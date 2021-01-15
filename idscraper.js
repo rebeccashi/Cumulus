@@ -19,14 +19,14 @@ while (num < MAX_JOBS) {
   .then(response => response.text())
   .then(data => {
     data = data.replace(/>\s</g, '><');
-    data = data.split(`<div class="summary">`);
+    data = data.split(`id="jl_`);
 
     console.log(data.length);
     
     data.forEach((d,i) => {
       if (i === 0) return;
 
-      desc.push(d.split(`</div>`)[0]
+      desc.push(d.split(`"`)[0]
         .replace(/<ul style="list-style-type:circle;margin-top: 0px;margin-bottom: 0px;padding-left:20px;"> \n/g, '')
         .replace(/<li>/g, '')
         .replace(/<\/li>/g, '')
@@ -49,5 +49,5 @@ while (num < MAX_JOBS) {
 Promise.all(fetches)
   .then(e => {
     desc2 = [...new Set(desc)];
-    fs.writeFileSync('filedata3', desc2.join('\n\n'));
+    fs.writeFileSync('top1000ids', desc2.join('\n\n'));
   });
