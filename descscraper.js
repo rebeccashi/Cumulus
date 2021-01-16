@@ -8,6 +8,7 @@ let file = fs.readFileSync("./top1000ids",'utf8');
 
 let fetches = [];
 let desc = [];
+let cleanData = [];
 
 const NUM_START = 0;
 
@@ -23,25 +24,29 @@ for (let i = NUM_START; i < fileArr.length; i++) {
     data = data.split(`class="jobsearch-jobDescriptionText">`);
 
     console.log(data.length);
-
+    
     if (data.length === 1) console.log(i);
     
     data.forEach((d,i) => {
       if (i === 0) return;
 
-      desc.push(d.split(`</div>`)[0]
-        .replace(/<ul style="list-style-type:circle;margin-top: 0px;margin-bottom: 0px;padding-left:20px;"> \n/g, '')
-        .replace(/<li>/g, '')
-        .replace(/<\/li>/g, '')
-        .replace(/<\/ul>/g, '')
-        .replace(/<b>/g, '')
-        .replace(/<\/b>/g, '')
-        .replace(/<p>/g, '')
-        .replace(/<\/p>/g, '')
-        .replace(/<li style="margin-bottom:0px;">/g, '')
-        .replace(/\n/g, '')
-        );
+      const cleanDesc = d.split(`</div>`)[0]
+      .replace(/<ul style="list-style-type:circle;margin-top: 0px;margin-bottom: 0px;padding-left:20px;"> \n/g, '')
+      .replace(/<li>/g, ' ')
+      .replace(/<\/li>/g, ' ')
+      .replace(/<\/ul>/g, ' ')
+      .replace(/<b>/g, ' ')
+      .replace(/<\/b>/g, ' ')
+      .replace(/<p>/g, ' ')
+      .replace(/<\/p>/g, ' ')
+      .replace(/<li style="margin-bottom:0px;">/g, ' ')
+      .replace(/\n/g, ' ')
+
+      console.log('item: '  + cleanDesc)
+      cleanData.push(cleanDesc)
+
     });
+    // console.log(desc)
   })
   .catch(err => {
     console.log(desc);
@@ -51,6 +56,7 @@ for (let i = NUM_START; i < fileArr.length; i++) {
 
 Promise.all(fetches)
   .then(e => {
-    desc2 = [...new Set(desc)];
-    fs.writeFileSync('top1000descriptions', desc2.join('\n\n'));
+    desc2 = [...new Set(cleanData)];
+    console.log(desc2)
+    fs.writeFileSync('top1000descriptions-3', desc2.join('\n\n'));
   });
