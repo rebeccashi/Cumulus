@@ -5,6 +5,18 @@
         /* url('agrandir/Agrandir-WideBold.woff2') format('woff2'), */
         url('agrandir/Agrandir-WideBold.woff') format('woff'),
         url('agrandir/Agrandir-WideBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Agrandir';
+    src: url('agrandir/Agrandir-Bold.eot');
+    src: url('agrandir/Agrandir-Bold.eot?#iefix') format('embedded-opentype'),
+        /* url('agrandir/Agrandir-Bold.woff2') format('woff2'), */
+        url('agrandir/Agrandir-Bold.woff') format('woff'),
+        url('agrandir/Agrandir-Bold.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
     font-display: swap;

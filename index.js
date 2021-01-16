@@ -116,17 +116,21 @@ app.get('/api/majors', (req, res) => {
     });
   });
 
+  let currAmt = 0;
   let arrayMajors = new Array(10);
   let index = 0;
 
   Object.keys(majorsObj).forEach(l => {
     arrayMajors[index] = { major: l, count: majorsObj[l] };
+    currAmt += majorsObj[l];
     index++;
   })
 
   let sortedKeywords = arrayMajors.sort((a,b) => b.count - a.count);
 
   let top10 = sortedKeywords.slice(0, 10);
+
+  let withPercentages = top10.map(el => { el.percent = (el.count / currAmt).toFixed(5); return el; });
 
   res.send(top10.filter(el => (el !== null && el.count > 0)))
 });

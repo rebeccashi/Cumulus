@@ -17,7 +17,7 @@
           <thead>
             <tr>
               <td>Keyword</td>
-              <td>Popularity</td>
+              <td>Share</td>
             </tr>
           </thead>
           <tbody>
@@ -27,16 +27,56 @@
     </template>
     <template id="top-keywords-graph-template">
       <div class="card result-card loader">
-        <h3>Top keywords for &quot;<span class="slot" data-slot="query"></span>&quot;</h3>
+        <h3>Top keywords for &quot;<span class="slot" data-slot="query"></span>&quot; &mdash; visualized</h3>
         <div class="visualization-container">
         </div>
+        <a role="button" class="show-data" data-hidden="true" data-selector="top-keywords" tabindex="0">Show data</a>
+      </div>
+    </template>
+    <template id="top-companies-template">
+      <div class="card result-card loader">
+        <h3>Top companies for &quot;<span class="slot" data-slot="query"></span>&quot;</h3>
+        <table>
+          <thead>
+            <tr>
+              <td>Company</td>
+              <td>Posts</td>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     </template>
     <template id="top-companies-graph-template">
       <div class="card result-card loader">
-        <h3>Top keywords for &quot;<span class="slot" data-slot="query"></span>&quot;</h3>
+        <h3>Top companies for &quot;<span class="slot" data-slot="query"></span>&quot; &mdash; visualized</h3>
         <div class="visualization-container">
         </div>
+        <a role="button" class="show-data" data-hidden="true" data-selector="top-companies" tabindex="0">Show data</a>
+      </div>
+    </template>
+    <template id="top-majors-template">
+      <div class="card result-card loader">
+        <h3>Top majors for &quot;<span class="slot" data-slot="query"></span>&quot;</h3>
+        <table>
+          <thead>
+            <tr>
+              <td>Major</td>
+              <td>Share</td>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </template>
+    <template id="top-majors-graph-template">
+      <div class="card result-card loader">
+        <h3>Top majors for &quot;<span class="slot" data-slot="query"></span>&quot; &mdash; visualized</h3>
+        <div class="visualization-container">
+        </div>
+        <a role="button" class="show-data" data-hidden="true" data-selector="top-majors" tabindex="0">Show data</a>
       </div>
     </template>
     <template id="load-search-results-template">
@@ -57,11 +97,11 @@
             </label>
           </div>
         </form>
-        <div class="filter-area loader">
+        <!--div class="filter-area loader">
           <div class="card filter-card">
              Sort by date
           </div>
-        </div>
+        </div-->
         <div id="search-results" class="loader">
           
         </div>
@@ -96,13 +136,13 @@
         </svg>
       </div>
       <h1 class="loader">
-        Technology and change go hand in hand. We help you stay up-to-date.
+        Job search? Meet your silver lining.
       </h1>
       <div class="action-area">
         <form class="search-area loader">
-          <h2>What's your dream job?</h2>
+          <h2>Where's your cloud nine?</h2>
           <div class="search-input-group">
-            <input type="text" class="search-input" placeholder="Job title, keywords, company, or location">
+            <input type="text" class="search-input" placeholder="Job title">
             <label>
               <input type="submit" />
               <svg type="submit" class="search-arrow" width="24" height="24" viewbox="0 0 100 100">
@@ -114,14 +154,29 @@
           </div>
         </form>
         <div class="search-cta loader">
-          <a href="/resume" class="card search-cta-card mock-link">
-            <h3>Upload a resume</h3>
-            <p>Get notified when your resume starts to lag behind</p>
-          </a>
-          <a href="/employers" class="card search-cta-card mock-link">
-            <h3>Are you an employer?</h3>
-            <p>See how your hiring practices compare to the rest</p>
-          </a>
+          <h3>Featured searches</h3>
+          <div class="featured-searches">
+            <a class="card featured-card" data-search="internship">
+              <strong>Internship</strong>
+            </a>
+            <a class="card featured-card" data-search="data">
+              <strong>Data Analyst</strong>
+            </a>
+            <a class="card featured-card" data-search="design">
+              <strong>Web Design</strong>
+            </a>
+          </div>
+          <h3>Want to stay updated?</h3>
+          <div class="cta-buttons">
+            <a href="/resume" class="card search-cta-card mock-link">
+              <h4>Upload a resume</h4>
+              <p>Get notified when your resume starts to look outdated</p>
+            </a>
+            <a href="/employers" class="card search-cta-card mock-link">
+              <h4>Are you an employer?</h4>
+              <p>See how your hiring compares to the rest of the market</p>
+            </a>
+          </div>
         </div>
       </div>
     </template>
@@ -144,7 +199,7 @@
       
     </main>
     <footer>
-      <p>Copyright 2021,  cumulus. All rights reserved.</p>
+      <p>Copyright 2021, cumulus.&nbsp;</p><p>All rights reserved.</p>
     </footer>
   </body>
 
