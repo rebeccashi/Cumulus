@@ -12,7 +12,7 @@
   <body>
     <template id="top-keywords-template">
       <div class="card result-card loader">
-        <h3>Top keywords over <span class="slot" data-slot="time_period"></span> for &quot;<span class="slot" data-slot="query"></span>&quot;</h3>
+        <h3>Top keywords for &quot;<span class="slot" data-slot="query"></span>&quot;</h3>
         <table>
           <thead>
             <tr>
@@ -23,6 +23,13 @@
           <tbody>
           </tbody>
         </table>
+      </div>
+    </template>
+    <template id="top-keywords-graph-template">
+      <div class="card result-card loader">
+        <h3>Top keywords for &quot;<span class="slot" data-slot="query"></span>&quot;</h3>
+        <div class="visualization-container">
+        </div>
       </div>
     </template>
     <template id="load-search-results-template">
@@ -134,5 +141,6 @@
     </footer>
   </body>
 
+  <script src="https://d3js.org/d3.v6.min.js"></script>
   <script src="/website/script.js"></script>
 </html>
