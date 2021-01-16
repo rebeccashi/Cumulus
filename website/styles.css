@@ -94,6 +94,12 @@ header {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+}
+
+.menubtn {
+  display: none;
 }
 
 nav {
@@ -150,6 +156,7 @@ main {
 
 main.search {
   padding-top: calc(5vh + 128px);
+  grid-template-rows: 1fr;
 }
 
 h1 {
@@ -176,7 +183,7 @@ input {
   outline: none;
   background: var(--transparent);
   border-radius: 8px;
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(8px);
   border: none;
   width: 100%;
   height: 3rem;
@@ -220,14 +227,22 @@ input:focus {
 
 #search-results {
   margin-top: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 16px;
 }
 
 .load-result {
   text-align: center;
 }
 
+.result-card {
+  width: 100%;
+}
+
 .result-card h3 {
   margin-bottom: 16px;
+  line-height: 1.2em;
 }
 
 .result-card thead {
@@ -253,7 +268,7 @@ input:focus {
   background: var(--transparent);
   border-radius: 8px;
   padding: 24px;
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(8px);
   box-shadow: 0px 3px 0px 0px var(--bg-darker);
   transition: 0.2s ease-out;
 }
@@ -286,4 +301,63 @@ footer {
   left: 0;
   padding: 0 32px;
   text-align: right;
+}
+
+@media (max-width: 1000px) {
+  .menubtn {
+    font-size: 2rem;
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    fill: var(--text);
+    stroke-width: 3px;
+    stroke: var(--text);
+  }
+
+  .cta {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 32px 5vw;
+    z-index: 99;
+    height: calc(100vh - 128px);
+    background: var(--bg);
+    width: 100vw;
+    position: fixed;
+    right: -100vw;
+    top: 128px;
+    transition: 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+
+  .cta .resume-cta {
+    text-align: center;
+    padding: 16px;
+    border: 3px solid var(--bg-darker);
+    border-radius: 8px;
+    width: 100%;
+  }
+
+  .cta .register-cta {
+    margin-left: 0;
+    margin-top: 16px;
+    text-align: center;
+    padding: 16px;
+    background: var(--bg-darker);
+    border-radius: 8px;
+    width: 100%;
+  }
+
+  main {
+    padding: 0 5vw;
+  }
+
+  #search-results {
+    grid-template-columns: 1fr;
+  }
+
+  .result-card {
+    width: 100%;
+  }
 }

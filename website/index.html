@@ -11,8 +11,8 @@
   </head>
   <body>
     <template id="top-keywords-template">
-      <div class="card result-card">
-        <h3>Top keywords over <span class="slot" data-slot="time_period"></span></h3>
+      <div class="card result-card loader">
+        <h3>Top keywords over <span class="slot" data-slot="time_period"></span> for &quot;<span class="slot" data-slot="query"></span>&quot;</h3>
         <table>
           <thead>
             <tr>
@@ -114,6 +114,12 @@
     <header>
       <nav>
         <a href="/" class="logo">cumulus</a>
+        <div class="menubtn"><span class="btn">
+          <svg width="30" height="30" viewbox="0 0 100 100">
+            <line x1="0" y1="33" x2="100" y2="33"></line>
+            <line x1="0" y1="66" x2="100" y2="66"></line>
+          </svg>
+        </span></div>
         <div class="cta">
           <a href="/resume" class="mock-link resume-cta">Upload your resume</a>
           <a href="/auth" class="mock-link register-cta">Sign in</a>

@@ -30,7 +30,9 @@ const doSearchSearchForm = () => {
   searchForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    alert(e);
+    let query = input.value;
+    window.history.pushState({ query }, '', `?q=${encodeURIComponent(query)}`);
+    getResults(input.value);
   });
 }
 
@@ -38,10 +40,10 @@ const doFilters = () => {
 
 }
 
-const doLoad = () => {
+const doLoad = (el) => {
   let ctr = 100;
 
-  Array.from(document.querySelectorAll('.loader')).forEach(load => {
+  Array.from(el.querySelectorAll('.loader')).forEach(load => {
     setTimeout(() => { load.classList.add('loaded') }, ctr);
     if (!load.classList.contains('no-load-time')) ctr += 150;
   });
@@ -70,29 +72,11 @@ const loadLanding = () => {
 
   main.appendChild(document.querySelector('#landing-template').content.cloneNode(true));
 
-  doLoad();
+  doLoad(main);
   unloadCurrent = unloadLanding;
 
   mockLinks();
   doLandingSearchForm();
-}
-
-const mockTopKeywords = () => {
-  return {
-    time_period: 'Jan 1 to Mar 3',
-    keywords: [
-      { keyword: 'JavaScript', popularity: 0.86 },
-      { keyword: 'React.js', popularity: 0.74 },
-      { keyword: 'Node.js', popularity: 0.72 },
-      { keyword: 'Vue.js', popularity: 0.54 },
-      { keyword: 'Next.js', popularity: 0.51 },
-      { keyword: 'Gatsby', popularity: 0.23 },
-      { keyword: 'Eleventy', popularity: 0.11 },
-      { keyword: 'Hugo', popularity: 0.09 },
-      { keyword: 'Angular', popularity: 0.07 },
-      { keyword: 'Golang', popularity: 0.05 },
-    ]
-  }
 }
 
 const buildTopKeywords = (data) => {
@@ -116,19 +100,34 @@ const buildTopKeywords = (data) => {
   return tk;
 }
 
-const getResults = (resultEl, query) => {
+async function fetchAndBuildResults(resultEl, query) {
+  const response = await fetch('mockTopKeywords.json');
+  const data = await response.json();
+
+  await doUnload(resultEl);
+
+  resultEl.innerHTML = '';
+  data.query = query;
+      
+  resultEl.appendChild(buildTopKeywords(data));
+      
+  resultEl.appendChild(buildTopKeywords(data));
+      
+  resultEl.appendChild(buildTopKeywords(data));
+      
+  resultEl.appendChild(buildTopKeywords(data));
+
+  doLoad(resultEl);
+}
+
+const getResults = (query) => {
+  let resultEl = document.querySelector('#search-results');
+
   if (!resultEl || !query) return;
 
   // parsing here!
 
-  doUnload(resultEl)
-  .then(() => {
-    resultEl.innerHTML = '';
-  
-    let data = mockTopKeywords();
-  
-    resultEl.appendChild(buildTopKeywords(data));
-  })
+  fetchAndBuildResults(resultEl, query);
 }
 
 const unloadLanding = () => {
@@ -162,9 +161,9 @@ const loadSearch = (q) => {
 
   results.appendChild(document.querySelector('#load-search-results-template').content.cloneNode(true));
 
-  getResults(results, q);
+  getResults(q);
 
-  doLoad();
+  doLoad(main);
   unloadCurrent = unloadSearch;
 
   mockLinks();
@@ -180,6 +179,27 @@ const unloadSearch = () => {
 }
 
 let unloadCurrent = null;
+
+const menuBtnListener = () => {
+  if (window.innerWidth < 1000) {
+    let cta = document.querySelector('.cta');
+
+    document.querySelector('.menubtn').addEventListener('click', () => {
+      console.log(cta, cta.style.right);
+      if (cta.style.right !== '0px') {
+        cta.style.right = '0px';
+      } else {
+        cta.style.right = '-100vw';
+      }
+    });
+  }
+}
+
+window.addEventListener('touchmove', () => {
+  if (document.querySelector('.cta').style.right === '0px') {
+    document.querySelector('.menubtn').dispatchEvent( new Event('click') );
+  }
+})
 
 window.addEventListener('load', () => {
   let url = new URLSearchParams(window.location.search);
@@ -204,20 +224,30 @@ window.addEventListener('load', () => {
         window.history.pushState({ query: null }, '', '?');
         loadLanding();
       })
-  })
+  });
+
+  menuBtnListener();
+});
+
+window.addEventListener('resize', () => {
+  menuBtnListener();
 });
 
 window.addEventListener('popstate', (e) => {
   if (e.state && e.state.query) {
-    unloadCurrent()
-      .then(() => {
-        loadSearch(e.state.query);
-      })
+    if (unloadCurrent === unloadSearch) {
+      getResults(e.state.query);
+    }
+    else {
+      unloadCurrent()
+        .then(() => {
+          loadSearch(e.state.query);
+        })
+    }
   } else {
     unloadCurrent()
       .then(() => {
         loadLanding();
       })
   }
-})
-
+});
