@@ -613,7 +613,7 @@ window.addEventListener('load', () => {
 
     unloadCurrent()
       .then(() => {
-        window.history.pushState({ query: null }, '', '?');
+        window.history.pushState({ query: null }, '', '/');
         loadLanding();
       })
   });
