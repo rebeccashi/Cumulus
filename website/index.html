@@ -10,6 +10,28 @@
     <link rel="stylesheet" type="text/css" href="/website/styles.css">
   </head>
   <body>
+    <template id="search-template">
+      <div class="search-bar">
+        <form class="search-area">
+          <div class="search-input-group">
+            <input type="text" class="search-input" placeholder="Job title, keywords, company, or location">
+            <label>
+              <input type="submit" />
+              <svg type="submit" class="search-arrow" width="24" height="24" viewbox="0 0 100 100">
+                <line x1="0" y1="50" x2="100" y2="50"></line>
+                <line x1="50" y1="0" x2="100" y2="50"></line>
+                <line x1="50" y1="100" x2="100" y2="50"></line>
+              </svg>
+            </label>
+          </div>
+        </form>
+        <div class="filter-area">
+          <div class="card filter-card">
+             <h3>Sort by date</h3>
+          </div>
+        </div>
+      </div>
+    </template>
     <template id="landing-template">
       <div class="cloud cloud-bottom-left">
         <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg5332" viewBox="0 55 256.00007 145">
