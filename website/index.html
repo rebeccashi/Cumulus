@@ -10,9 +10,27 @@
     <link rel="stylesheet" type="text/css" href="/website/styles.css">
   </head>
   <body>
+    <template id="top-keywords-template">
+      <div class="card result-card">
+        <h3>Top keywords over <span class="slot" data-slot="time_period"></span></h3>
+        <table>
+          <thead>
+            <tr>
+              <td>Keyword</td>
+              <td>Popularity</td>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </template>
+    <template id="load-search-results-template">
+      <h2 class="load-result">Hold tight, we're fetching your results!</h2>
+    </template>
     <template id="search-template">
       <div class="search-bar">
-        <form class="search-area">
+        <form class="search-area loader">
           <div class="search-input-group">
             <input type="text" class="search-input" placeholder="Job title, keywords, company, or location">
             <label>
@@ -25,15 +43,18 @@
             </label>
           </div>
         </form>
-        <div class="filter-area">
+        <div class="filter-area loader">
           <div class="card filter-card">
-             <h3>Sort by date</h3>
+             Sort by date
           </div>
+        </div>
+        <div id="search-results" class="loader">
+          
         </div>
       </div>
     </template>
     <template id="landing-template">
-      <div class="cloud cloud-bottom-left">
+      <div class="cloud cloud-bottom-left loader no-load-time">
         <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg5332" viewBox="0 55 256.00007 145">
           <title id="title6870">Cloud</title>
           <defs id="defs5334"/>
@@ -42,7 +63,7 @@
           </g>
         </svg>
       </div>
-      <div class="cloud cloud-top-right">
+      <div class="cloud cloud-top-right loader no-load-time">
         <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg5332" viewBox="0 55 256.00007 145">
           <title id="title6870">Cloud</title>
           <defs id="defs5334"/>
@@ -51,7 +72,7 @@
           </g>
         </svg>
       </div>
-      <div class="cloud cloud-top-left">
+      <div class="cloud cloud-top-left loader no-load-time">
         <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg5332" viewBox="0 55 256.00007 145">
           <title id="title6870">Cloud</title>
           <defs id="defs5334"/>
@@ -60,11 +81,11 @@
           </g>
         </svg>
       </div>
-      <h1>
+      <h1 class="loader">
         Technology and change go hand in hand. We help you stay up-to-date.
       </h1>
       <div class="action-area">
-        <form class="search-area">
+        <form class="search-area loader">
           <h2>What's your dream job?</h2>
           <div class="search-input-group">
             <input type="text" class="search-input" placeholder="Job title, keywords, company, or location">
@@ -78,7 +99,7 @@
             </label>
           </div>
         </form>
-        <div class="search-cta">
+        <div class="search-cta loader">
           <a href="/resume" class="card search-cta-card mock-link">
             <h3>Upload a resume</h3>
             <p>Get notified when your resume starts to lag behind</p>
