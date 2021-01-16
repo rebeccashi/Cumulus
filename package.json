@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "idscrape": "node idscraper.js",
-    "descscrape": "node descscraper.js"
+    "descscrape": "node descscraper.js",
+    "keyword": "node keyword.js"
   },
   "keywords": [],
   "author": "",
@@ -16,9 +17,6 @@
     "http-proxy-agent": "^4.0.1",
     "https-proxy-agent": "^5.0.0",
     "node-fetch": "^2.6.1",
-    "@aws-sdk/client-s3": "^1.0.0-gamma.6",
-    "@aws-sdk/node-http-handler": "^1.0.0-gamma.5",
-    "@aws-sdk/types": "^0.1.0-gamma.6",
     "ts-node": "^9.0.0"
   },
   "devDependencies": {
