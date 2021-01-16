@@ -96,6 +96,7 @@ const loadLanding = () => {
 }
 
 const buildTopKeywords = (data) => {
+  console.log(data);
   let tk = document.querySelector('#top-keywords-template').content.cloneNode(true);
 
   Array.from(tk.querySelectorAll('.slot')).forEach(slot => {
@@ -107,8 +108,8 @@ const buildTopKeywords = (data) => {
   data.keywords.forEach(keyword => {
     tbody.insertAdjacentHTML('beforeEnd', `
       <tr>
-        <td>${keyword.keyword}</td>
-        <td>${Math.round(keyword.popularity * 100)}%</td>
+        <td>${keyword.language.charAt(0).toUpperCase() + keyword.language.substr(1)}</td>
+        <td>${Math.round(parseFloat(keyword.percent) * 100)}%</td>
       </tr>
     `)
   });
@@ -117,21 +118,25 @@ const buildTopKeywords = (data) => {
 }
 
 async function fetchAndBuildResults(resultEl, query) {
-  const response = await fetch('mockTopKeywords.json');
+  const response = await fetch('/api/keywords?q=' + query.trim());
   const data = await response.json();
 
   await doUnload(resultEl);
 
   resultEl.innerHTML = '';
-  data.query = query;
+
+  let dataobj = {
+    keywords: data,
+    query
+  }
       
-  resultEl.appendChild(buildTopKeywords(data));
+  resultEl.appendChild(buildTopKeywords(dataobj));
       
-  resultEl.appendChild(buildTopKeywords(data));
+  resultEl.appendChild(buildTopKeywords(dataobj));
       
-  resultEl.appendChild(buildTopKeywords(data));
+  resultEl.appendChild(buildTopKeywords(dataobj));
       
-  resultEl.appendChild(buildTopKeywords(data));
+  resultEl.appendChild(buildTopKeywords(dataobj));
 
   doLoad(resultEl);
 }
@@ -201,7 +206,6 @@ const menuBtnListener = () => {
     let cta = document.querySelector('.cta');
 
     document.querySelector('.menubtn').addEventListener('click', () => {
-      console.log(cta, cta.style.right);
       if (cta.style.right !== '0px') {
         cta.style.right = '0px';
       } else {
@@ -219,8 +223,6 @@ window.addEventListener('touchmove', () => {
 
 window.addEventListener('load', () => {
   let url = new URLSearchParams(window.location.search);
-
-  console.log(url);
 
   if (!url.has('q')) {
     unloadCurrent = unloadSearch;
