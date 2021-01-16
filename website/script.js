@@ -7,17 +7,26 @@ const mockLinks = () => {
   });
 }
 
+let submitting = false;
+
 const doLandingSearchForm = () => {
   let searchForm = document.querySelector('form.search-area');
   let input = searchForm.querySelector('.search-input');
+  let svg = searchForm.querySelector('svg');
 
   searchForm.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    if (submitting) return;
+    submitting = true;
+
+    svg.classList.add('submitted');
 
     unloadLanding()
       .then(() => {
         let query = input.value;
         window.history.pushState({ query }, '', `?q=${encodeURIComponent(query)}`);
+        submitting = false;
         loadSearch(query);
       })
   });
@@ -26,13 +35,20 @@ const doLandingSearchForm = () => {
 const doSearchSearchForm = () => {
   let searchForm = document.querySelector('form.search-area');
   let input = searchForm.querySelector('.search-input');
+  let svg = searchForm.querySelector('svg');
 
   searchForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
+    if (submitting) return;
+    submitting = true;
+
+    svg.classList.add('submitted');
+
     let query = input.value;
     window.history.pushState({ query }, '', `?q=${encodeURIComponent(query)}`);
     getResults(input.value);
+    setTimeout(() => { if (svg.classList.contains('submitted')) svg.classList.remove('submitted'); submitting = false }, 800);
   });
 }
 

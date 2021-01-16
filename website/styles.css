@@ -210,13 +210,18 @@ input:focus {
   stroke: var(--bg-darker);
   width: 40px;
   stroke-width: 6px;
-  transition: 0.2s ease-out;
+  transition: 0.3s cubic-bezier(0.15, 0.82, 0.15, 1);
 }
 
 .search-input-group svg:hover {
   cursor: pointer;
   padding-left: 16px;
   padding-right: 0px;
+}
+
+.search-input-group svg.submitted {
+  transform: translateY(-50%) translateX(100%);
+  opacity: 0;
 }
 
 .search-cta {
@@ -233,6 +238,7 @@ input:focus {
 }
 
 .load-result {
+  grid-area: none;
   text-align: center;
 }
 
@@ -255,11 +261,17 @@ input:focus {
   padding: 0 8px;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  text-align: center;
   place-content: center;
 }
 
 .result-card tr:nth-child(2n) {
   background: var(--bg);
+}
+
+.result-card tr:hover {
+  background: var(--bg-darker);
+  cursor: pointer;
 }
 
 .card {
@@ -350,7 +362,23 @@ footer {
   }
 
   main {
-    padding: 0 5vw;
+    padding: calc(5vh + 128px) 5vw;
+    grid-template-rows: auto auto;
+    padding-bottom: 80px;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  .action-area {
+    grid-template-rows: auto 1fr;
+    grid-gap: 16px;
+  }
+
+  .search-cta {
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 
   #search-results {
@@ -359,5 +387,13 @@ footer {
 
   .result-card {
     width: 100%;
+  }
+
+  footer {
+    position: relative;
+    background: var(--transparent);
+    text-align: center;
+    backdrop-filter: blur(4px) brightness(1.05);
+    padding-top: 1rem;
   }
 }
