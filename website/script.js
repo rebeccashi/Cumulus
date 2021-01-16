@@ -95,8 +95,7 @@ const loadLanding = () => {
   doLandingSearchForm();
 }
 
-const buildTopKeywords = (data) => {
-  console.log(data);
+const buildTopKeywords = (resultEl, data) => {
   let tk = document.querySelector('#top-keywords-template').content.cloneNode(true);
 
   Array.from(tk.querySelectorAll('.slot')).forEach(slot => {
@@ -114,7 +113,60 @@ const buildTopKeywords = (data) => {
     `)
   });
 
-  return tk;
+  resultEl.appendChild(tk);
+}
+
+const buildTopKeywordsGraph = (resultEl, data) => {
+  let tk = document.querySelector('#top-keywords-graph-template').content.cloneNode(true);
+
+  Array.from(tk.querySelectorAll('.slot')).forEach(slot => {
+    slot.innerHTML = data[slot.dataset.slot];
+  });
+
+  data = data.keywords;
+
+  resultEl.appendChild(tk);
+
+  // set the dimensions and margins of the graph
+  let margin = {top: 20, right: 20, bottom: 30, left: 40},
+  width = 480 - margin.left - margin.right,
+  height = 240 - margin.top - margin.bottom;
+
+  // set the ranges
+  let x = d3.scaleBand()
+        .range([0, width])
+        .padding(0.3);
+  let y = d3.scaleLinear()
+        .range([height, 0]);
+
+  x.domain(data.map(function(d) { return d.language; }));
+  y.domain([0, d3.max(data, function(d) { return parseFloat(d.percent); })]);
+
+  let svg = d3.select('.visualization-container')
+  .append('svg')
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+  svg.selectAll(".bar")
+      .data(data)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function(d) { return x(d.language); })
+        .attr("width", x.bandwidth())
+        .attr("y", function(d) { return y(d.percent); })
+        .attr("height", function(d) { return height - y(parseFloat(d.percent)); });
+
+  // add the x Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  // add the y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y));
 }
 
 async function fetchAndBuildResults(resultEl, query) {
@@ -130,13 +182,9 @@ async function fetchAndBuildResults(resultEl, query) {
     query
   }
       
-  resultEl.appendChild(buildTopKeywords(dataobj));
+  buildTopKeywords(resultEl, dataobj);
       
-  resultEl.appendChild(buildTopKeywords(dataobj));
-      
-  resultEl.appendChild(buildTopKeywords(dataobj));
-      
-  resultEl.appendChild(buildTopKeywords(dataobj));
+  buildTopKeywordsGraph(resultEl, dataobj);
 
   doLoad(resultEl);
 }

@@ -7,6 +7,7 @@
   --text: black;
   --bg: #c6f1ff;
   --bg-darker: #b7d6d6;
+  --bg-darkest: #112f57;
   --transparent: #ffffff99;
   font-family: 'Agrandir';
 }
@@ -234,17 +235,35 @@ input:focus {
 #search-results {
   margin-top: 24px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-gap: 16px;
 }
 
 .load-result {
-  grid-area: none;
   text-align: center;
 }
 
 .result-card {
   width: 100%;
+}
+
+.visualization-container {
+  width: 100%;
+}
+
+.visualization-container svg {
+  width: 100%;
+  height: auto;
+}
+
+.bar {
+  fill: var(--bg-darkest);
+}
+
+.bar:hover {
+  cursor: pointer;
+  fill: var(--bg-darker);
+  transition: 0.05s linear;
 }
 
 .result-card h3 {
