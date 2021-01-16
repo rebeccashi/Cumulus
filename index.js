@@ -29,12 +29,30 @@ app.get('/api/keywords', (req, res) => {
   }
 
   // if we had a search it would go here
+  let foundJobs = jobDb.filter(job => job.title.toLowerCase().indexOf(req.query.q.trim().toLowerCase()) >= 0); // fix this
 
-  let sortedKeywords = keywordDb.sort((a,b) => b.count - a.count);
+  let keywordsObj = {};
+
+  foundJobs.forEach(job => {
+    Object.keys(job.keywords).forEach(keyword => {
+      if (!keywordsObj[keyword]) keywordsObj[keyword] = job.keywords[keyword];
+      else keywordsObj[keyword] += job.keywords[keyword];
+    });
+  });
+
+  let currAmt = 0;
+  let arrayJobs = [];
+
+  Object.keys(keywordsObj).forEach(l => {
+    arrayJobs.push({ language: l, count: keywordsObj[l] });
+    currAmt += keywordsObj[l];
+  })
+
+  let sortedKeywords = arrayJobs.sort((a,b) => b.count - a.count);
 
   let top10 = sortedKeywords.slice(0, 10);
 
-  let withPercentages = top10.map(el => { el.percent = (el.count / amt).toFixed(5); return el; });
+  let withPercentages = top10.map(el => { el.percent = (el.count / currAmt).toFixed(5); return el; });
 
   res.send(withPercentages)
 });
