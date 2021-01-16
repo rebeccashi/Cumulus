@@ -3,9 +3,10 @@ const fs = require('fs');
 let text = fs.readFileSync("descriptions.json").toString('utf-8');
 
 let textobj = JSON.parse(text);
-let jobDataObj =  JSON.parse(fs.readFileSync("jobData.json").toString('utf-8'))
+// let jobDataObj =  JSON.parse(fs.readFileSync("jobData.json").toString('utf-8'))
 
-const programmingLanguages = ['Bash', 'C', 'C++', "C#", "CSS", 'Dreamweaver', 'Kotlin',  "Go", 'Golang',  'HTML', "Javascript", "Java", "Node" , "MySQL", "Objective-C", 'python', 'PERL', 'php', 'qt', 'sql', 'R', 'ruby', 'Ruby on Rails', 'Scala', 'Smalltalk', 'mySQL', 'postgres', 'postgresql', 'graphql', 'mongodb', 'Swift', 'jQuery', 'Matlab', 'React', 'aws', 'typescript', ];
+const programmingLanguages = ['Bash', 'C', 'C++', "C#", "CSS", 'Dreamweaver', 'Kotlin',  "Go", 'Golang',  'HTML', "JavaScript", "Java", "Node" , "MySQL", "Objective-C", 'Python', 'Perl', 'PHP', 'Qt', 'SQL', 'R', 'Ruby', 'Ruby on Rails', 'Scala', 'Smalltalk', 'Postgres', 'PostgreSQL', 'GraphQL', 'MongoDB', 'Swift', 'jQuery', 'Matlab', 'React', 'AWS', 'TypeScript', ];
+const majors = ["Computer Science", "Computer Engineering",  "Information Technology", "Statistics", "Data Analytics", "Data Science", "Computer information Systems", "Electrical Engineering", "Mechanical Engineering", "Industrial Engineering", "Biomedical Engineering", "Chemistry", "Business Analytics", "Mathematics", "Physics", "Material Science Engineering"];
 const languagesData = {};
 const jobData = [];
 
@@ -22,6 +23,7 @@ function escapeRegExp(string) {
 const findTopLanguages = () => {
   textobj.forEach(job => {
     let langs = {};
+    let majorArr = {};
   
     programmingLanguages.forEach((language, i) => {
       let regex = new RegExp(`(?:\\s|\\W|>)(${escapeRegExp(language)})(?:\\s|\\W|<)`, 'gmi');
@@ -33,12 +35,21 @@ const findTopLanguages = () => {
       langs[language] = matches ? matches.length : 0;
       languagesData[language] += matches ? matches.length : 0;
     });
+
+    majors.forEach((major, i) => {
+      let regex = new RegExp(`(?:\\s|\\W|>)(${escapeRegExp(major)})(?:\\s|\\W|<)`, 'gmi');
+  
+      let matches = job.description.match(regex);
+    
+      majorArr[major] = matches ? matches.length : 0;
+    });
   
     job.keywords = langs;
+    job.majors = majorArr;
   
     jobData.push(job);
   })
-  fs.writeFileSync('languagesData.json', JSON.stringify(languagesData));
+  // fs.writeFileSync('languagesData.json', JSON.stringify(languagesData));
   fs.writeFileSync('jobData.json', JSON.stringify(jobData));
 }
 
@@ -58,8 +69,8 @@ const findTopCompanies = () => {
     companies.push(obj.company)
   })
   companyData = transformMapIntoData(companyMap);
-  console.log(companyData)
-  fs.writeFileSync('companyData.json', JSON.stringify(companyData));
+  // console.log(companyData)
+  // fs.writeFileSync('companyData.json', JSON.stringify(companyData));
 }
 
 const transformMapIntoData = (map) => {
@@ -71,11 +82,9 @@ const transformMapIntoData = (map) => {
 }
 
 const findTopmajors = () => {
-  const majors = ["computer science", "computer engineering",  "information technology", "statistics", "data analytics", "data science",
-"computer information systems", "electrical engineering", "mechanical engineering", "industrial engineering", "biomedical engineering", "chemistry", 
-"business analytics", "mathematics", "physics", "material science Engineering"]
+  const majors = ["Computer science", "Computer engineering",  "information Technology", "statistics", "data analytics", "data science", "Computer information systems", "electrical engineering", "mechanical engineering", "industrial engineering", "biomedical engineering", "chemistry", "business analytics", "mathematics", "physics", "material science Engineering"];
   // Computer Engineering/Science
   // Computer Science or Engineering
-
-findTopCompanies();
+}
+findTopLanguages();
 
