@@ -142,49 +142,136 @@ const buildTopKeywordsGraph = (resultEl, data) => {
   x.domain(data.map(function(d) { return d.language; }));
   y.domain([0, d3.max(data, function(d) { return parseFloat(d.percent); })]);
 
-  let svg = d3.select('.visualization-container')
-  .append('svg')
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
-  .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+  let svg = d3.select('.visualization-container:not(.selected)')
+    .attr('class', 'visualization-container selected')
+    .append('svg')
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
     .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
   svg.selectAll(".bar")
-      .data(data)
-        .enter().append("rect")
-        .attr("class", "bar")
-        .attr("x", function(d) { return x(d.language); })
-        .attr("width", x.bandwidth())
-        .attr("y", function(d) { return y(d.percent); })
-        .attr("height", function(d) { return height - y(parseFloat(d.percent)); });
+    .data(data)
+    .enter().append("rect")
+    .attr("class", "bar")
+    .attr("x", function(d) { return x(d.language); })
+    .attr("width", x.bandwidth())
+    .attr("y", function(d) { return y(d.percent); })
+    .attr("height", function(d) { return height - y(parseFloat(d.percent)); });
 
   // add the x Axis
   svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
 
   // add the y Axis
   svg.append("g")
       .call(d3.axisLeft(y));
 }
 
+const truncateLabel = (arr) => {
+  
+}
+
+const buildTopCompaniesGraph = (resultEl, data) => {
+  let tk = document.querySelector('#top-companies-graph-template').content.cloneNode(true);
+  
+  Array.from(tk.querySelectorAll('.slot')).forEach(slot => {
+    slot.innerHTML = data[slot.dataset.slot];
+  });
+
+  data = data.companies;
+  console.log(`data: ${data}`)
+
+  resultEl.appendChild(tk);
+
+  // set the dimensions and margins of the graph
+  let margin = {top: 20, right: 20, bottom: 50, left: 40},
+  width = 480 - margin.left - margin.right,
+  height = 240 - margin.top - margin.bottom;
+
+  // set the ranges
+  let x = d3.scaleBand()
+        .range([0, width])
+        .padding(0.3);
+  let y = d3.scaleLinear()
+        .range([height, 0]);
+  // let xAxis = d3.svg.axis()
+  // .scale(x);
+
+  x.domain(data.map(function(d) {
+    let xLabel;
+    if (d.company.length <= 8) {
+      xLabel = d.company
+    } else {
+      xLabel = d.company.slice(0,8).concat('..')
+    }
+     return xLabel; 
+  }));
+  y.domain([0, d3.max(data, function(d) { return parseFloat(d.count); })]);
+
+  let svg = d3.select('.visualization-container:not(.selected)')
+    .attr('class', 'visualization-container selected')
+    .append('svg')
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+  svg.selectAll(".bar")
+    .data(data)
+    .enter().append("rect")
+    .attr("class", "bar")
+    .attr("x", function(d) { return x(d.company); })
+    .attr("width", x.bandwidth())
+    .attr("y", function(d) { return y(d.count); })
+    .attr("height", function(d) { return height - y(parseFloat(d.count)); });
+
+  // add the x Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x))
+      .selectAll("text")  
+          .style("text-anchor", "end")
+          .attr("dx", "-.8em")
+          .attr("dy", ".15em")
+          .attr("transform", "rotate(-40)" );
+      // .call(xAxis)
+      // .attr("transform", "rotate(90)")
+
+  // add the y Axis
+  svg.append("g")
+    .call(d3.axisLeft(y));
+}
+
 async function fetchAndBuildResults(resultEl, query) {
-  const response = await fetch('/api/keywords?q=' + query.trim());
-  const data = await response.json();
+  const keywordsResponse = await fetch('/api/keywords?q=' + query.trim());
+  const keywordsData = await keywordsResponse.json();
+  console.log(keywordsData)
+
+  const companiesResponse = await fetch('/api/companies?q=' + query.trim());
+  let companiesData = await companiesResponse.json();
+  companiesData = companiesData.filter(data => data != null)
+  console.log(companiesData)
 
   await doUnload(resultEl);
 
   resultEl.innerHTML = '';
 
-  let dataobj = {
-    keywords: data,
+  let keywordsObj = {
+    keywords: keywordsData,
+    query
+  }
+  let companiesObj = {
+    companies: companiesData,
     query
   }
       
-  buildTopKeywords(resultEl, dataobj);
-      
-  buildTopKeywordsGraph(resultEl, dataobj);
+  buildTopKeywords(resultEl, keywordsObj);
+  buildTopKeywordsGraph(resultEl, keywordsObj);
+  buildTopCompaniesGraph(resultEl, companiesObj);
 
   doLoad(resultEl);
 }
