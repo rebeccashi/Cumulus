@@ -1,0 +1,35 @@
+@font-face {
+    font-family: 'Agrandir';
+    src: url('agrandir/Agrandir-WideBold.eot');
+    src: url('agrandir/Agrandir-WideBold.eot?#iefix') format('embedded-opentype'),
+        /* url('agrandir/Agrandir-WideBold.woff2') format('woff2'), */
+        url('agrandir/Agrandir-WideBold.woff') format('woff'),
+        url('agrandir/Agrandir-WideBold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Agrandir';
+    src: url('agrandir/Agrandir-GrandBlack.eot');
+    src: url('agrandir/Agrandir-GrandBlack.eot?#iefix') format('embedded-opentype'),
+        /* url('agrandir/Agrandir-GrandBlack.woff2') format('woff2'), */
+        url('agrandir/Agrandir-GrandBlack.woff') format('woff'),
+        url('agrandir/Agrandir-GrandBlack.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Agrandir';
+    src: url('agrandir/Agrandir-Regular.eot');
+    src: url('agrandir/Agrandir-Regular.eot?#iefix') format('embedded-opentype'),
+        /* url('agrandir/Agrandir-GrandBlack.woff2') format('woff2'), */
+        url('agrandir/Agrandir-Regular.woff') format('woff'),
+        url('agrandir/Agrandir-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
