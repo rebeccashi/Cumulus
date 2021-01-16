@@ -9,7 +9,7 @@
     "dev": "nodemon index.js",
     "idscrape": "node idscraper.js",
     "descscrape": "node descscraper.js",
-    "keywords": "node keywords.js"
+    "analyze": "node analyzeData.js"
   },
   "keywords": [],
   "author": "",

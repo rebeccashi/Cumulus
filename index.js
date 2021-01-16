@@ -18,7 +18,6 @@ Object.keys(keywords).forEach(l => {
 app.use('/website', express.static(__dirname + '/website'));
 app.use('/', express.static(__dirname + '/website'));
 
-
 /*
   { "query": "software engineering internship new york" }
 */
@@ -56,7 +55,7 @@ app.get('/api/keywords', (req, res) => {
 
   let withPercentages = top10.map(el => { el.percent = (el.count / currAmt).toFixed(5); return el; });
 
-  res.send(withPercentages)
+  res.send(withPercentages.filter(el => (el !== null && el.count > 0)))
 });
 
 /*
@@ -93,7 +92,43 @@ app.get('/api/companies', (req, res) => {
 
   let top20 = sortedCompanies.slice(0, 20);
 
-  res.send(top20)
+  res.send(top20.filter(el => (el !== null && el.count > 0)))
+});
+
+/*
+  { "query": "software engineering internship new york" }
+*/
+app.get('/api/majors', (req, res) => {
+  if (!req.query.q) {
+    res.status(406).send('Missing data');
+    return;
+  }
+
+  // if we had a search it would go here
+  let foundJobs = jobDb.filter(job => job.title.toLowerCase().indexOf(req.query.q.trim().toLowerCase()) >= 0); // fix this
+
+  let majorsObj = {};
+
+  foundJobs.forEach(job => {
+    Object.keys(job.majors).forEach(major => {
+      if (!majorsObj[major]) majorsObj[major] = job.majors[major];
+      else majorsObj[major] += job.majors[major];
+    });
+  });
+
+  let arrayMajors = new Array(10);
+  let index = 0;
+
+  Object.keys(majorsObj).forEach(l => {
+    arrayMajors[index] = { major: l, count: majorsObj[l] };
+    index++;
+  })
+
+  let sortedKeywords = arrayMajors.sort((a,b) => b.count - a.count);
+
+  let top10 = sortedKeywords.slice(0, 10);
+
+  res.send(top10.filter(el => (el !== null && el.count > 0)))
 });
 
 app.listen(process.env.PORT || 3000, () => {
