@@ -41,11 +41,13 @@ app.get('/api/keywords', (req, res) => {
   });
 
   let currAmt = 0;
-  let arrayJobs = [];
+  let arrayJobs = new Array(10);
+  let index = 0;
 
   Object.keys(keywordsObj).forEach(l => {
-    arrayJobs.push({ language: l, count: keywordsObj[l] });
+    arrayJobs[index] = { language: l, count: keywordsObj[l] };
     currAmt += keywordsObj[l];
+    index++;
   })
 
   let sortedKeywords = arrayJobs.sort((a,b) => b.count - a.count);
@@ -55,6 +57,43 @@ app.get('/api/keywords', (req, res) => {
   let withPercentages = top10.map(el => { el.percent = (el.count / currAmt).toFixed(5); return el; });
 
   res.send(withPercentages)
+});
+
+/*
+  { "query": "software engineering internship new york" }
+*/
+app.get('/api/companies', (req, res) => {
+  if (!req.query.q) {
+    res.status(406).send('Missing data');
+    return;
+  }
+
+  let companies = new Array(20);
+  let companyObj = {};
+  let index = 0;
+  
+  jobDb.forEach((obj) => {
+    let company = obj.company;
+
+    if (obj.title.toLowerCase().indexOf(req.query.q.trim().toLowerCase()) < 0) return;
+    
+    if (!companyObj[company]) {
+      companyObj[company] = 1;
+    } else {
+      companyObj[company]++;
+    }
+  });
+
+  Object.keys(companyObj).forEach(l => {
+    companies[index] = { company: l, count: companyObj[l] };
+    index++;
+  });
+
+  let sortedCompanies = companies.sort((a,b) => b.count - a.count);
+
+  let top20 = sortedCompanies.slice(0, 20);
+
+  res.send(top20)
 });
 
 app.listen(process.env.PORT || 3000, () => {
