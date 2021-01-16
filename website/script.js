@@ -15,11 +15,22 @@ const doSearchForm = () => {
     e.preventDefault();
 
     alert(input.value);
+
+    loadSearch();
   });
 }
 
+const doFilters = () => {
+
+}
+
 const loadLanding = () => {
-  document.querySelector('main').appendChild(document.querySelector('#landing-template').content.cloneNode(true));
+  let main = document.querySelector('main');
+
+  if (main.classList.contains('search')) main.classList.remove('search');
+  main.classList.add('landing');
+
+  main.appendChild(document.querySelector('#landing-template').content.cloneNode(true));
   mockLinks();
   doSearchForm();
 }
@@ -33,6 +44,22 @@ const loadSearch = (q) => {
     loadLanding();
     return;
   }
+
+  let main = document.querySelector('main');
+
+  if (main.classList.contains('landing')) main.classList.remove('landing');
+  main.classList.add('search');
+
+  main.appendChild(document.querySelector('#search-template').content.cloneNode(true));
+
+  let searchForm = document.querySelector('form.search-area');
+  let input = searchForm.querySelector('.search-input');
+
+  input.value = q;
+
+  mockLinks();
+  doSearchForm();
+  doFilters();
 }
 
 const unloadSearch = () => {

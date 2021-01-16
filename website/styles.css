@@ -19,13 +19,13 @@ body {
   background: var(--bg);
 }
 
-.cloud {
+.landing .cloud {
   position: fixed;
   fill: var(--transparent);
   z-index: -1;
 }
 
-.cloud-bottom-left {
+.landing .cloud-bottom-left {
   width: 80vw;
   bottom: -24%;
   left: -10%;
@@ -35,7 +35,7 @@ body {
   animation-iteration-count: infinite;
 }
 
-.cloud-top-right {
+.landing .cloud-top-right {
   width: 35vw;
   top: 5%;
   right: -15%;
@@ -46,7 +46,7 @@ body {
   animation-iteration-count: infinite;
 }
 
-.cloud-top-left {
+.landing .cloud-top-left {
   width: 20vw;
   top: 0%;
   left: 10%;
@@ -130,6 +130,10 @@ main {
   grid-gap: 5vh;
 }
 
+main.search {
+  padding-top: calc(5vh + 128px);
+}
+
 h1 {
   font-size: 3rem;
   font-weight: bold;
@@ -205,6 +209,10 @@ input:focus {
   backdrop-filter: blur(16px);
   box-shadow: 0px 3px 0px 0px var(--bg-darker);
   transition: 0.2s ease-out;
+}
+
+.filter-card:hover {
+  cursor: pointer;
 }
 
 .card:hover {
