@@ -70,5 +70,12 @@ const transformMapIntoData = (map) => {
   return data
 }
 
+const findTopmajors = () => {
+  const majors = ["computer science", "computer engineering",  "information technology", "statistics", "data analytics", "data science",
+"computer information systems", "electrical engineering", "mechanical engineering", "industrial engineering", "biomedical engineering", "chemistry", 
+"business analytics", "mathematics", "physics", "material science Engineering"]
+  // Computer Engineering/Science
+  // Computer Science or Engineering
+
 findTopCompanies();
 
