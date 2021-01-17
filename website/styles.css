@@ -8,6 +8,7 @@
   --bg: #c6f1ff;
   --bg-darker: #b7d6d6;
   --bg-darkest: #112f57;
+  --less-transparent: #ffffffcc;
   --transparent: #ffffff99;
   --header: 104px;
   --graph: #18769e;
@@ -17,6 +18,7 @@
 html {
   height: 100%;
   font-size: 0.95rem;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -230,6 +232,17 @@ h1 {
   display: grid;
   grid-template-rows: auto 1fr;
   grid-gap: 16px;
+}
+
+main.search .search-area {
+  position: sticky;
+  top: calc(var(--header) + 24px);
+  z-index: 50;
+}
+
+main.search .search-area input {
+  background: var(--less-transparent);
+  border: 1px solid var(--bg-darker);
 }
 
 .search-area input[type="submit"] { 

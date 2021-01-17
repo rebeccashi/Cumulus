@@ -39,6 +39,8 @@ const doLandingSearchForm = () => {
     if (submitting) return;
     submitting = true;
 
+    window.scrollTo(0, 0)
+
     svg.classList.add('submitted');
 
     unloadSearch()
@@ -61,6 +63,8 @@ const doSearchSearchForm = () => {
 
     if (submitting) return;
     submitting = true;
+
+    window.scrollTo(0, 0)
 
     svg.classList.add('submitted');
 
