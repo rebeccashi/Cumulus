@@ -550,6 +550,77 @@ const buildTopTypesGraph = (resultEl, data) => {
               .tickFormat(d3.format("d")));
 }
 
+const buildTopTypesPieChart = (resultEl, data) => {
+  let tk = document.querySelector('#top-types-graph-template').content.cloneNode(true);
+  
+  Array.from(tk.querySelectorAll('.slot')).forEach(slot => {
+    slot.textContent = data[slot.dataset.slot];
+  });
+
+  data = data.types;
+
+  resultEl.appendChild(tk);
+
+  let width = 400;
+  let height = 400;
+  let margin = {top: 30, right: 20, bottom: 20, left: 40};
+
+  let svg = d3.select('.visualization-container:not(.selected)')
+            .attr('class', 'visualization-container selected')
+            .append('svg')
+              .attr("width", width)
+              .attr("height", height)
+            .append("g")
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");        
+
+  let arc = d3.arc()
+    .innerRadius(0)
+    .outerRadius(Math.min(width, height) / 2 - 1)
+
+  let arcLabel = () =>{
+      let radius = Math.min(width, height) / 2 * 0.8;
+      return d3.arc().innerRadius(radius).outerRadius(radius);
+  }
+
+  let color = d3.scaleOrdinal()
+    .domain(data.map(d => d.type))
+    .range(d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), data.length).reverse())
+  
+  let pie = d3.pie() 
+    .value(d => d.count)
+
+  let arcs =  pie(data);
+
+  svg.attr("stroke", "white")
+  .selectAll("path")
+  .data(arcs)
+  .join("path")
+    .attr("fill", d => color(d.data.type))
+    .attr("d", arc)
+  .append("title")
+    .text(d => `${d.type}: ${d.count}`);
+
+  svg.append("g")
+    // .attr("font-family", "sans-serif")
+    .attr("font-size", 12)
+    .attr("text-anchor", "middle")
+  .selectAll("text")
+  .data(arcs)
+  .join("text")
+    .attr("stroke", "black")
+    .attr("transform", d => `translate(${arc.centroid(d)})`)
+    .call(text => text.append("tspan")
+        .attr("y", "-0.4em")
+        // .attr("font-weight", "bold")
+        .text(d => d.data.type))
+    .call(text => text.filter(d => (d.endAngle - d.startAngle) > 0.25).append("tspan")
+        .attr("x", 0)
+        .attr("y", "0.7em")
+        .attr("fill-opacity", 0.7)
+        .text(d => d.data.count.toLocaleString()));
+
+}
+
 async function fetchAndBuildResults(resultEl, query) {
   const keywordsResponse = await fetch('/api/keywords?q=' + query.trim());
   const keywordsData = await keywordsResponse.json();
@@ -600,7 +671,8 @@ async function fetchAndBuildResults(resultEl, query) {
     buildTopCompanies(resultEl, companiesObj, true);
     buildTopMajorsGraph(resultEl, majorsObj);
     buildTopMajors(resultEl, majorsObj, true);
-    buildTopTypesGraph(resultEl, typesObj);
+    // buildTopTypesGraph(resultEl, typesObj);
+    buildTopTypesPieChart(resultEl, typesObj);
     buildTopTypes(resultEl, typesObj, true);
 
     Array.from(resultEl.querySelectorAll('.show-data')).forEach(el => {
