@@ -10,6 +10,7 @@
   --bg-darkest: #112f57;
   --transparent: #ffffff99;
   --header: 104px;
+  --graph: #18769e;
   font-family: 'Agrandir';
 }
 
@@ -303,7 +304,7 @@ h4 {
 }
 
 .bar {
-  fill: var(--bg-darker);
+  fill: var(--graph);
   transition: 0.3s cubic-bezier(0.15, 0.82, 0.15, 1);
 }
 
