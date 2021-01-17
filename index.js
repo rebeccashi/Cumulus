@@ -134,6 +134,56 @@ app.get('/api/majors', (req, res) => {
 
   let withPercentages = top10.map(el => { el.percent = (el.count / currAmt).toFixed(5); return el; });
 
+  res.send(withPercentages.filter(el => (el !== null && el.count > 0)))
+});
+
+/*
+  { "query": "software engineering internship new york" }
+*/
+app.get('/api/types', (req, res) => {
+  if (!req.query.q) {
+    res.status(406).send('Missing data');
+    return;
+  }
+
+  // if we had a search it would go here
+  let foundJobs = jobDb.filter(job => job.title.toLowerCase().indexOf(req.query.q.trim().toLowerCase()) >= 0); // fix this
+
+  let typesObj = {};
+
+  foundJobs.forEach(job => {
+    if (job.type) {
+      job.type.forEach(type => {
+        type = type.toLowerCase();
+
+        if (type.indexOf(',') >= 0) {
+          typeArr = type.split(',');
+          typeArr.forEach(innertype => {
+            innertype = innertype.trim();
+
+            if (!typesObj[innertype]) typesObj[innertype] = 1;
+            else typesObj[innertype]++;
+          })
+        } else {
+          if (!typesObj[type]) typesObj[type] = 1;
+          else typesObj[type]++;
+        }
+      });
+    }
+  });
+
+  let arrayTypes = new Array(5);
+  let index = 0;
+
+  Object.keys(typesObj).forEach(l => {
+    arrayTypes[index] = { type: l.charAt(0).toUpperCase() + l.substr(1), count: typesObj[l] };
+    index++;
+  })
+
+  let sortedKeywords = arrayTypes.sort((a,b) => b.count - a.count);
+
+  let top10 = sortedKeywords.slice(0, 10);
+
   res.send(top10.filter(el => (el !== null && el.count > 0)))
 });
 

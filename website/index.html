@@ -40,7 +40,7 @@
           <thead>
             <tr>
               <td>Company</td>
-              <td>Posts</td>
+              <td>Jobs</td>
             </tr>
           </thead>
           <tbody>
@@ -77,6 +77,29 @@
         <div class="visualization-container">
         </div>
         <a role="button" class="show-data" data-hidden="true" data-selector="top-majors" tabindex="0">Show data</a>
+      </div>
+    </template>
+    <template id="top-types-template">
+      <div class="card result-card loader">
+        <h3>Top job types for &quot;<span class="slot" data-slot="query"></span>&quot;</h3>
+        <table>
+          <thead>
+            <tr>
+              <td>Job type</td>
+              <td>Jobs</td>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </template>
+    <template id="top-types-graph-template">
+      <div class="card result-card loader">
+        <h3>Top job types for &quot;<span class="slot" data-slot="query"></span>&quot; &mdash; visualized</h3>
+        <div class="visualization-container">
+        </div>
+        <a role="button" class="show-data" data-hidden="true" data-selector="top-types" tabindex="0">Show data</a>
       </div>
     </template>
     <template id="load-search-results-template">

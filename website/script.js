@@ -432,6 +432,120 @@ const buildTopMajorsGraph = (resultEl, data) => {
               .tickFormat(d3.format("d")));
 }
 
+const buildTopTypes = (resultEl, data, hide) => {
+  let tk = document.querySelector('#top-types-template').content.cloneNode(true);
+
+  if (hide) {
+    tk.querySelector('.result-card').classList.add('hidden');
+    tk.querySelector('.result-card').classList.add('top-types');
+  }
+
+  Array.from(tk.querySelectorAll('.slot')).forEach(slot => {
+    slot.textContent = data[slot.dataset.slot];
+  });
+
+  let tbody = tk.querySelector('tbody');
+
+  data.types.forEach(type => {
+    tbody.insertAdjacentHTML('beforeEnd', `
+      <tr>
+        <td>${type.type.charAt(0).toUpperCase() + type.type.substr(1)}</td>
+        <td>${parseFloat(type.count)}</td>
+      </tr>
+    `)
+  });
+
+  resultEl.appendChild(tk);
+}
+
+const buildTopTypesGraph = (resultEl, data) => {
+  let tk = document.querySelector('#top-types-graph-template').content.cloneNode(true);
+  
+  Array.from(tk.querySelectorAll('.slot')).forEach(slot => {
+    slot.textContent = data[slot.dataset.slot];
+  });
+
+  data = data.types;
+
+  resultEl.appendChild(tk);
+
+  // set the dimensions and margins of the graph
+  let margin = {top: 20, right: 20, bottom: 50, left: 40},
+  width = 480 - margin.left - margin.right,
+  height = 240 - margin.top - margin.bottom;
+
+  // set the ranges
+  let x = d3.scaleBand()
+        .range([0, width])
+        .padding(0.3);
+  let y = d3.scaleLinear()
+        .range([height, 0]);
+  // let xAxis = d3.svg.axis()
+  // .scale(x);
+
+  x.domain(data.map(function(d) { return d.type; }));
+  y.domain([0, d3.max(data, function(d) { return parseFloat(d.count); })]);
+
+  let svg = d3.select('.visualization-container:not(.selected)')
+    .attr('class', 'visualization-container selected')
+    .append('svg')
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+  let div = d3.select('body')
+    .select('div.tooltip')
+
+  svg.selectAll(".bar")
+    .data(data)
+    .enter().append("rect")
+    .attr("class", "bar")
+    .attr("x", function(d) { return x(d.type); })
+    .attr("width", x.bandwidth())
+    .attr("y", function(d) { return y(d.count); })
+    .attr("height", function(d) { return height - y(parseFloat(d.count)); })
+    .on('mouseover', function(e, d) {
+      div.transition()		
+          .duration(200)		
+          .style("opacity", .9);		
+      div	.html(`<span class="title">${d.type}</span><span class="value">${d.count} posting${d.count > 1 ? 's' : ''}</span>`)	
+          .style("left", (e.clientX) + "px")		
+          .style("top", (e.clientY) + "px");
+    })
+    .on('mousemove', function(e) {
+      div	.style("left", (e.clientX) + "px")		
+          .style("top", (e.clientY) + "px");
+    })
+    .on('mouseout', function() {
+      div.transition()		
+          .duration(500)		
+          .style("opacity", 0);	
+    })
+
+  // add the x Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).tickFormat(function(d) { return truncateLabel(d); }))
+      .selectAll("text")  
+          .style("text-anchor", "end")
+          .attr("dx", "-.8em")
+          .attr("dy", ".15em")
+          .attr("transform", "rotate(-40)" );
+      // .call(xAxis)
+      // .attr("transform", "rotate(90)")
+
+  const yAxisTicks = y.ticks()
+  .filter(Number.isInteger);
+
+  // add the y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y)
+              .tickValues(yAxisTicks)
+              .tickFormat(d3.format("d")));
+}
+
 async function fetchAndBuildResults(resultEl, query) {
   const keywordsResponse = await fetch('/api/keywords?q=' + query.trim());
   const keywordsData = await keywordsResponse.json();
@@ -441,6 +555,9 @@ async function fetchAndBuildResults(resultEl, query) {
 
   const majorsResponse = await fetch('/api/majors?q=' + query.trim());
   let majorsData = await majorsResponse.json();
+
+  const typesResponse = await fetch('/api/types?q=' + query.trim());
+  let typesData = await typesResponse.json();
 
   await doUnload(resultEl);
 
@@ -458,6 +575,10 @@ async function fetchAndBuildResults(resultEl, query) {
     majors: majorsData,
     query
   }
+  let typesObj = {
+    types: typesData,
+    query
+  }
   let div = d3.select('body')
               .append('div')
               .attr('class', 'tooltip')			
@@ -467,6 +588,7 @@ async function fetchAndBuildResults(resultEl, query) {
     buildTopKeywords(resultEl, keywordsObj, false);
     buildTopCompanies(resultEl, companiesObj, false);
     buildTopMajors(resultEl, majorsObj, false);
+    buildTopTypes(resultEl, typesObj, false);
   } else {
     buildTopKeywordsGraph(resultEl, keywordsObj);
     buildTopKeywords(resultEl, keywordsObj, true);
@@ -474,6 +596,8 @@ async function fetchAndBuildResults(resultEl, query) {
     buildTopCompanies(resultEl, companiesObj, true);
     buildTopMajorsGraph(resultEl, majorsObj);
     buildTopMajors(resultEl, majorsObj, true);
+    buildTopTypesGraph(resultEl, typesObj);
+    buildTopTypes(resultEl, typesObj, true);
 
     Array.from(resultEl.querySelectorAll('.show-data')).forEach(el => {
       el.addEventListener('click', () => {
@@ -664,7 +788,6 @@ window.addEventListener('resize', () => {
 });
 
 window.addEventListener('popstate', (e) => {
-  console.log(e, e.state);
   if (e.state && e.state.query) {
     if (unloadCurrent === unloadResults) {
       getResults(e.state.query);
