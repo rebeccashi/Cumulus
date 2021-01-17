@@ -107,7 +107,7 @@ const buildTopKeywords = (resultEl, data, hide) => {
   }
 
   Array.from(tk.querySelectorAll('.slot')).forEach(slot => {
-    slot.innerHTML = data[slot.dataset.slot];
+    slot.textContent = data[slot.dataset.slot];
   });
 
   let tbody = tk.querySelector('tbody');
@@ -128,7 +128,7 @@ const buildTopKeywordsGraph = (resultEl, data) => {
   let tk = document.querySelector('#top-keywords-graph-template').content.cloneNode(true);
 
   Array.from(tk.querySelectorAll('.slot')).forEach(slot => {
-    slot.innerHTML = data[slot.dataset.slot];
+    slot.textContent = data[slot.dataset.slot];
   });
 
   data = data.keywords;
@@ -217,7 +217,7 @@ const buildTopCompanies = (resultEl, data, hide) => {
   }
 
   Array.from(tk.querySelectorAll('.slot')).forEach(slot => {
-    slot.innerHTML = data[slot.dataset.slot];
+    slot.textContent = data[slot.dataset.slot];
   });
 
   let tbody = tk.querySelector('tbody');
@@ -238,7 +238,7 @@ const buildTopCompaniesGraph = (resultEl, data) => {
   let tk = document.querySelector('#top-companies-graph-template').content.cloneNode(true);
   
   Array.from(tk.querySelectorAll('.slot')).forEach(slot => {
-    slot.innerHTML = data[slot.dataset.slot];
+    slot.textContent = data[slot.dataset.slot];
   });
 
   data = data.companies;
@@ -331,7 +331,7 @@ const buildTopMajors = (resultEl, data, hide) => {
   }
 
   Array.from(tk.querySelectorAll('.slot')).forEach(slot => {
-    slot.innerHTML = data[slot.dataset.slot];
+    slot.textContent = data[slot.dataset.slot];
   });
 
   let tbody = tk.querySelector('tbody');
@@ -352,7 +352,7 @@ const buildTopMajorsGraph = (resultEl, data) => {
   let tk = document.querySelector('#top-majors-graph-template').content.cloneNode(true);
 
   Array.from(tk.querySelectorAll('.slot')).forEach(slot => {
-    slot.innerHTML = data[slot.dataset.slot];
+    slot.textContent = data[slot.dataset.slot];
   });
 
   data = data.majors;
@@ -635,7 +635,7 @@ window.addEventListener('load', () => {
     unloadCurrent = unloadResults;
     loadSearch();
   } else if (window.location.pathname.includes('search') && url.has('q')) {
-    window.history.pushState({ search: true, query: q }, '', `/search?q=${encodeURIComponent(query)}`);
+    window.history.pushState({ search: true, query: url.get('q') }, '', `/search?q=${encodeURIComponent(url.get('q'))}`);
     unloadCurrent = unloadSearch;
     loadResults(url.get('q'));
   } else {
