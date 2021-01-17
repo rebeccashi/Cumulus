@@ -561,17 +561,20 @@ const buildTopTypesPieChart = (resultEl, data) => {
 
   resultEl.appendChild(tk);
 
-  let width = 400;
-  let height = 400;
-  let margin = {top: 30, right: 20, bottom: 20, left: 40};
+  // TODO: MAKE SVG SMALLER
+  let margin = {top: 30, right: 20, bottom: 20, left: 50};
+  let width = 480 - margin.left - margin.right;
+  let height = 480 - margin.top - margin.bottom;
+  let x = width /2 + margin.left;
+  let y = width/2 + margin.top;
 
   let svg = d3.select('.visualization-container:not(.selected)')
             .attr('class', 'visualization-container selected')
             .append('svg')
-              .attr("width", width)
-              .attr("height", height)
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
             .append("g")
-            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");        
+            .attr("transform", "translate(" + x + "," + y + ")");        
 
   let arc = d3.arc()
     .innerRadius(0)
@@ -584,7 +587,10 @@ const buildTopTypesPieChart = (resultEl, data) => {
 
   let color = d3.scaleOrdinal()
     .domain(data.map(d => d.type))
-    .range(d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), data.length).reverse())
+    // .range(d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), data.length).reverse())
+    .range(d3.schemeBlues[data.length])
+  // console.log()
+  console.log(d3.schemeBlues[data.length])
   
   let pie = d3.pie() 
     .value(d => d.count)
