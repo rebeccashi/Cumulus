@@ -1,4 +1,10 @@
-# cumulus
+# Cumulus
+
+Cumulus offers a snapshot of the current job market to help you ease the stress of job hunting, by displaying the most in-demand skills, the top majors and other meaningful data to your desired job title. 
+
+<img width="1000" alt="landing page" src="https://user-images.githubusercontent.com/27893685/104851130-15a50200-58c1-11eb-8aec-cb106f8ea962.png">
+
+---
 
 ## Running
 
