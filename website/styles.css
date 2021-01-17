@@ -42,13 +42,13 @@ body {
   transition: 0.3s cubic-bezier(0.15, 0.82, 0.15, 1);
 }
 
-.landing .cloud {
+main .cloud {
   position: fixed;
   fill: var(--transparent);
   z-index: -1;
 }
 
-.landing .cloud-bottom-left {
+main .cloud-bottom-left {
   width: 80vw;
   bottom: -24%;
   left: -10%;
@@ -58,7 +58,15 @@ body {
   animation-iteration-count: infinite;
 }
 
-.landing .cloud-top-right {
+main.landing .cloud-bottom-left {
+  width: 80vw;
+  bottom: -27%;
+  left: auto;
+  right: -20%;
+  animation: none;
+}
+
+main .cloud-top-right {
   width: 35vw;
   top: 5%;
   right: -15%;
@@ -69,7 +77,14 @@ body {
   animation-iteration-count: infinite;
 }
 
-.landing .cloud-top-left {
+main.landing .cloud-top-right {
+  width: 30vw;
+  top: 5%;
+  right: 10%;
+  animation: none;
+}
+
+main .cloud-top-left {
   width: 20vw;
   top: 0%;
   left: 10%;
@@ -78,6 +93,14 @@ body {
   animation-duration: 42s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+}
+
+main.landing .cloud-top-left {
+  width: 11vw;
+  bottom: 10%;
+  top: auto;
+  left: 2%;
+  animation: none;
 }
 
 @keyframes cloud-0 {
@@ -158,6 +181,15 @@ main {
   grid-gap: 5vh;
 }
 
+main.landing {
+  padding-top: calc(5vh + 128px);
+  padding-left: 10vw;
+  padding-right: 15vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 main.search {
   padding-top: calc(5vh + 128px);
   grid-template-rows: 1fr;
@@ -166,6 +198,31 @@ main.search {
 h1 {
   font-size: 3rem;
   font-weight: 800;
+}
+
+.landing-copy {
+  height: auto;
+  width: 80%;
+}
+
+.landing-copy p {
+  max-width: 35ch;
+  line-height: 1.2em;
+  margin: 32px 0;
+}
+
+.card.cta-card {
+  display: inline-block;
+  width: auto;
+  font-size: 0.75em;
+}
+
+.card.cta-card h4 {
+  margin-bottom: 0;
+}
+
+.cta-card:hover {
+  cursor: pointer;
 }
 
 .action-area {
@@ -179,7 +236,7 @@ h1 {
 }
 
 h2 {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 800;
   margin-bottom: 16px;
 }
@@ -232,7 +289,7 @@ input:focus {
 .search-cta {
   display: flex;
   flex-flow: column nowrap;
-  margin-top: 8px;
+  margin-top: 32px;
 }
 
 .featured-searches {
@@ -242,8 +299,8 @@ input:focus {
 }
 
 .featured-card {
-  margin-right: 8px;
-  margin-bottom: 8px;
+  margin-right: 16px;
+  margin-bottom: 16px;
 }
 
 .featured-card:hover {
@@ -489,9 +546,19 @@ footer {
   }
 
   main {
-    padding: calc(5vh + 128px) 5vw;
+    padding: calc(5vh + var(--header)) 5vw;
     padding-bottom: 32px;
     grid-template-rows: auto 1fr;
+  }
+
+  main.landing {
+    padding: calc(5vh + var(--header)) 5vw;
+    padding-bottom: 64px;
+  }
+
+  .landing-copy {
+    height: auto;
+    width: 100%;
   }
 
   h1 {
@@ -499,7 +566,7 @@ footer {
   }
 
   h2 {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
   }
 
   h3 {

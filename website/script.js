@@ -17,12 +17,12 @@ const doFeaturedSearches = () => {
       if (submitting) return;
       submitting = true;
 
-      unloadLanding()
+      unloadSearch()
         .then(() => {
           let query = link.dataset.search;
-          window.history.pushState({ query }, '', `?q=${encodeURIComponent(query)}`);
+          window.history.pushState({ search: true, query }, '', `/search?q=${encodeURIComponent(query)}`);
           submitting = false;
-          loadSearch(query);
+          loadResults(query);
         })
     });
   });
@@ -41,12 +41,12 @@ const doLandingSearchForm = () => {
 
     svg.classList.add('submitted');
 
-    unloadLanding()
+    unloadSearch()
       .then(() => {
         let query = input.value;
-        window.history.pushState({ query }, '', `?q=${encodeURIComponent(query)}`);
+        window.history.pushState({ search: true, query }, '', `/search?q=${encodeURIComponent(query)}`);
         submitting = false;
-        loadSearch(query);
+        loadResults(query);
       })
   });
 }
@@ -65,14 +65,10 @@ const doSearchSearchForm = () => {
     svg.classList.add('submitted');
 
     let query = input.value;
-    window.history.pushState({ query }, '', `?q=${encodeURIComponent(query)}`);
+    window.history.pushState({ search: true, query }, '', `/search?q=${encodeURIComponent(query)}`);
     getResults(input.value);
     setTimeout(() => { if (svg.classList.contains('submitted')) svg.classList.remove('submitted'); submitting = false }, 800);
   });
-}
-
-const doFilters = () => {
-
 }
 
 const doLoad = (el) => {
@@ -95,24 +91,6 @@ const doUnload = (el) => {
 
     setTimeout(resolve, ctr);
   });
-}
-
-const loadLanding = () => {
-  let main = document.querySelector('main');
-
-  main.innerHTML = '';
-
-  if (main.classList.contains('search')) main.classList.remove('search');
-  main.classList.add('landing');
-
-  main.appendChild(document.querySelector('#landing-template').content.cloneNode(true));
-
-  doLoad(main);
-  unloadCurrent = unloadLanding;
-
-  mockLinks();
-  doLandingSearchForm();
-  doFeaturedSearches();
 }
 
 const truncateLabel = (label) => {
@@ -525,16 +503,34 @@ const getResults = (query) => {
   fetchAndBuildResults(resultEl, query);
 }
 
-const unloadLanding = () => {
+const loadSearch = () => {
+  let main = document.querySelector('main');
+
+  main.innerHTML = '';
+
+  if (main.classList.contains('search')) main.classList.remove('search');
+  if (main.classList.contains('landing')) main.classList.remove('landing');
+
+  main.appendChild(document.querySelector('#search-template').content.cloneNode(true));
+
+  doLoad(main);
+  unloadCurrent = unloadSearch;
+
+  mockLinks();
+  doLandingSearchForm();
+  doFeaturedSearches();
+}
+
+const unloadSearch = () => {
   return new Promise((resolve, reject) => {
     doUnload(document.querySelector('main'))
       .then(() => resolve());
   });
 }
 
-const loadSearch = (q) => {
+const loadResults = (q) => {
   if (!q) {
-    loadLanding();
+    loadSearch();
     return;
   }
 
@@ -545,7 +541,7 @@ const loadSearch = (q) => {
   if (main.classList.contains('landing')) main.classList.remove('landing');
   main.classList.add('search');
 
-  main.appendChild(document.querySelector('#search-template').content.cloneNode(true));
+  main.appendChild(document.querySelector('#results-template').content.cloneNode(true));
 
   let searchForm = document.querySelector('form.search-area');
   let input = searchForm.querySelector('.search-input');
@@ -559,14 +555,50 @@ const loadSearch = (q) => {
   getResults(q);
 
   doLoad(main);
-  unloadCurrent = unloadSearch;
+  unloadCurrent = unloadResults;
 
   mockLinks();
   doSearchSearchForm();
-  doFilters();
 }
 
-const unloadSearch = () => {
+const unloadResults = () => {
+  return new Promise((resolve, reject) => {
+    let div = document.querySelector('div.tooltip');
+
+    if (div) {
+      div.parentNode.removeChild(div);
+    }
+
+    doUnload(document.querySelector('main'))
+      .then(() => resolve());
+  });
+}
+
+const loadLanding = () => {
+  let main = document.querySelector('main');
+
+  main.innerHTML = '';
+
+  if (main.classList.contains('search')) main.classList.remove('search');
+  main.classList.add('landing');
+
+  main.appendChild(document.querySelector('#landing-template').content.cloneNode(true));
+
+  doLoad(main);
+  unloadCurrent = unloadLanding;
+
+  mockLinks();
+
+  document.querySelector('.cta-card').addEventListener('click', () => {
+    unloadLanding()
+      .then(() => {
+        window.history.pushState({ search: true, query: null }, '', `/search`);
+        loadSearch();
+      })
+  });
+}
+
+const unloadLanding = () => {
   return new Promise((resolve, reject) => {
     doUnload(document.querySelector('main'))
       .then(() => resolve());
@@ -598,12 +630,18 @@ window.addEventListener('touchmove', () => {
 window.addEventListener('load', () => {
   let url = new URLSearchParams(window.location.search);
 
-  if (!url.has('q')) {
+  if (window.location.pathname.includes('search') && !url.has('q')) {
+    window.history.pushState({ search: true, query: null }, '', `/search`);
+    unloadCurrent = unloadResults;
+    loadSearch();
+  } else if (window.location.pathname.includes('search') && url.has('q')) {
+    window.history.pushState({ search: true, query: q }, '', `/search?q=${encodeURIComponent(query)}`);
     unloadCurrent = unloadSearch;
-    loadLanding();
+    loadResults(url.get('q'));
   } else {
+    window.history.pushState(null, '', `/`);
     unloadCurrent = unloadLanding;
-    loadSearch(url.get('q'));
+    loadLanding();
   }
 
   document.querySelector('.logo').addEventListener('click', (e) => {
@@ -613,7 +651,7 @@ window.addEventListener('load', () => {
 
     unloadCurrent()
       .then(() => {
-        window.history.pushState({ query: null }, '', '/');
+        window.history.pushState({ search: false, query: null }, '', '/');
         loadLanding();
       })
   });
@@ -626,16 +664,22 @@ window.addEventListener('resize', () => {
 });
 
 window.addEventListener('popstate', (e) => {
+  console.log(e, e.state);
   if (e.state && e.state.query) {
-    if (unloadCurrent === unloadSearch) {
+    if (unloadCurrent === unloadResults) {
       getResults(e.state.query);
     }
     else {
       unloadCurrent()
         .then(() => {
-          loadSearch(e.state.query);
+          loadResults(e.state.query);
         })
     }
+  } else if (e.state !== null) {
+    unloadCurrent()
+      .then(() => {
+        loadSearch();
+      })
   } else {
     unloadCurrent()
       .then(() => {

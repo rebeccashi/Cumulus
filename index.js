@@ -18,6 +18,7 @@ Object.keys(keywords).forEach(l => {
 
 app.use('/website', express.static(__dirname + '/website'));
 app.use('/', express.static(__dirname + '/website'));
+app.use('/search', express.static(__dirname + '/website'));
 
 /*
   { "query": "software engineering internship new york" }
