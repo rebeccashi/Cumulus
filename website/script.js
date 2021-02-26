@@ -573,6 +573,7 @@ const buildTopTypesPieChart = (resultEl, data) => {
             .append('svg')
               .attr("width", width + margin.left + margin.right)
               .attr("height", height + margin.top + margin.bottom)
+              .attr('viewBox', `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
             .append("g")
             .attr("transform", "translate(" + x + "," + y + ")");        
 
@@ -587,10 +588,7 @@ const buildTopTypesPieChart = (resultEl, data) => {
 
   let color = d3.scaleOrdinal()
     .domain(data.map(d => d.type))
-    // .range(d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), data.length).reverse())
     .range(d3.schemeBlues[data.length])
-  // console.log()
-  console.log(d3.schemeBlues[data.length])
   
   let pie = d3.pie() 
     .value(d => d.count)
