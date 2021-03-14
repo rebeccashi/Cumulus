@@ -1,0 +1,15 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    background: transparent;
+    justify-content: center;
+    height: 70px;
+    align-items: center;
+}
+
+.link {
+    display: block;
+}

@@ -1,4 +1,8 @@
 .App {
   text-align: center;
   top: 0;
+  margin: 0;
+  background-color: #C6F1FF;
+  font-family: 'Telegraf Regular';
+  /* font-weight: 400; */
 }
