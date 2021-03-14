@@ -1,45 +1,20 @@
 import './App.css';
+import { render } from 'react-dom'
 import {
-  BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
 import Landing from './Landing/Landing'
+import Navbar from './Navbar/Navbar'
 
 function App() {
   return (
     <div className="App">
-      <Router>
-        <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Cumulus</Link>
-              </li>
-              <li>
-                <Link to="/users">Pricing</Link>
-              </li>
-              <li>
-                <Link to="/about">About us</Link>
-              </li>
-            </ul>
-          </nav>
+      <Navbar/>
+        <Switch>
+          <Route path="/" component={Landing}/>
 
-          {/* A <Switch> looks through its children <Route>s and
-              renders the first one that matches the current URL. */}
-          <Switch>
-            <Route path="/">
-              <Landing />
-            </Route>
-
-            {/* <Route path="/pricing">
-              <Pricing />
-            </Route>
-          */}
-          </Switch>
-        </div>
-      </Router>
+        </Switch>
     </div>
   );
 }
