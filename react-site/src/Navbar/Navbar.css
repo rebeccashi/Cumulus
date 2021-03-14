@@ -2,14 +2,46 @@
     position: fixed;
     top: 0;
     left: 0;
-    display: flex;
     width: 100%;
     background: transparent;
     justify-content: center;
-    height: 70px;
     align-items: center;
+    height: 70px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
 }
 
 .link {
     display: block;
+    font-size: 18px;
+    text-decoration: none;
+    color: black;
+}
+
+.logo {
+    font-size: 30px;
+    text-align: center;
+    grid-column: 1/3;
+    font-weight: bold;
+}
+
+.pricing {
+    grid-column: 9/10;
+}
+
+.about {
+    grid-column: 10/11;
+}
+
+#signup {
+    border-radius: 20px;
+    color: white;
+    background: #4756DF;
+    height: 50px;
+    width: 100px;
+    line-height: 48px;
+    grid-column: 11/13;
+    justify-content: center;
+    margin: 0 auto;
+    font-size: 14px;
 }

@@ -9,7 +9,17 @@
 }
 
 .tagline {
-    margin-top: 200px;
+    margin-top: 180px;
     font-family: 'Telegraf';
-    /* margin: 0 auto; */
+    width: 60%;
+
+}
+
+.title {
+    font-size: 48px;
+}
+
+.description {
+    font-size: 20px;
+    font-weight: normal;
 }
