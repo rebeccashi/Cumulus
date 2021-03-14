@@ -9,14 +9,14 @@
 }
 
 .tagline {
-    margin-top: 100px;
+    margin-top: 110px;
     font-family: 'Telegraf';
     width: 50%;
 }
 
 .title {
     font-size: 48px;
-    margin: 30px auto;
+    margin: 40px auto;
 }
 
 .description {
@@ -27,7 +27,7 @@
 
 #search-bar {
     margin: 0 auto;
-    margin-top: 30px;
+    margin-top: 35px;
     height: 56px;
     width: 90%;
     background: rgba(255,255,255,0.6);
