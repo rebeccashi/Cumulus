@@ -9,6 +9,7 @@
     height: 70px;
     display: grid;
     grid-template-columns: repeat(12, 1fr);
+    z-index: 2;
 }
 
 .link {
