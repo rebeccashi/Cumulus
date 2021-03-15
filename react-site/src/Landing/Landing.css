@@ -6,12 +6,14 @@
     background: #C6F1FF;
     display: flex;
     justify-content: center;
+    z-index: -2;
 }
 
 .tagline {
     margin-top: 110px;
     font-family: 'Telegraf';
     width: 50%;
+    z-index: 2;
 }
 
 .title {
@@ -54,4 +56,17 @@
     width: 18%;
     margin-right: 2%;
     margin-top: auto;
+}
+
+#cloud1 {
+    color: white;
+    top: 75px;
+    left: 200px;
+}
+
+.cloud {
+    position: absolute;
+    width: 250px;
+    z-index: 0;
+    mix-blend-mode: lighten;
 }
