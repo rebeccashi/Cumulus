@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-let text = fs.readFileSync("descriptions.json").toString('utf-8');
+let text = fs.readFileSync("data/descriptions.json").toString('utf-8');
 
 let textobj = JSON.parse(text);
 
@@ -75,5 +75,5 @@ var loop = true;
 
 console.log(languagesData);
 
-fs.writeFileSync('languagesData.json', JSON.stringify(languagesData));
-fs.writeFileSync('jobData.json', JSON.stringify(jobData));
+fs.writeFileSync('data/languagesData.json', JSON.stringify(languagesData));
+fs.writeFileSync('data/jobData.json', JSON.stringify(jobData));

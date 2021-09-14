@@ -4,8 +4,8 @@ const app = express();
 app.use(express.json());
 
 // pretend reading from file system is like a database lol
-const jobDb = JSON.parse(fs.readFileSync("jobData.json", 'utf-8'));
-const keywords = JSON.parse(fs.readFileSync("languagesData.json", 'utf-8'));
+const jobDb = JSON.parse(fs.readFileSync("scraping/data/jobData.json", 'utf-8'));
+const keywords = JSON.parse(fs.readFileSync("scraping/data/languagesData.json", 'utf-8'));
 
 const keywordDb = [];
 

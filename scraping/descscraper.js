@@ -5,7 +5,7 @@ const fs = require('fs');
 const HttpsProxyAgent = require('https-proxy-agent');
 const { exit } = require('process');
 
-let file = fs.readFileSync("./top1000ids",'utf8');
+let file = fs.readFileSync("data/top1000ids",'utf8');
 
 let fetches = [];
 let desc = [];
@@ -31,7 +31,7 @@ for (let i = NUM_START; i < fileArr.length; i++) {
     console.log()
 
     if (data.indexOf('Captcha') >= 0) {
-      fs.writeFileSync('descriptions4.json', JSON.stringify(desc));
+      fs.writeFileSync('data/descriptions4.json', JSON.stringify(desc));
       console.log(`failed at ${i}`);
       // exit();
     }
@@ -112,7 +112,7 @@ for (let i = NUM_START; i < fileArr.length; i++) {
     // });
   })
   .catch(err => {
-    fs.writeFileSync('descriptions4.json', JSON.stringify(desc));
+    fs.writeFileSync('data/descriptions4.json', JSON.stringify(desc));
     console.log(err);
   })
 }))
@@ -120,5 +120,5 @@ for (let i = NUM_START; i < fileArr.length; i++) {
 
 Promise.all(fetches)
   .then(e => {
-    fs.writeFileSync('descriptions4.json', JSON.stringify(desc));
+    fs.writeFileSync('data/descriptions4.json', JSON.stringify(desc));
   });
