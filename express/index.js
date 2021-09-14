@@ -16,9 +16,9 @@ Object.keys(keywords).forEach(l => {
   amt += keywords[l];
 })
 
-app.use('/website', express.static(__dirname + '/website'));
-app.use('/', express.static(__dirname + '/website'));
-app.use('/search', express.static(__dirname + '/website'));
+app.use('/website', express.static(process.cwd() + '/website'));
+app.use('/', express.static(process.cwd() + '/website'));
+app.use('/search', express.static(process.cwd() + '/website'));
 
 /*
   { "query": "software engineering internship new york" }
