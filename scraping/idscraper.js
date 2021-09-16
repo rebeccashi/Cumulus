@@ -49,5 +49,5 @@ while (num < MAX_JOBS) {
 Promise.all(fetches)
   .then(e => {
     desc2 = [...new Set(desc)];
-    fs.writeFileSync('data/output/plaintext/top1000ids', desc2.join('\n\n'));
+    fs.writeFileSync('../data/output/plaintext/top1000ids', desc2.join('\n\n'));
   });
