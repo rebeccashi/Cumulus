@@ -1,6 +1,6 @@
-const fetch = require('node-fetch');
-const fs = require('fs');
-const HttpsProxyAgent = require('https-proxy-agent');
+import fetch from 'node-fetch';
+import fs from 'fs';
+import HttpsProxyAgent from 'https-proxy-agent';
 
 let desc = [];
 
@@ -49,5 +49,5 @@ while (num < MAX_JOBS) {
 Promise.all(fetches)
   .then(e => {
     desc2 = [...new Set(desc)];
-    fs.writeFileSync('data/top1000ids', desc2.join('\n\n'));
+    fs.writeFileSync('data/output/plaintext/top1000ids', desc2.join('\n\n'));
   });

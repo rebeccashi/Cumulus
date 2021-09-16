@@ -1,9 +1,9 @@
-const fs = require('fs');
+import fs from 'fs';
 
-let text = fs.readFileSync("data/descriptions.json").toString('utf-8');
+let text = fs.readFileSync("data/input/json/descriptions.json").toString('utf-8');
 
 let textobj = JSON.parse(text);
-// let jobDataObj =  JSON.parse(fs.readFileSync("jobData.json").toString('utf-8'))
+// let jobDataObj =  JSON.parse(fs.readFileSync("data/input/json/jobData.json").toString('utf-8'))
 
 const programmingLanguages = ['Bash', 'C', 'C++', "C#", "CSS", 'Dreamweaver', 'Kotlin',  "Go", 'Golang',  'HTML', "JavaScript", "Java", "Node" , "MySQL", "Objective-C", 'Python', 'Perl', 'PHP', 'Qt', 'SQL', 'R', 'Ruby', 'Ruby on Rails', 'Scala', 'Smalltalk', 'Postgres', 'PostgreSQL', 'GraphQL', 'MongoDB', 'Swift', 'jQuery', 'Matlab', 'React', 'AWS', 'TypeScript', ];
 const majors = ["Computer Science", "Computer Engineering",  "Information Technology", "Statistics", "Data Analytics", "Data Science", "Computer information Systems", "Electrical Engineering", "Mechanical Engineering", "Industrial Engineering", "Biomedical Engineering", "Chemistry", "Business Analytics", "Mathematics", "Physics", "Material Science Engineering"];
@@ -49,8 +49,8 @@ const findTopLanguages = () => {
   
     jobData.push(job);
   })
-  // fs.writeFileSync('languagesData.json', JSON.stringify(languagesData));
-  fs.writeFileSync('data/jobData.json', JSON.stringify(jobData));
+  // fs.writeFileSync('data/output/json/languagesData.json', JSON.stringify(languagesData));
+  fs.writeFileSync('data/output/json/jobData.json', JSON.stringify(jobData));
 }
 
 const findTopCompanies = () => {
@@ -70,7 +70,7 @@ const findTopCompanies = () => {
   })
   companyData = transformMapIntoData(companyMap);
   // console.log(companyData)
-  // fs.writeFileSync('companyData.json', JSON.stringify(companyData));
+  // fs.writeFileSync('data/output/json/companyData.json', JSON.stringify(companyData));
 }
 
 const transformMapIntoData = (map) => {
