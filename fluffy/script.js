@@ -626,16 +626,16 @@ const buildTopTypesPieChart = (resultEl, data) => {
 }
 
 async function fetchAndBuildResults(resultEl, query) {
-  const keywordsResponse = await fetch('/api/keywords?q=' + query.trim());
+  const keywordsResponse = await fetch('http://localhost:3000/api/keywords?q=' + query.trim());
   const keywordsData = await keywordsResponse.json();
 
-  const companiesResponse = await fetch('/api/companies?q=' + query.trim());
+  const companiesResponse = await fetch('http://localhost:3000/api/companies?q=' + query.trim());
   let companiesData = await companiesResponse.json();
 
-  const majorsResponse = await fetch('/api/majors?q=' + query.trim());
+  const majorsResponse = await fetch('http://localhost:3000/api/majors?q=' + query.trim());
   let majorsData = await majorsResponse.json();
 
-  const typesResponse = await fetch('/api/types?q=' + query.trim());
+  const typesResponse = await fetch('http://localhost:3000/api/types?q=' + query.trim());
   let typesData = await typesResponse.json();
 
   await doUnload(resultEl);
@@ -824,6 +824,7 @@ const menuBtnListener = () => {
     });
   }
 }
+
 
 window.addEventListener('touchmove', () => {
   if (document.querySelector('.cta').style.right === '0px') {

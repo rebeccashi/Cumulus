@@ -8,6 +8,15 @@ import Cloud5 from '../images/cloud5.svg';
 
 class Landing extends React.Component {
 
+    constructor(props) {
+        super(props)
+        this.onSearch = this.onSearch.bind(this)
+    }
+
+    onSearch(e) {
+        console.log(e.target);
+    }
+
     render() {
         return (
             <div className="landing">
@@ -21,8 +30,9 @@ class Landing extends React.Component {
                     <h1 className="title">Get a bird's-eye view of your field</h1>
                     <h2 className="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus, est aliquam imperdiet consectetur, purus odio pulvinar orci, ut volutpat ex justo dapibus metus. </h2>
                     <div id="search-bar">
-                        <span id="search-bar-text">Job title, keywords, company or location</span>
-                        <div id="search-button">Search</div>
+                        {/* <label for="search-text">Job title, keywords, company or location</label> */}
+                        <input type="text" id="search-bar-text" placeholder="Job title, keywords, company or location"></input>
+                        <div id="search-button" onClick={this.onSearch}>Search</div>
                     </div>
                 </div>
             </div>
