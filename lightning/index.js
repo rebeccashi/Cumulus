@@ -1,11 +1,13 @@
 const express = require('express');
 const fs = require('fs');
+const cors = require('cors');
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 // pretend reading from file system is like a database lol
-const jobDb = JSON.parse(fs.readFileSync("../data/input/json/jobData.json", 'utf-8'));
-const keywords = JSON.parse(fs.readFileSync("../data/output/json/languagesData.json", 'utf-8'));
+const jobDb = JSON.parse(fs.readFileSync("../droplets/input/json/jobData.json", 'utf-8'));
+const keywords = JSON.parse(fs.readFileSync("../droplets/output/json/languagesData.json", 'utf-8'));
 
 const keywordDb = [];
 
@@ -15,10 +17,6 @@ Object.keys(keywords).forEach(l => {
   keywordDb.push({ language: l, count: keywords[l] });
   amt += keywords[l];
 })
-
-app.use('/website', express.static(process.cwd() + '/website'));
-app.use('/', express.static(process.cwd() + '/website'));
-app.use('/search', express.static(process.cwd() + '/website'));
 
 /*
   { "query": "software engineering internship new york" }
