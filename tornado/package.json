@@ -8,7 +8,8 @@
     "idscrape": "node idscraper.js",
     "descscrape": "node descscraper.js",
     "analyze": "node analyzeData.js",
-    "indeed": "node scrapers/indeed.js"
+    "indeed": "node scrapers/indeed.js",
+    "prettier": "prettier --write scrapers/*.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",
     "https-proxy-agent": "^5.0.0",
-    "node-fetch": "^3.0.0"
+    "node-fetch": "^3.0.0",
+    "prettier": "^2.4.1"
   }
 }
