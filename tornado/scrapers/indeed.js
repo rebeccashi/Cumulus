@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import cheerio from "cheerio";
 
-import fs from 'fs';
+import fs from "fs";
 
 console.log("Scraping Indeed!");
 
@@ -51,7 +51,9 @@ class IndeedQuery {
     const $ = cheerio.load(html);
 
     const pagination = $(".pagination");
-    const isLastPage = pagination.length === 0 || pagination.find("a[aria-label='Next']").length === 0;
+    const isLastPage =
+      pagination.length === 0 ||
+      pagination.find("a[aria-label='Next']").length === 0;
 
     const jobTable = $("#resultsCol");
     const jobs = jobTable.find(".result");
@@ -89,7 +91,7 @@ class IndeedQuery {
       };
     });
 
-    return {jobObjects, isLastPage};
+    return { jobObjects, isLastPage };
   }
 
   // we use a recursive strategy to get every page
@@ -128,22 +130,22 @@ class IndeedQuery {
   }
 
   async getAllJobs() {
-    const data = await this.recursivelyGetJobPage([])
+    const data = await this.recursivelyGetJobPage([]);
     console.log(`Got the data with length ${data?.length}`);
     return data;
   }
 }
 
 const getAllJobsForKeyword = async (keyword) => {
-  console.time('Scraping time')
+  console.time("Scraping time");
   const iq = new IndeedQuery({
     keyword,
   });
 
   const jobs = await iq.getAllJobs();
-  console.timeEnd('Scraping time')
-  console.log(`Jobs scraped: ${jobs.length}`)
-  fs.writeFileSync('testdata_2.json', JSON.stringify(jobs));
+  console.timeEnd("Scraping time");
+  console.log(`Jobs scraped: ${jobs.length}`);
+  fs.writeFileSync("testdata_2.json", JSON.stringify(jobs));
 };
 
 getAllJobsForKeyword("art therapist");
