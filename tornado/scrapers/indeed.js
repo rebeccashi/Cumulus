@@ -75,6 +75,8 @@ class IndeedQuery {
 
       const isEasyApply = job.find(".ialbl").text().trim() === "Easily apply";
 
+      this.jobUrls.push(url);
+
       return {
         title: jobtitle,
         summary: summary,
@@ -92,52 +94,56 @@ class IndeedQuery {
 
   // we use a recursive strategy to get every page
   async recursivelyGetJobPage(jobData) {
-    await fetch(this.url(), {
-      // TODO: run through new list of proxies
-      // agent: new HttpsProxyAgent('http://152.179.12.86:3128')
-    })
-      // TODO: check for errors here, add breaking case
-      .then((response) => response.text())
-      .then(async (data) => {
-        const {jobObjects, isLastPage} = await this.scrapePageForJob(data);
-        if (typeof jobObjects === "undefined")
-          throw new Error("Undefined list of new jobs!");
-        // if (jobData.length > 10) throw new Error("Lots of jobs");
-
-        this.start += jobObjects.length;
-        jobData = [...jobData, ...jobObjects];
-
-        console.log(`Scraped the next ${jobObjects.length} jobs!`);
-
-        if (isLastPage) {
-          console.log("Reached end of jobs!");
-          return;
-        }
-
-        this.recursivelyGetJobPage(jobData);
-      })
-      .catch((err) => {
-        console.log(err);
-        return;
+    try {
+      const response = await fetch(this.url(), {
+        // TODO: run through new list of proxies
+        // agent: new HttpsProxyAgent('http://152.179.12.86:3128')
       });
+      const data = await response.text();
+      const { jobObjects, isLastPage } = await this.scrapePageForJob(data);
+      if (typeof jobObjects === "undefined")
+        throw new Error("Undefined list of new jobs!");
 
+      this.start += jobObjects.length;
+      let newJobData = [...jobData, ...jobObjects];
+
+      console.log(`Scraped the next ${jobObjects.length} jobs!`);
+
+      // if (newJobData.length > 20) {
+      //   console.log("Early return!")
+      //   console.log(newJobData.length);
+      //   return newJobData;
+      // }
+
+      if (isLastPage) {
+        console.log("Reached end of jobs!");
+        return newJobData;
+      }
+
+      return await this.recursivelyGetJobPage(newJobData);
+    } catch (err) {
+      console.log(err);
       return jobData;
+    }
   }
 
   async getAllJobs() {
-    const data = await this.recursivelyGetJobPage([], this.keyword);
-    console.log("Got the data!");
+    const data = await this.recursivelyGetJobPage([])
+    console.log(`Got the data with length ${data?.length}`);
     return data;
   }
 }
 
 const getAllJobsForKeyword = async (keyword) => {
+  console.time('Scraping time')
   const iq = new IndeedQuery({
     keyword,
   });
 
   const jobs = await iq.getAllJobs();
-  fs.writeFileSync('testdata.json', JSON.stringify(jobs));
+  console.timeEnd('Scraping time')
+  console.log(`Jobs scraped: ${jobs.length}`)
+  fs.writeFileSync('testdata_2.json', JSON.stringify(jobs));
 };
 
 getAllJobsForKeyword("art therapist");
