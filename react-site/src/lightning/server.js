@@ -16,10 +16,7 @@ Object.keys(keywords).forEach(l => {
   amt += keywords[l];
 })
 
-// app.use('/website', express.static(__dirname + '/public'));
-// app.use('/', express.static(__dirname + '/website'));
-// app.use('/search', express.static(__dirname + '/website'));
-
+// Set up Express API
 /*
   { "query": "software engineering internship new york" }
 */
