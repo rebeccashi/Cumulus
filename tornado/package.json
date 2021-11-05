@@ -8,7 +8,7 @@
     "idscrape": "node idscraper.js",
     "descscrape": "node descscraper.js",
     "analyze": "node analyzeData.js",
-    "indeed": "node scrapers/indeed.js",
+    "indeed": "node cheerio_scrapers/indeed.js",
     "prettier": "prettier --write scrapers/*.js"
   },
   "keywords": [],
