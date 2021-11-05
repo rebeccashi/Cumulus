@@ -9,7 +9,7 @@
     "descscrape": "node descscraper.js",
     "analyze": "node analyzeData.js",
     "indeed": "node cheerio_scrapers/indeed.js",
-    "prettier": "prettier --write scrapers/*.js"
+    "prettier": "prettier --write **/*.js"
   },
   "keywords": [],
   "author": "",

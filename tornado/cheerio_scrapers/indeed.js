@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import cheerio from "cheerio";
 
 import fs from "fs";
-import HttpsProxyAgent from 'https-proxy-agent';
+import HttpsProxyAgent from "https-proxy-agent";
 
 console.log("Scraping Indeed!");
 
@@ -101,7 +101,7 @@ class IndeedQuery {
       const response = await fetch(this.url(), {
         // TODO: run through new list of proxies
         // agent: new HttpsProxyAgent('http://45.152.188.210:3128')
-        agent: new HttpsProxyAgent('http://52.183.8.192:3128')
+        agent: new HttpsProxyAgent("http://52.183.8.192:3128"),
       });
       const data = await response.text();
       const { jobObjects, isLastPage } = await this.scrapePageForJob(data);
@@ -145,7 +145,7 @@ const dateKebab = () => {
   const year = dateObj.getUTCFullYear();
 
   return `${month}-${day}-${year}`;
-}
+};
 
 const getAllJobsForKeyword = async (keyword) => {
   console.time("Scraping time");
@@ -156,7 +156,10 @@ const getAllJobsForKeyword = async (keyword) => {
   const jobs = await iq.getAllJobs();
   console.timeEnd("Scraping time");
   console.log(`Jobs scraped: ${jobs.length}`);
-  fs.writeFileSync(`cheerio_scrapers/${keyword.replace(" ", "_")}_${dateKebab()}.json`, JSON.stringify(jobs));
+  fs.writeFileSync(
+    `cheerio_scrapers/${keyword.replace(" ", "_")}_${dateKebab()}.json`,
+    JSON.stringify(jobs)
+  );
 };
 
 getAllJobsForKeyword("art therapist");
