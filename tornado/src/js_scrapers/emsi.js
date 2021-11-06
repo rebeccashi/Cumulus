@@ -138,7 +138,11 @@ class EmsiQuery {
 
         return data;
       });
+    } catch (err) {
+      console.log('Missing job title data! Skipping...');
+    }
 
+    try {
       companies = await this.page.evaluate(() => {
         const data = {};
 
@@ -150,7 +154,11 @@ class EmsiQuery {
 
         return data;
       });
+    } catch (err) {
+      console.log('Missing company data! Skipping...');
+    }
 
+    try {
       const months = await this.page.evaluate(() => {
         const svg = document.querySelector("svg.recharts-surface");
 
@@ -185,7 +193,7 @@ class EmsiQuery {
         timeseries[month] = text.split(":")[1].trim();
       }
     } catch (err) {
-      console.error(err);
+      console.log('Missing timeseries data! Skipping...');
     }
 
     return {
