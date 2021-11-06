@@ -71,7 +71,7 @@ class EmsiQuery {
   async setupPuppeteer() {
     console.log("Setting up Puppeteer...");
 
-    this.browser = await puppeteer.launch({ headless: false });
+    this.browser = await puppeteer.launch({ headless: true });
     this.page = await this.browser.newPage();
 
     console.log("Set up Puppeteer!");
@@ -186,7 +186,7 @@ class EmsiQuery {
 
     const data = await this.scrapeHTMLForSkill();
 
-    fs.writeFileSync(`${this.outputDir}/${skill}`, JSON.stringify(data));
+    fs.writeFileSync(`${this.outputDir}/${skill.replace(/[\\/:"*?<>|]+/g, '-')}`, JSON.stringify(data));
 
     console.log(`Wrote skill ${skill} to disk!`);
   }
@@ -199,7 +199,7 @@ class EmsiQuery {
 
     for (let [skill, _] of this.remainingSkills) {
       console.log(`Checking if we need to fetch skill ${skill}...`);
-      if (this.parsedSkills.has(skill)) {
+      if (this.parsedSkills.has(skill.replace(/[\\/:"*?<>|]+/g, '-'))) {
         console.log(`We do not, skipping!`);
         continue;
       }
@@ -209,7 +209,7 @@ class EmsiQuery {
       await this.fetchSkill(skill);
       this.parsedSkills.set(skill, 1);
 
-      await sleep(1000);
+      await sleep(500);
     }
 
     console.log("Done scraping!");
