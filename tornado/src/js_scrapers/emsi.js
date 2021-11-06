@@ -71,7 +71,7 @@ class EmsiQuery {
   async setupPuppeteer() {
     console.log("Setting up Puppeteer...");
 
-    this.browser = await puppeteer.launch({ headless: true });
+    this.browser = await puppeteer.launch({ headless: false });
     this.page = await this.browser.newPage();
 
     console.log("Set up Puppeteer!");
@@ -103,60 +103,70 @@ class EmsiQuery {
       return document.querySelector("h1.cUdUkR").textContent;
     });
 
-    const titles = await this.page.evaluate(() => {
-      const data = {};
-
-      const table = document.querySelectorAll("table.bFBCms")[0];
-      Array.from(table.querySelectorAll("tbody tr")).forEach((row) => {
-        data[row.querySelectorAll("td")[0].textContent] =
-          row.querySelectorAll("td")[1].textContent;
-      });
-
-      return data;
-    });
-
-    const companies = await this.page.evaluate(() => {
-      const data = {};
-
-      const table = document.querySelectorAll("table.bFBCms")[1];
-      Array.from(table.querySelectorAll("tbody tr")).forEach((row) => {
-        data[row.querySelectorAll("td")[0].textContent] =
-          row.querySelectorAll("td")[1].textContent;
-      });
-
-      return data;
-    });
-
-    const months = await this.page.evaluate(() => {
-      const svg = document.querySelector("svg.recharts-surface");
-
-      const xAxis = svg.querySelector(".xAxis");
-
-      const months = [];
-      Array.from(xAxis.querySelectorAll("text")).forEach((text) =>
-        months.push(text.textContent)
-      );
-
-      return months;
-    });
-
+    let titles = {};
+    let companies = {};
     const timeseries = {};
-    for (let index = 0; index < months.length; index++) {
-      let month = months[index];
 
-      await this.page.hover(
-        `svg.recharts-surface g.recharts-cartesian-grid-vertical line:nth-child(${
-          index + 1
-        })`
-      );
+    try {
+      titles = await this.page.evaluate(() => {
+        const data = {};
 
-      const text = await this.page.evaluate(() => {
-        const tooltip = document.querySelector("div.recharts-tooltip-wrapper");
+        const table = document.querySelectorAll("table.bFBCms")[0];
+        Array.from(table.querySelectorAll("tbody tr")).forEach((row) => {
+          data[row.querySelectorAll("td")[0].textContent] =
+            row.querySelectorAll("td")[1].textContent;
+        });
 
-        return tooltip.querySelector("div.cfevtU div:nth-child(2)").textContent;
+        return data;
       });
 
-      timeseries[month] = text.split(":")[1].trim();
+      companies = await this.page.evaluate(() => {
+        const data = {};
+
+        const table = document.querySelectorAll("table.bFBCms")[1];
+        Array.from(table.querySelectorAll("tbody tr")).forEach((row) => {
+          data[row.querySelectorAll("td")[0].textContent] =
+            row.querySelectorAll("td")[1].textContent;
+        });
+
+        return data;
+      });
+
+      const months = await this.page.evaluate(() => {
+        const svg = document.querySelector("svg.recharts-surface");
+
+        const xAxis = svg.querySelector(".xAxis");
+
+        const months = [];
+        Array.from(xAxis.querySelectorAll("text")).forEach((text) =>
+          months.push(text.textContent)
+        );
+
+        return months;
+      });
+
+      for (let index = 0; index < months.length; index++) {
+        let month = months[index];
+
+        await this.page.hover(
+          `svg.recharts-surface g.recharts-cartesian-grid-vertical line:nth-child(${
+            index + 1
+          })`
+        );
+
+        const text = await this.page.evaluate(() => {
+          const tooltip = document.querySelector(
+            "div.recharts-tooltip-wrapper"
+          );
+
+          return tooltip.querySelector("div.cfevtU div:nth-child(2)")
+            .textContent;
+        });
+
+        timeseries[month] = text.split(":")[1].trim();
+      }
+    } catch (err) {
+      console.error(err);
     }
 
     return {
@@ -176,8 +186,6 @@ class EmsiQuery {
 
     const data = await this.scrapeHTMLForSkill();
 
-    console.log(data);
-
     fs.writeFileSync(`${this.outputDir}/${skill}`, JSON.stringify(data));
 
     console.log(`Wrote skill ${skill} to disk!`);
@@ -189,29 +197,21 @@ class EmsiQuery {
     await this.getRemainingSkills();
     // this.remainingSkills.set('JavaScript (Programming Language)', 'https://skills.emsidata.com/skills/KS1200771D9CR9LB4MWW');
 
-    const fetchAllSkills = new Promise((resolve, reject) => {
-      this.remainingSkills.forEach(async (_, skill) => {
-        console.log(`Checking if we need to fetch skill ${skill}...`);
-        if (this.parsedSkills.has(skill)) {
-          console.log(`We do not, skipping!`);
-          if (this.remainingSkills.size == this.parsedSkills.size) {
-            resolve();
-            return;
-          } else return;
-        }
+    for (let [skill, _] of this.remainingSkills) {
+      console.log(`Checking if we need to fetch skill ${skill}...`);
+      if (this.parsedSkills.has(skill)) {
+        console.log(`We do not, skipping!`);
+        continue;
+      }
 
-        console.log("Yes we do!");
+      console.log("Yes we do!");
 
-        await this.fetchSkill(skill);
-        this.parsedSkills.set(skill, 1);
+      await this.fetchSkill(skill);
+      this.parsedSkills.set(skill, 1);
 
-        if (this.remainingSkills.size == this.parsedSkills.size) resolve();
+      await sleep(1000);
+    }
 
-        await sleep(500);
-      });
-    });
-
-    await fetchAllSkills;
     console.log("Done scraping!");
   }
 }
