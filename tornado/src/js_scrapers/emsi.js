@@ -15,18 +15,18 @@ const retry = async (callback, count, description) => {
   try {
     return await callback();
   } catch (err) {
-    console.log(`Function ${description} failed with ${count} tries left!`)
+    console.log(`Function ${description} failed with ${count} tries left!`);
     if (count <= 0) {
-      console.log(`Throwing this error to caller!`)
+      console.log(`Throwing this error to caller!`);
       throw err;
     }
 
     await sleep(1000);
-    
-    console.log(`Trying again now...`)
+
+    console.log(`Trying again now...`);
     return await retry(callback, count - 1);
   }
-}
+};
 
 console.log("Scraping EMSI!");
 
@@ -139,7 +139,7 @@ class EmsiQuery {
         return data;
       });
     } catch (err) {
-      console.log('Missing job title data! Skipping...');
+      console.log("Missing job title data! Skipping...");
     }
 
     try {
@@ -155,7 +155,7 @@ class EmsiQuery {
         return data;
       });
     } catch (err) {
-      console.log('Missing company data! Skipping...');
+      console.log("Missing company data! Skipping...");
     }
 
     try {
@@ -193,7 +193,7 @@ class EmsiQuery {
         timeseries[month] = text.split(":")[1].trim();
       }
     } catch (err) {
-      console.log('Missing timeseries data! Skipping...');
+      console.log("Missing timeseries data! Skipping...");
     }
 
     return {
@@ -209,11 +209,18 @@ class EmsiQuery {
 
     const url = this.remainingSkills.get(skill);
 
-    await retry(() => this.page.goto(url, { waitUntil: "networkidle0" }), 10, `Get skill ${skill}`)
+    await retry(
+      () => this.page.goto(url, { waitUntil: "networkidle0" }),
+      10,
+      `Get skill ${skill}`
+    );
 
     const data = await this.scrapeHTMLForSkill();
 
-    fs.writeFileSync(`${this.outputDir}/${skill.replace(/[\\/:"*?<>|]+/g, '-')}`, JSON.stringify(data));
+    fs.writeFileSync(
+      `${this.outputDir}/${skill.replace(/[\\/:"*?<>|]+/g, "-")}`,
+      JSON.stringify(data)
+    );
 
     console.log(`Wrote skill ${skill} to disk!`);
   }
@@ -226,7 +233,12 @@ class EmsiQuery {
 
     for (let [skill, _] of this.remainingSkills) {
       console.log(`Checking if we need to fetch skill ${skill}...`);
-      if (this.parsedSkills.has(skill.replace(/[\\/:"*?<>|]+/g, '-'))) {
+      console.log(
+        `[INFO] Currently on skill ${
+          this.parsedSkills.size() + 1
+        } of ${this.remainingSkills.size()}`
+      );
+      if (this.parsedSkills.has(skill.replace(/[\\/:"*?<>|]+/g, "-"))) {
         console.log(`We do not, skipping!`);
         continue;
       }
