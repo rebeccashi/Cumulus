@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import cheerio from "cheerio";
+import puppeteer from 'puppeteer';
 
 import fs from "fs";
 
@@ -66,6 +67,15 @@ class EmsiQuery {
     console.log("Got access token!")
   }
 
+  async setupPuppeteer() {
+    console.log("Setting up Puppeteer...");
+
+    this.browser = await puppeteer.launch({ headless: true });
+    this.page = await this.browser.newPage();
+
+    console.log("Set up Puppeteer!");
+  }
+
   async getRemainingSkills() {
     console.log('Trying to get all skills from API...');
 
@@ -84,53 +94,66 @@ class EmsiQuery {
     console.log("Got skills from API!")
   }
 
-  // update this if UI changes (cheerio/scraping)
-  async scrapeHTMLForSkill(html) {
-    const $ = cheerio.load(html);
+  async scrapeHTMLForSkill() {
+    const skill = await this.page.evaluate(() => {
+      // return document.body.innerHTML;
+      return document.querySelector("h1.cUdUkR").textContent;
+    })
 
-    const pagination = $(".pagination");
-    const isLastPage =
-      pagination.length === 0 ||
-      pagination.find("a[aria-label='Next']").length === 0;
+    const titles = await this.page.evaluate(() => {
+      const data = {};
 
-    const jobTable = $("#resultsCol");
-    const jobs = jobTable.find(".result");
+      const table = document.querySelectorAll("table.bFBCms")[0]
+      Array.from(table.querySelectorAll("tbody tr")).forEach(row => {
+        data[row.querySelectorAll("td")[0].textContent] = row.querySelectorAll("td")[1].textContent;
+      })
 
-    const jobObjects = jobs.map((i, e) => {
-      const job = $(e);
+      return data;
+    })
 
-      const jobtitle = job.find(".jobTitle > span").text().trim();
+    const companies = await this.page.evaluate(() => {
+      const data = {};
 
-      const url = "https://indeed.com" + job.attr("href");
+      const table = document.querySelectorAll("table.bFBCms")[1]
+      Array.from(table.querySelectorAll("tbody tr")).forEach(row => {
+        data[row.querySelectorAll("td")[0].textContent] = row.querySelectorAll("td")[1].textContent;
+      })
 
-      const summary = job.find(".job-snippet").text().trim();
+      return data;
+    })
 
-      const company = job.find(".companyName").text().trim() || null;
+    const months = await this.page.evaluate(() => {
+      const svg = document.querySelector("svg.recharts-surface");
 
-      const location = job.find(".companyLocation").text().trim();
+      const xAxis = svg.querySelector(".xAxis");
 
-      const postDate = job.find(".date").text().trim();
+      const months = [];
+      Array.from(xAxis.querySelectorAll("text")).forEach(text => months.push(text.textContent))
 
-      const salary = job.find(".salary-snippet").text().trim();
+      return months;
+    })
 
-      const isEasyApply = job.find(".ialbl").text().trim() === "Easily apply";
+    const timeseries = {}
+    for (let index = 0; index < months.length; index++) {
+      let month = months[index];
 
-      this.jobUrls.push(url);
+      await this.page.hover(`svg.recharts-surface g.recharts-cartesian-grid-vertical line:nth-child(${index + 1})`)
+  
+      const text = await this.page.evaluate(() => {
+        const tooltip = document.querySelector('div.recharts-tooltip-wrapper');
 
-      const skill = "";
-      const titles = [];
-      const companies = [];
-      const timeseries = [];
+        return tooltip.querySelector("div.cfevtU div:nth-child(2)").textContent;
+      })
 
-      return {
-        skill,
-        titles,
-        companies,
-        timeseries
-      };
-    });
+      timeseries[month] = text.split(":")[1].trim();
+    }
 
-    return { skillData };
+    return {
+      skill,
+      titles,
+      companies,
+      timeseries
+    }
   }
 
   async fetchSkill(skill) {
@@ -138,16 +161,15 @@ class EmsiQuery {
 
     const url = this.remainingSkills.get(skill);
 
-    const response = await fetch(url);
-    const body = await response.text();
+    await this.page.goto(url, {"waitUntil" : "networkidle0"});
 
-    const data = this.scrapeHTMLForSkill(body);
+    const data = await this.scrapeHTMLForSkill();
 
     console.log(data);
 
     fs.writeFileSync(
-      `cheerio_scrapers/${keyword.replace(" ", "_")}_${dateKebab()}.json`,
-      JSON.stringify(jobs)
+      `${this.outputDir}/${skill}`,
+      JSON.stringify(data)
     );
 
     console.log(`Wrote skill ${skill} to disk!`)
@@ -160,8 +182,17 @@ class EmsiQuery {
     this.remainingSkills.set('JavaScript (Programming Language)', 'https://skills.emsidata.com/skills/KS1200771D9CR9LB4MWW');
 
     const fetchAllSkills = new Promise((resolve, reject) => {
-      this.remainingSkills.forEach(async skill => {
-        if (this.parsedSkills.has(skill)) return;
+      this.remainingSkills.forEach(async (_, skill) => {
+        console.log(`Checking if we need to fetch skill ${skill}...`)
+        if (this.parsedSkills.has(skill)) { 
+          console.log(`We do not, skipping!`)
+          if (this.remainingSkills.size == this.parsedSkills.size) {
+            resolve();
+            return;
+          } else return;
+        }
+
+        console.log('Yes we do!')
 
         await this.fetchSkill(skill);
         this.parsedSkills.set(skill, 1);
@@ -184,6 +215,7 @@ const runScraper = async () => {
   });
 
   await eq.getAccessToken();
+  await eq.setupPuppeteer();
   await eq.scrape();
 };
 

@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "scrape_indeed": "node src/cheerio_scrapers/indeed.js",
-    "scrape_emsi": "node src/cheerio_scrapers/emsi.js",
+    "scrape_indeed": "node src/js_scrapers/indeed.js",
+    "scrape_emsi": "node src/js_scrapers/emsi.js",
     "prettier": "prettier --write **/*.js"
   },
   "keywords": [],
@@ -16,6 +16,7 @@
     "cheerio": "^1.0.0-rc.10",
     "https-proxy-agent": "^5.0.0",
     "node-fetch": "^3.0.0",
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "puppeteer": "^11.0.0"
   }
 }
