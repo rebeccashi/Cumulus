@@ -4,8 +4,10 @@
   "description": "",
   "type": "module",
   "scripts": {
+    "full_emsi": "MODE=full node src/emsi.js",
+    "scrape_emsi": "MODE=scrape node src/emsi.js",
+    "transform_emsi": "MODE=transform node src/emsi.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "scrape_emsi": "node src/emsi.js",
     "prettier": "prettier --write src/**/*.js"
   },
   "keywords": [],

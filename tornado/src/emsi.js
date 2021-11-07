@@ -14,13 +14,21 @@ class EMSI {
   constructor({
     output = EMSIOUTPUT.FILESYSTEM,
     outputDb = "./db",
-    clientId = process.env.EMSI_CLIENT_ID,
-    clientSecret = process.env.EMSI_CLIENT_SECRET,
+    clientId = "",
+    clientSecret = "",
   }) {
     this.output = output;
     this.outputDb = outputDb;
     this.clientId = clientId;
     this.clientSecret = clientSecret;
+
+    const dbWrapper = await import(`./util/${this.output}.js`);
+    dbWrapper.populateParsedSkills(this);
+  }
+
+  async setupScraper() {
+    await this.getAccessToken();
+    await this.setupPuppeteer();
 
     let dateObj = new Date();
     this.date = `${dateObj.getUTCMonth() + 1}-${dateObj.getUTCFullYear()}`;
@@ -222,17 +230,31 @@ class EMSI {
 
     console.log("Done scraping!");
   }
+
+  async transform() {
+    console.log('Hi!')
+  }
 }
 
 const runScraper = async () => {
-  const eq = new EMSI({
+  const emsi = new EMSI({
     clientId: process.env.EMSI_CLIENT_ID,
     clientSecret: process.env.EMSI_CLIENT_SECRET,
   });
 
-  await eq.getAccessToken();
-  await eq.setupPuppeteer();
-  await eq.scrape();
+  await emsi.setupScraper();
+  await emsi.scrape();
 };
 
-runScraper();
+const runTransformer = async () => {
+  const emsi = new EMSI()
+
+  await emsi.transform();
+}
+
+if (process.env.MODE === 'scrape' || process.env.MODE === 'full') {
+  runScraper();
+} 
+if (process.env.MODE === 'transform' || process.env.MODE === 'full') {
+  runTransformer();
+}
