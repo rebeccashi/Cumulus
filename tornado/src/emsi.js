@@ -3,34 +3,9 @@ import puppeteer from "puppeteer";
 
 import fs from "fs";
 
-const sleep = (ms) => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-};
+import { retry, sleep } from "./util/util";
 
-const retry = async (callback, count, description) => {
-  console.log(`(Re)trying function: ${description}...`);
-
-  try {
-    return await callback();
-  } catch (err) {
-    console.log(`Function ${description} failed with ${count} tries left!`);
-    if (count <= 0) {
-      console.log(`Throwing this error to caller!`);
-      throw err;
-    }
-
-    await sleep(1000);
-
-    console.log(`Trying again now...`);
-    return await retry(callback, count - 1);
-  }
-};
-
-console.log("Scraping EMSI!");
-
-class EmsiQuery {
+class EMSI {
   constructor({
     outputDir = "./output",
     clientId = process.env.EMSI_CLIENT_ID,
@@ -229,14 +204,13 @@ class EmsiQuery {
     console.log("Starting to scrape...");
 
     await this.getRemainingSkills();
-    // this.remainingSkills.set('JavaScript (Programming Language)', 'https://skills.emsidata.com/skills/KS1200771D9CR9LB4MWW');
 
     for (let [skill, _] of this.remainingSkills) {
       console.log(`Checking if we need to fetch skill ${skill}...`);
       console.log(
-        `[INFO] Currently on skill ${
-          this.parsedSkills.size + 1
-        } of ${this.remainingSkills.size}`
+        `[INFO] Currently on skill ${this.parsedSkills.size + 1} of ${
+          this.remainingSkills.size
+        }`
       );
       if (this.parsedSkills.has(skill.replace(/[\\/:"*?<>|]+/g, "-"))) {
         console.log(`We do not, skipping!`);
@@ -256,7 +230,7 @@ class EmsiQuery {
 }
 
 const runScraper = async () => {
-  const eq = new EmsiQuery({
+  const eq = new EMSI({
     clientId: process.env.EMSI_CLIENT_ID,
     clientSecret: process.env.EMSI_CLIENT_SECRET,
   });
