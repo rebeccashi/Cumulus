@@ -22,6 +22,10 @@ class EMSI {
     this.clientId = clientId;
     this.clientSecret = clientSecret;
 
+    let dateObj = new Date();
+    this.date = `${dateObj.getUTCMonth() + 1}-${dateObj.getUTCFullYear()}`;
+
+    this.skillIdMap = new Map();
     this.parsedSkills = new Map();
     this.remainingSkills = new Map();
 
@@ -91,13 +95,13 @@ class EMSI {
   }
 
   async scrapeHTMLForSkill() {
-    const skill = await this.page.evaluate(() => {
+    const name = await this.page.evaluate(() => {
       return document.querySelector("h1.cUdUkR").textContent;
     });
 
-    let titles = {};
-    let companies = {};
-    const timeseries = {};
+    let titles = [];
+    let companies = [];
+    let numJobs = 0;
 
     try {
       titles = await this.page.evaluate(() => {
@@ -105,12 +109,16 @@ class EMSI {
 
         const table = document.querySelectorAll("table.bFBCms")[0];
         Array.from(table.querySelectorAll("tbody tr")).forEach((row) => {
-          data[row.querySelectorAll("td")[0].textContent] =
-            row.querySelectorAll("td")[1].textContent;
+          data.push({
+            name: row.querySelectorAll("td")[0].textContent,
+            numJobs: row.querySelectorAll("td")[1].textContent
+          });
         });
 
         return data;
       });
+
+      titles.sort((a, b) => b.numJobs - a.numJobs);
     } catch (err) {
       console.log("Missing job title data! Skipping...");
     }
@@ -121,59 +129,45 @@ class EMSI {
 
         const table = document.querySelectorAll("table.bFBCms")[1];
         Array.from(table.querySelectorAll("tbody tr")).forEach((row) => {
-          data[row.querySelectorAll("td")[0].textContent] =
-            row.querySelectorAll("td")[1].textContent;
+          data.push({
+            name: row.querySelectorAll("td")[0].textContent,
+            numJobs: row.querySelectorAll("td")[1].textContent
+          });
         });
 
         return data;
       });
+
+      titles.sort((a, b) => b.numJobs - a.numJobs);
     } catch (err) {
       console.log("Missing company data! Skipping...");
     }
 
     try {
-      const months = await this.page.evaluate(() => {
-        const svg = document.querySelector("svg.recharts-surface");
+      await this.page.hover(
+        'svg.recharts-surface g.recharts-cartesian-grid-vertical line:nth-child(11)'
+      );
 
-        const xAxis = svg.querySelector(".xAxis");
-
-        const months = [];
-        Array.from(xAxis.querySelectorAll("text")).forEach((text) =>
-          months.push(text.textContent)
+      const text = await this.page.evaluate(() => {
+        const tooltip = document.querySelector(
+          "div.recharts-tooltip-wrapper"
         );
 
-        return months;
+        return tooltip.querySelector("div.cfevtU div:nth-child(2)")
+          .textContent;
       });
 
-      for (let index = 0; index < months.length; index++) {
-        let month = months[index];
-
-        await this.page.hover(
-          `svg.recharts-surface g.recharts-cartesian-grid-vertical line:nth-child(${
-            index + 1
-          })`
-        );
-
-        const text = await this.page.evaluate(() => {
-          const tooltip = document.querySelector(
-            "div.recharts-tooltip-wrapper"
-          );
-
-          return tooltip.querySelector("div.cfevtU div:nth-child(2)")
-            .textContent;
-        });
-
-        timeseries[month] = text.split(":")[1].trim();
-      }
+      numJobs = text.split(":")[1].trim();
     } catch (err) {
       console.log("Missing timeseries data! Skipping...");
     }
 
     return {
-      skill,
+      name,
+      date: this.date,
+      numJobs,
       titles,
-      companies,
-      timeseries,
+      companies
     };
   }
 
@@ -190,12 +184,15 @@ class EMSI {
 
     const data = await this.scrapeHTMLForSkill();
 
-    fs.writeFileSync(
-      `${this.outputDb}/${skill.replace(/[\\/:"*?<>|]+/g, "-")}`,
-      JSON.stringify(data)
-    );
+    if (data.numJobs == 0) {
+      console.log(`Skill ${skill} has no available data! Skipping...`);
+      return;
+    } else {
+      const dbWrapper = await import(`./util/${this.output}.js`);
+      dbWrapper.writeSkill(this, data);
 
-    console.log(`Wrote skill ${skill} to disk!`);
+      console.log(`Wrote skill ${skill} to disk!`);
+    }
   }
 
   async scrape() {
@@ -210,7 +207,7 @@ class EMSI {
           this.remainingSkills.size
         }`
       );
-      if (this.parsedSkills.has(skill.replace(/[\\/:"*?<>|]+/g, "-"))) {
+      if (this.parsedSkills.has(skill)) {
         console.log(`We do not, skipping!`);
         continue;
       }
@@ -233,9 +230,9 @@ const runScraper = async () => {
     clientSecret: process.env.EMSI_CLIENT_SECRET,
   });
 
-  // await eq.getAccessToken();
-  // await eq.setupPuppeteer();
-  // await eq.scrape();
+  await eq.getAccessToken();
+  await eq.setupPuppeteer();
+  await eq.scrape();
 };
 
 runScraper();
