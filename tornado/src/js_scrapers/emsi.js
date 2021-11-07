@@ -235,8 +235,8 @@ class EmsiQuery {
       console.log(`Checking if we need to fetch skill ${skill}...`);
       console.log(
         `[INFO] Currently on skill ${
-          this.parsedSkills.size() + 1
-        } of ${this.remainingSkills.size()}`
+          this.parsedSkills.size + 1
+        } of ${this.remainingSkills.size}`
       );
       if (this.parsedSkills.has(skill.replace(/[\\/:"*?<>|]+/g, "-"))) {
         console.log(`We do not, skipping!`);
