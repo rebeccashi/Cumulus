@@ -6,9 +6,9 @@ import fs from "fs";
 import { retry, sleep } from "./util/util.js";
 
 const EMSIOUTPUT = {
-  FILESYSTEM: 'fs',
-  MONGODB: 'mdb'
-}
+  FILESYSTEM: "fs",
+  MONGODB: "mdb",
+};
 
 class EMSI {
   constructor({
@@ -37,8 +37,9 @@ class EMSI {
     this.parsedSkills = new Map();
     this.remainingSkills = new Map();
 
-    import(`./util/${this.output}.js`)
-      .then(dbWrapper => dbWrapper.populateParsedSkills(this));
+    import(`./util/${this.output}.js`).then((dbWrapper) =>
+      dbWrapper.populateParsedSkills(this)
+    );
   }
 
   async getAccessToken() {
@@ -119,7 +120,7 @@ class EMSI {
         Array.from(table.querySelectorAll("tbody tr")).forEach((row) => {
           data.push({
             name: row.querySelectorAll("td")[0].textContent,
-            numJobs: row.querySelectorAll("td")[1].textContent
+            numJobs: row.querySelectorAll("td")[1].textContent,
           });
         });
 
@@ -139,7 +140,7 @@ class EMSI {
         Array.from(table.querySelectorAll("tbody tr")).forEach((row) => {
           data.push({
             name: row.querySelectorAll("td")[0].textContent,
-            numJobs: row.querySelectorAll("td")[1].textContent
+            numJobs: row.querySelectorAll("td")[1].textContent,
           });
         });
 
@@ -153,16 +154,13 @@ class EMSI {
 
     try {
       await this.page.hover(
-        'svg.recharts-surface g.recharts-cartesian-grid-vertical line:nth-child(11)'
+        "svg.recharts-surface g.recharts-cartesian-grid-vertical line:nth-child(11)"
       );
 
       const text = await this.page.evaluate(() => {
-        const tooltip = document.querySelector(
-          "div.recharts-tooltip-wrapper"
-        );
+        const tooltip = document.querySelector("div.recharts-tooltip-wrapper");
 
-        return tooltip.querySelector("div.cfevtU div:nth-child(2)")
-          .textContent;
+        return tooltip.querySelector("div.cfevtU div:nth-child(2)").textContent;
       });
 
       numJobs = text.split(":")[1].trim();
@@ -175,7 +173,7 @@ class EMSI {
       date: this.date,
       numJobs,
       titles,
-      companies
+      companies,
     };
   }
 
@@ -232,7 +230,7 @@ class EMSI {
   }
 
   async transform() {
-    console.log('Hi!')
+    console.log("Hi!");
   }
 }
 
@@ -247,14 +245,14 @@ const runScraper = async () => {
 };
 
 const runTransformer = async () => {
-  const emsi = new EMSI()
+  const emsi = new EMSI();
 
   await emsi.transform();
-}
+};
 
-if (process.env.MODE === 'scrape' || process.env.MODE === 'full') {
+if (process.env.MODE === "scrape" || process.env.MODE === "full") {
   runScraper();
-} 
-if (process.env.MODE === 'transform' || process.env.MODE === 'full') {
+}
+if (process.env.MODE === "transform" || process.env.MODE === "full") {
   runTransformer();
 }

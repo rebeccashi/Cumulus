@@ -24,10 +24,12 @@ const retry = async (callback, count, description) => {
 };
 
 const uuid = (length) => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   return Array.from(Array(length)).reduce((acc) => {
-    return acc + characters.charAt(Math.floor(Math.random() * characters.length));
-  }, '');
-}
+    return (
+      acc + characters.charAt(Math.floor(Math.random() * characters.length))
+    );
+  }, "");
+};
 
 export { retry, sleep, uuid };
