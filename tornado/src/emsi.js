@@ -3,32 +3,30 @@ import puppeteer from "puppeteer";
 
 import fs from "fs";
 
-import { retry, sleep } from "./util/util";
+import { retry, sleep } from "./util/util.js";
+
+const EMSIOUTPUT = {
+  FILESYSTEM: 'fs',
+  MONGODB: 'mdb'
+}
 
 class EMSI {
   constructor({
-    outputDir = "./output",
+    output = EMSIOUTPUT.FILESYSTEM,
+    outputDb = "./db",
     clientId = process.env.EMSI_CLIENT_ID,
     clientSecret = process.env.EMSI_CLIENT_SECRET,
   }) {
-    this.outputDir = outputDir;
+    this.output = output;
+    this.outputDb = outputDb;
     this.clientId = clientId;
     this.clientSecret = clientSecret;
 
     this.parsedSkills = new Map();
     this.remainingSkills = new Map();
 
-    try {
-      console.log("Checking if output directory exists...");
-      const files = fs.readdirSync(outputDir);
-      console.log("It exists, adding existing skills to skip list!");
-
-      files.forEach((file) => this.parsedSkills.set(file, 1));
-    } catch (err) {
-      console.log("It does not exist! Creating it now...");
-      fs.mkdirSync(outputDir);
-      console.log("Created it successfully!");
-    }
+    import(`./util/${this.output}.js`)
+      .then(dbWrapper => dbWrapper.populateParsedSkills(this));
   }
 
   async getAccessToken() {
@@ -193,7 +191,7 @@ class EMSI {
     const data = await this.scrapeHTMLForSkill();
 
     fs.writeFileSync(
-      `${this.outputDir}/${skill.replace(/[\\/:"*?<>|]+/g, "-")}`,
+      `${this.outputDb}/${skill.replace(/[\\/:"*?<>|]+/g, "-")}`,
       JSON.stringify(data)
     );
 
@@ -235,9 +233,9 @@ const runScraper = async () => {
     clientSecret: process.env.EMSI_CLIENT_SECRET,
   });
 
-  await eq.getAccessToken();
-  await eq.setupPuppeteer();
-  await eq.scrape();
+  // await eq.getAccessToken();
+  // await eq.setupPuppeteer();
+  // await eq.scrape();
 };
 
 runScraper();

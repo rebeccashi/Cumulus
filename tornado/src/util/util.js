@@ -23,4 +23,11 @@ const retry = async (callback, count, description) => {
   }
 };
 
-export { retry, sleep };
+const uuid = (length) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  return Array.from(Array(length)).reduce((acc) => {
+    return acc + characters.charAt(Math.floor(Math.random() * characters.length));
+  }, '');
+}
+
+export { retry, sleep, uuid };

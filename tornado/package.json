@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "scrape_indeed": "node src/js_scrapers/indeed.js",
-    "scrape_emsi": "node src/js_scrapers/emsi.js",
+    "scrape_emsi": "node src/emsi.js",
     "prettier": "prettier --write src/**/*.js"
   },
   "keywords": [],
