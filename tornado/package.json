@@ -4,9 +4,9 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "full_emsi": "MODE=full node src/emsi.js",
-    "scrape_emsi": "MODE=scrape node src/emsi.js",
-    "transform_emsi": "MODE=transform node src/emsi.js",
+    "emsi.all": "MODE=all node src/emsi.js",
+    "emsi.scrape": "MODE=scrape node src/emsi.js",
+    "emsi.transform": "MODE=transform node src/emsi.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prettier": "prettier --write src/**/*.js"
   },
@@ -16,6 +16,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",
     "https-proxy-agent": "^5.0.0",
+    "mongodb": "^4.1.4",
     "node-fetch": "^3.0.0",
     "prettier": "^2.4.1",
     "puppeteer": "^11.0.0"

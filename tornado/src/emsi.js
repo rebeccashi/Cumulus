@@ -248,9 +248,9 @@ const runTransformer = async () => {
   await emsi.transform();
 };
 
-if (process.env.MODE === "scrape" || process.env.MODE === "full") {
+if (process.env.MODE === "scrape" || process.env.MODE === "all") {
   runScraper();
 }
-if (process.env.MODE === "transform" || process.env.MODE === "full") {
+if (process.env.MODE === "transform" || process.env.MODE === "all") {
   runTransformer();
 }
