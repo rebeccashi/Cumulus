@@ -7,6 +7,8 @@
     "emsi.all": "MODE=all node src/emsi.js",
     "emsi.scrape": "MODE=scrape node src/emsi.js",
     "emsi.transform": "MODE=transform node src/emsi.js",
+    "oneshot.old_schema_to_new_schema": "node src/deprecated/oneshot/old_schema_to_new_schema.js",
+    "oneshot.filesystem_to_mongodb": "node src/deprecated/oneshot/filesystem_to_mongodb.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prettier": "prettier --write src/**/*.js"
   },
