@@ -1,8 +1,6 @@
 import fetch from "node-fetch";
 import puppeteer from "puppeteer";
 
-import fs from "fs";
-
 import { retry, sleep } from "./util/util.js";
 
 const EMSIOUTPUT = {

@@ -4,9 +4,9 @@ import { uuid } from "./util.js";
 
 const populateParsedSkills = (queryObject) => {
   try {
-    console.log("Checking if output directory exists...");
+    console.log("Reading from output directory...");
     const files = fs.readdirSync(`${queryObject.outputDb}/skills`);
-    console.log("It exists, adding existing skills to skip list!");
+    console.log("Read successful! Adding existing skills to skip list...");
 
     const totalLength = files.length;
 
@@ -21,9 +21,7 @@ const populateParsedSkills = (queryObject) => {
     });
     process.stdout.write("\n");
   } catch (err) {
-    console.log("It does not exist! Creating it now...");
-    fs.mkdirSync(queryObject.outputDb);
-    console.log("Created it successfully!");
+    console.error(err);
   }
 };
 

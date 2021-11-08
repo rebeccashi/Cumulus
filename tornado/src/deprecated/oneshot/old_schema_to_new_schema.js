@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import { uuid } from "../util/util.js";
+import { uuid } from "../../util/util.js";
 
 const files = fs.readdirSync("./output");
 const totalLength = files.length;
