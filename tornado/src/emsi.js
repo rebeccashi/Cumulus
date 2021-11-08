@@ -14,14 +14,11 @@ class EMSI {
     outputDb = "./db",
     clientId = "",
     clientSecret = "",
-  }) {
+  } = {}) {
     this.output = output;
     this.outputDb = outputDb;
     this.clientId = clientId;
     this.clientSecret = clientSecret;
-
-    const dbWrapper = await import(`./util/${this.output}.js`);
-    dbWrapper.populateParsedSkills(this);
   }
 
   async setupScraper() {
@@ -35,9 +32,8 @@ class EMSI {
     this.parsedSkills = new Map();
     this.remainingSkills = new Map();
 
-    import(`./util/${this.output}.js`).then((dbWrapper) =>
-      dbWrapper.populateParsedSkills(this)
-    );
+    const dbWrapper = await import(`./util/${this.output}.js`);
+    dbWrapper.populateParsedSkills(this);
   }
 
   async getAccessToken() {
@@ -228,7 +224,8 @@ class EMSI {
   }
 
   async transform() {
-    console.log("Hi!");
+    console.log("Starting to transform...");
+    console.log("Done transforming!");
   }
 }
 
