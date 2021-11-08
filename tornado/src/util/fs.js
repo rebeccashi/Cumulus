@@ -5,7 +5,7 @@ import { uuid } from "./util.js";
 const populateParsedSkills = (queryObject) => {
   try {
     console.log("Reading from output directory...");
-    const files = fs.readdirSync(`${queryObject.outputDb}/skills`);
+    const files = fs.readdirSync(`./${queryObject.outputDb}/skills`);
     console.log("Read successful! Adding existing skills to skip list...");
 
     const totalLength = files.length;
@@ -32,7 +32,7 @@ const writeSkill = (queryObject, skill) => {
   if (queryObject.skillIdMap.has(name)) {
     const file = queryObject.skillIdMap.get(name);
     const data = JSON.parse(
-      fs.readFileSync(`${queryObject.outputDb}/${file}`, "utf-8")
+      fs.readFileSync(`./${queryObject.outputDb}/${file}`, "utf-8")
     );
 
     data.copies.unshift(skill);
@@ -53,7 +53,7 @@ const writeSkill = (queryObject, skill) => {
       })
     );
 
-    console.log(`Wrote new skill ${name} at file ${file}`);
+    console.log(`Wrote new skill ${name} at file ${file}!`);
   }
 };
 

@@ -10,8 +10,8 @@ const EMSIOUTPUT = {
 
 class EMSI {
   constructor({
-    output = EMSIOUTPUT.FILESYSTEM,
-    outputDb = "./db",
+    output = EMSIOUTPUT.MONGODB,
+    outputDb = "jobs",
     clientId = "",
     clientSecret = "",
   } = {}) {
@@ -26,14 +26,14 @@ class EMSI {
     await this.setupPuppeteer();
 
     let dateObj = new Date();
-    this.date = `${dateObj.getUTCMonth() + 1}-${dateObj.getUTCFullYear()}`;
+    this.date = `${dateObj.getUTCMonth()}-${dateObj.getUTCFullYear()}`; // subtract month by 1
 
     this.skillIdMap = new Map();
     this.parsedSkills = new Map();
     this.remainingSkills = new Map();
 
     const dbWrapper = await import(`./util/${this.output}.js`);
-    dbWrapper.populateParsedSkills(this);
+    await dbWrapper.populateParsedSkills(this);
   }
 
   async getAccessToken() {
@@ -108,7 +108,7 @@ class EMSI {
 
     try {
       titles = await this.page.evaluate(() => {
-        const data = {};
+        const data = [];
 
         const table = document.querySelectorAll("table.bFBCms")[0];
         Array.from(table.querySelectorAll("tbody tr")).forEach((row) => {
@@ -128,7 +128,7 @@ class EMSI {
 
     try {
       companies = await this.page.evaluate(() => {
-        const data = {};
+        const data = [];
 
         const table = document.querySelectorAll("table.bFBCms")[1];
         Array.from(table.querySelectorAll("tbody tr")).forEach((row) => {
@@ -148,7 +148,7 @@ class EMSI {
 
     try {
       await this.page.hover(
-        "svg.recharts-surface g.recharts-cartesian-grid-vertical line:nth-child(11)"
+        "svg.recharts-surface g.recharts-cartesian-grid-vertical line:nth-child(12)"
       );
 
       const text = await this.page.evaluate(() => {
@@ -189,7 +189,7 @@ class EMSI {
       return;
     } else {
       const dbWrapper = await import(`./util/${this.output}.js`);
-      dbWrapper.writeSkill(this, data);
+      await dbWrapper.writeSkill(this, data);
 
       console.log(`Wrote skill ${skill} to disk!`);
     }

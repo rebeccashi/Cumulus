@@ -16,17 +16,17 @@ const run = async () => {
     console.log("Connected correctly to server!");
 
     const db = client.db(dbName);
-    const col = db.collection("skills");
+    const skills = db.collection("skills");
 
     console.log("Trying to read skills...");
-    const files = fs.readdirSync(`./db/skills`);
+    const files = fs.readdirSync(`./jobs/skills`);
     console.log("Read successful! Reading skills to memory...");
 
     const totalLength = files.length;
     const skillArray = [];
     for (let i = 0; i < totalLength; i++) {
       const data = JSON.parse(
-        fs.readFileSync(`./db/skills/${files[i]}`, "utf-8")
+        fs.readFileSync(`./jobs/skills/${files[i]}`, "utf-8")
       );
       skillArray.push(data);
       process.stdout.write(`Adding skill ${i}/${totalLength} to memory\r`);
@@ -34,7 +34,7 @@ const run = async () => {
     process.stdout.write("\n");
 
     console.log("Read skills to memory! Uploading skills to MongoDB...");
-    const p = await col.insertMany(skillArray);
+    await skills.insertMany(skillArray);
     console.log("Uploaded skills to MongoDB!");
   } catch (err) {
     console.log(err.stack);
