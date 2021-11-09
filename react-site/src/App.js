@@ -14,9 +14,9 @@ function App() {
     <div className="App">
       <Navbar/>
         <Switch>
-          <Route path="/" component={Landing}/>
-          <Route path="/users" component={Users}/>
           <Route path="/about" component={About}/>
+          <Route path="/users" component={Users}/>
+          <Route path="/" component={Landing}/>
         </Switch>
     </div>
   );
