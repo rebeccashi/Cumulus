@@ -5,13 +5,17 @@ const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-const collectionName = "skills";
+const COLLECTIONS = {
+  SKILLS: "skills",
+  TITLES: "titles",
+  COMPANIES: "companies"
+};
 
 const populateParsedSkills = async (queryObject) => {
   await client.connect();
 
   const db = client.db(queryObject.outputDb);
-  const skills = db.collection(collectionName);
+  const skills = db.collection(COLLECTIONS.SKILLS);
 
   const query = { copies: { $elemMatch: { date: queryObject.date } } };
 
@@ -32,6 +36,13 @@ const populateParsedSkills = async (queryObject) => {
   await client.close();
 };
 
+const getAllSkills = async (queryObject) => {
+  await client.connect();
+
+  const db = client.db(queryObject.outputDb);
+  const skills = db.collection(COLLECTIONS.SKILLS);
+}
+
 const writeSkill = async (queryObject, skill) => {
   const name = skill.name;
   delete skill.name;
@@ -39,7 +50,7 @@ const writeSkill = async (queryObject, skill) => {
   await client.connect();
 
   const db = client.db(queryObject.outputDb);
-  const skills = db.collection(collectionName);
+  const skills = db.collection(COLLECTIONS.SKILLS);
 
   const query = { name: name };
 
