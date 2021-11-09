@@ -1,12 +1,12 @@
 import * as React from 'react';
-import './Landing.css';
+import './About.css';
 import Cloud1 from '../images/cloud1.svg';
 import Cloud2 from '../images/cloud2.svg';
 import Cloud3 from '../images/cloud3.svg';
 import Cloud4 from '../images/cloud4.svg';
 import Cloud5 from '../images/cloud5.svg';
 
-class Landing extends React.Component {
+class About extends React.Component {
 
     constructor(props) {
         super(props)
@@ -41,4 +41,4 @@ class Landing extends React.Component {
 
 }
 
-export default Landing;
+export default About;

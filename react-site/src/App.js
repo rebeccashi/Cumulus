@@ -6,6 +6,8 @@ import {
 } from "react-router-dom";
 import Landing from './Landing/Landing'
 import Navbar from './Navbar/Navbar'
+import Users from './Users/Users'
+import About from './About/About'
 
 function App() {
   return (
@@ -13,7 +15,8 @@ function App() {
       <Navbar/>
         <Switch>
           <Route path="/" component={Landing}/>
-
+          <Route path="/users" component={Users}/>
+          <Route path="/about" component={About}/>
         </Switch>
     </div>
   );
