@@ -19,14 +19,14 @@ class EMSI {
     this.outputDb = outputDb;
     this.clientId = clientId;
     this.clientSecret = clientSecret;
+
+    let dateObj = new Date();
+    this.date = `${dateObj.getUTCMonth()}-${dateObj.getUTCFullYear()}`; // subtract month by 1
   }
 
   async setupScraper() {
     await this.getAccessToken();
     await this.setupPuppeteer();
-
-    let dateObj = new Date();
-    this.date = `${dateObj.getUTCMonth()}-${dateObj.getUTCFullYear()}`; // subtract month by 1
 
     this.skillIdMap = new Map();
     this.parsedSkills = new Map();
@@ -223,8 +223,111 @@ class EMSI {
     console.log("Done scraping!");
   }
 
+  async setupTransformer() {
+    this.skillArray = [];
+    this.titleMap = new Map();
+    this.companyMap = new Map();
+  }
+
+  addSkillToMapWithData(skillName, map, data) {
+    data.forEach((entry) => {
+      if (map.has(entry.name)) {
+        const existingData = map.get(entry.name);
+
+        existingData.push({
+          name: skillName,
+          numJobs: entry.numJobs,
+        });
+        existingData.sort((a, b) => b.numJobs - a.numJobs);
+
+        map.set(entry.name, existingData);
+      } else {
+        map.set(entry.name, [
+          {
+            name: skillName,
+            numJobs: entry.numJobs,
+          },
+        ]);
+      }
+    });
+
+    return map;
+  }
+
+  loopOverSkills() {
+    console.log("Looping over each skill...");
+
+    const totalLength = this.skillArray.length;
+    this.skillArray.forEach((skill, current) => {
+      process.stdout.write(`Processing skill ${current}/${totalLength}\r`);
+
+      const latestCopy = skill.copies.filter(
+        (copy) => copy.date == this.date
+      )[0];
+
+      this.addSkillToMapWithData(skill.name, this.titleMap, latestCopy.titles);
+      this.addSkillToMapWithData(
+        skill.name,
+        this.companyMap,
+        latestCopy.companies
+      );
+    });
+    process.stdout.write("\n");
+  }
+
+  async writeTitles() {
+    console.log("Writing titles...");
+
+    const totalLength = this.titleMap.size;
+    let current = 0;
+
+    const dbWrapper = await import(`./util/${this.output}.js`);
+
+    for (let [titleName, titleSkills] of this.titleMap) {
+      process.stdout.write(`Writing title ${current++}/${totalLength}\r`);
+
+      await dbWrapper.writeTitle(this, {
+        name: titleName,
+        date: this.date,
+        skills: titleSkills,
+      });
+    }
+    process.stdout.write("\n");
+    console.log("Wrote titles!");
+  }
+
+  async writeCompanies() {
+    console.log("Writing companies...");
+
+    const totalLength = this.companyMap.size;
+    let current = 0;
+
+    const dbWrapper = await import(`./util/${this.output}.js`);
+
+    for (let [companyName, companySkills] of this.companyMap) {
+      process.stdout.write(`Writing company ${current++}/${totalLength}\r`);
+
+      await dbWrapper.writeCompany(this, {
+        name: companyName,
+        date: this.date,
+        skills: companySkills,
+      });
+    }
+    process.stdout.write("\n");
+    console.log("Wrote companies!");
+  }
+
   async transform() {
     console.log("Starting to transform...");
+
+    const dbWrapper = await import(`./util/${this.output}.js`);
+    await dbWrapper.getAllCurrentSkills(this);
+
+    this.loopOverSkills();
+
+    await this.writeTitles();
+    await this.writeCompanies();
+
     console.log("Done transforming!");
   }
 }
@@ -242,6 +345,7 @@ const runScraper = async () => {
 const runTransformer = async () => {
   const emsi = new EMSI();
 
+  await emsi.setupTransformer();
   await emsi.transform();
 };
 
