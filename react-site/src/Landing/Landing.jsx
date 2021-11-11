@@ -5,6 +5,9 @@ import Cloud2 from '../images/cloud2.svg';
 import Cloud3 from '../images/cloud3.svg';
 import Cloud4 from '../images/cloud4.svg';
 import Cloud5 from '../images/cloud5.svg';
+const axios = require('axios');
+
+var search;
 
 class Landing extends React.Component {
 
@@ -13,8 +16,20 @@ class Landing extends React.Component {
         this.onSearch = this.onSearch.bind(this)
     }
 
+
+    updateSearch(e){
+        search = e.target.value;
+    }
+
     onSearch(e) {
-        console.log(e.target);
+        axios.post('/api/search',{
+            userSearch: search 
+        })
+        .then(function(response){
+            console.log(response);
+        })
+
+
     }
 
     render() {
@@ -31,7 +46,7 @@ class Landing extends React.Component {
                     <h2 className="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus, est aliquam imperdiet consectetur, purus odio pulvinar orci, ut volutpat ex justo dapibus metus. </h2>
                     <div id="search-bar">
                         {/* <label for="search-text">Job title, keywords, company or location</label> */}
-                        <input type="text" id="search-bar-text" placeholder="Job title, keywords, company or location"></input>
+                        <input type="text" onChange={this.updateSearch} id="search-bar-text" placeholder="Job title, keywords, company or location"></input>
                         <div id="search-button" onClick={this.onSearch}>Search</div>
                     </div>
                 </div>

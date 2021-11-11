@@ -18,6 +18,32 @@ Object.keys(keywords).forEach(l => {
   amt += keywords[l];
 })
 
+app.post('/api/search', (req,res)=>{
+  var search = req.body.userSearch;
+
+  var response = []
+
+  for(var i = 0; i < jobDb.length; i ++){
+    var inSearch = false;
+    var job = jobDb[i];
+    if(job.title.toLowerCase().includes(search.toLowerCase())){
+      inSearch = true;
+    }
+    else if(job.company.toLowerCase().includes(search.toLowerCase())){
+      inSearch = true;
+    }
+    else if(job.description.toLowerCase().includes(search.toLowerCase())){
+      insearch = true;
+    }
+
+    if(inSearch){
+      response.push(job);
+    }
+  }
+
+  res.send(response)
+})
+
 /*
   { "query": "software engineering internship new york" }
 */
