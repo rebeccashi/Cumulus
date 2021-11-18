@@ -7,7 +7,7 @@ class Navbar extends React.Component {
         return (
             <nav className="navbar">
                 <Link to="/" className="link logo">Cumulus</Link>
-                <Link to="/users" className="link pricing">Pricing</Link>
+                <Link to="/search" className="link pricing">Search</Link>
                 <Link to="/about" className="link about">About us</Link>
                 <div id="signup">Sign Up</div>
             </nav>
