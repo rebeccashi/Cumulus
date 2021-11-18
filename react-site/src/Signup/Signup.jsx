@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './About.css';
+import './Signup.css';
 import Cloud1 from '../images/cloud1.svg';
 import Cloud2 from '../images/cloud2.svg';
 import Cloud3 from '../images/cloud3.svg';
