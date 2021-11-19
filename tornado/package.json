@@ -4,9 +4,13 @@
   "description": "",
   "type": "module",
   "scripts": {
+    "emsi.all": "cross-env MODE=all node src/emsi.js",
+    "emsi.scrape": "cross-env MODE=scrape node src/emsi.js",
+    "emsi.transform": "cross-env MODE=transform node src/emsi.js",
+    "oneshot.old_schema_to_new_schema": "node src/deprecated/oneshot/old_schema_to_new_schema.js",
+    "oneshot.filesystem_to_mongodb": "node src/deprecated/oneshot/filesystem_to_mongodb.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "scrape_indeed": "node cheerio_scrapers/indeed.js",
-    "prettier": "prettier --write **/*.js"
+    "prettier": "prettier --write src/**/*.js"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +18,12 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",
     "https-proxy-agent": "^5.0.0",
+    "mongodb": "^4.1.4",
     "node-fetch": "^3.0.0",
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "puppeteer": "^11.0.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }
