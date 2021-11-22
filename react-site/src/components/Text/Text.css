@@ -1,0 +1,14 @@
+h1 {
+    font-family: 'Inter', 'Arial', sans-serif;
+  }
+  
+  .text-color--purple {
+    color: var(--purple);
+  }
+  .text-color--white {
+    color: var(--white);
+  }
+  
+  h1 {
+    font-size: 12px;
+  }
