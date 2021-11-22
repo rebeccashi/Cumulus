@@ -1,14 +1,19 @@
-h1 {
-    font-family: 'Inter', 'Arial', sans-serif;
-  }
+p {
+  font-family: 'Inter', 'Arial', sans-serif;
+}
   
-  .text-color--purple {
-    color: var(--purple);
-  }
-  .text-color--white {
-    color: var(--white);
-  }
+.text-color--purple {
+  color: var(--purple);
+}
+.text-color--white {
+  color: var(--white);
+}
   
-  h1 {
-    font-size: 12px;
-  }
+p.default {
+  font-size: 12px;
+}
+
+p.label {
+  font-size: 6px;
+  font-weight: 600;
+}
