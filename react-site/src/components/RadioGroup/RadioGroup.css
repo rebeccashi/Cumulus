@@ -1,0 +1,41 @@
+.radiogroup {
+  font-family: 'Inter', 'Arial', sans-serif;
+
+  display: flex;
+  flex-flow: row wrap;
+
+  width: 300px;
+}
+  
+.radiogroup-color--blue {
+  background-color: var(--blue);
+}
+.radiogroup-color--white {
+  background-color: var(--white);
+}
+
+.radiogroup-button {
+  height: 40px;
+  padding-left: 32px;
+  padding-right: 32px;
+
+  color: var(--purple);
+  
+  display: grid;
+  place-content: center;
+
+  margin-right: 16px;
+  margin-bottom: 16px;
+
+  border-radius: 8px;
+}
+
+.radiogroup-button:hover {
+  background-color: var(--purple10);
+  cursor: pointer;
+}
+
+.radiogroup-button:active, .radiogroup-button.active {
+  background-color: var(--purple);
+  color: var(--white);
+}
