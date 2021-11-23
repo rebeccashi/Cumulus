@@ -7,7 +7,7 @@ export const Text = ({
   color='purple',
   children
 }) => {
-  const colorClass = `color--${color}`;
+  const colorClass = `text-color--${color}`;
   
   return (
     <p className={`${colorClass} ${variant}`}>{children}</p>
