@@ -6,6 +6,9 @@ import Cloud3 from '../images/cloud3.svg';
 import Cloud4 from '../images/cloud4.svg';
 import Cloud5 from '../images/cloud5.svg';
 
+import Input from '../components/Input';
+import Heading from '../components/Heading';
+import Text from '../components/Text';
 
 class Landing extends React.Component {
 
@@ -28,13 +31,17 @@ class Landing extends React.Component {
                 <img src={Cloud5} className="cloud" id="cloud5"/>
 
                 <div className="tagline">
-                    <h1 className="title">Get a bird's-eye view of your field</h1>
-                    <h2 className="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus, est aliquam imperdiet consectetur, purus odio pulvinar orci, ut volutpat ex justo dapibus metus. </h2>
-                    <div id="search-bar">
-                        {/* <label for="search-text">Job title, keywords, company or location</label> */}
-                        <input type="text" id="search-bar-text" placeholder="Job title, keywords, company or location"></input>
-                        <div id="search-button" onClick={this.onSearch}>Search</div>
-                    </div>
+                    <Heading>Get a bird's-eye view of your field</Heading>
+                    <Text>We'll be your eyes and ears.</Text>
+                    <br />
+                    <Input 
+                        placeholder='Job title, keywords, company, or location' 
+                        label='Search' 
+                        color='white' 
+                        withIcon={true} 
+                        iconVariant='search' 
+                        setValue={() => {}}
+                    />
                 </div>
             </div>
         )
