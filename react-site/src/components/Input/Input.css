@@ -1,0 +1,68 @@
+.input {
+  font-family: 'Inter', 'Arial', sans-serif;
+  color: var(--purple);
+
+  min-width: 300px;
+
+  position: relative;
+}
+  
+.input-color--blue {
+  background-color: var(--blue);
+}
+.input-color--white {
+  background-color: var(--white);
+}
+
+.input-input {
+  font-family: 'Inter', 'Arial', sans-serif;
+  color: var(--purple);
+  font-size: 1em;
+
+  width: 100%;
+  height: 40px;
+  padding-left: 16px;
+  padding-right: 52px;
+
+  border: none;
+  outline: none;
+  border-radius: 8px;
+}
+
+.input-placeholder {
+  color: var(--purple30);
+
+  position: absolute;
+  left: 16px;
+  top: 50%;
+
+  max-width: calc(100% - 52px);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+
+  transform: translateY(-50%);
+  transition: ease-in-out 0.1s;
+
+  pointer-events: none;
+}
+
+.input.active .input-placeholder {
+  color: var(--purple);
+  font-size: 12px;
+
+  top: -4px;
+
+  transform: translateY(-100%);
+  transition: ease-in-out 0.1s;
+}
+
+.input-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  pointer-events: none;
+}
