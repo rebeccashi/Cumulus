@@ -7,7 +7,7 @@ export const Heading = ({
   color='purple',
   children
 }) => {
-  const colorClass = `color--${color}`;
+  const colorClass = `heading-color--${color}`;
 
   switch (variant) {
     case 'h1': return (

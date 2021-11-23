@@ -4,7 +4,7 @@
   display: flex;
   flex-flow: row wrap;
 
-  width: 300px;
+  width: fit-content;
 }
   
 .radiogroup-color--blue {
