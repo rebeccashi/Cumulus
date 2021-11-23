@@ -13,14 +13,15 @@ export const Input = ({
   value,
   autocomplete='',
   setValue,
-  onSubmit=null
+  onSubmit=null,
+  style
 }) => {
   const colorClass = `input-color--${color}`;
 
   const [isActive, setIsActive] = React.useState(false);
   
   return (
-    <div class={`input ${isActive ? 'active' : ''} ${label?.length > 0 ? 'with-label' : ''}`}>
+    <div class={`input ${isActive ? 'active' : ''} ${label?.length > 0 ? 'with-label' : ''}`} style={style}>
       <span className='input-placeholder'>{
         isActive ?
         label :
