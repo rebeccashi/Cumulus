@@ -1,8 +1,7 @@
 import React from "react";
 
-import Icon from '../Icon';
-
 import './Input.css';
+import Icon from '../Icon';
 
 export const Input = ({
   color='blue',

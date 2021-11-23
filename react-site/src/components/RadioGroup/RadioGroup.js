@@ -5,11 +5,10 @@ import './RadioGroup.css';
 export const RadioGroup = ({
   color='blue',
   options,
+  value,
   setValue
 }) => {
   const colorClass = `radiogroup-color--${color}`;
-
-  const [active, setActive] = React.useState(null);
   
   return (
     <div className='radiogroup'>
@@ -17,8 +16,7 @@ export const RadioGroup = ({
         options.map(opt => {
           return (
             <>
-              <div className={`radiogroup-button ${active === opt.value ? 'active' : ''} ${colorClass}`} onClick={() => {
-                setActive(opt.value);
+              <div className={`radiogroup-button ${value === opt.value ? 'active' : ''} ${colorClass}`} onClick={() => {
                 setValue(opt.value);
               }}>
                 <span className='radiogroup-button--text'>{opt.label}</span>

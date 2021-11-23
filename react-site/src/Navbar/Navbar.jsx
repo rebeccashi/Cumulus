@@ -10,7 +10,7 @@ class Navbar extends React.Component {
                 <Link to="/" className="link logo">Cumulus</Link>
                 <Link to="/users" className="link pricing">Pricing</Link>
                 <Link to="/about" className="link about">About us</Link>
-                <Button label='Sign Up' />
+                <Button color='cta' label='Sign Up' />
             </nav>
         )
     }
