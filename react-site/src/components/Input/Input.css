@@ -60,6 +60,27 @@
   transition: ease-in-out 0.1s;
 }
 
+.input-autocomplete {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+.input-autocomplete--value {
+  opacity: 0;
+}
+.input-autocomplete--autocomplete {
+  color: var(--purple30);
+}
+.input.active .input-autocomplete {
+  opacity: 1;
+}
+
 .input-icon {
   position: absolute;
   right: 16px;

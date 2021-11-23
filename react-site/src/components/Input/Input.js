@@ -10,6 +10,7 @@ export const Input = ({
   withIcon,
   iconVariant,
   value,
+  autocomplete='',
   setValue
 }) => {
   const colorClass = `input-color--${color}`;
@@ -17,12 +18,16 @@ export const Input = ({
   const [isActive, setIsActive] = React.useState(false);
   
   return (
-    <div class={`input ${isActive ? 'active' : ''} ${label.length > 0 ? 'with-label' : ''}`}>
+    <div class={`input ${isActive ? 'active' : ''} ${label?.length > 0 ? 'with-label' : ''}`}>
       <span className='input-placeholder'>{
         isActive ?
         label :
         placeholder
       }</span>
+      <span className='input-autocomplete'>
+        <span className='input-autocomplete--value'>{value}</span>
+        <span className='input-autocomplete--autocomplete'>{autocomplete}</span>
+      </span>
       <input 
         type='text' 
         className={`input-input ${colorClass} ${withIcon ? 'with-icon' : ''}`} 

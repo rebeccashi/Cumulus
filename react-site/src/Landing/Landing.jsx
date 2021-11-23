@@ -38,8 +38,7 @@ class Landing extends React.Component {
                     <Text>We'll be your eyes and ears.</Text>
                     <br />
                     <Input 
-                        placeholder='Job title, keywords, company, or location' 
-                        label='Search' 
+                        placeholder='Job title, keywords, company, or location'
                         color='white' 
                         withIcon={true} 
                         iconVariant='search' 
@@ -51,6 +50,7 @@ class Landing extends React.Component {
                                 }
                             })
                         }}
+                        autocomplete={this.state.value.length === 0 ? '' : 'Software Engineer'.substring('Software Engineer'.toLocaleLowerCase().indexOf(this.state.value.toLocaleLowerCase()) + this.state.value.length)}
                     />
                 </div>
             </div>
