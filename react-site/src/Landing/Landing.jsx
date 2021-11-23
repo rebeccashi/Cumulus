@@ -51,6 +51,9 @@ class Landing extends React.Component {
                             })
                         }}
                         autocomplete={this.state.value.length === 0 ? '' : 'Software Engineer'.substring('Software Engineer'.toLocaleLowerCase().indexOf(this.state.value.toLocaleLowerCase()) + this.state.value.length)}
+                        style={{
+                            width: '100%'
+                        }}
                     />
                 </div>
             </div>
