@@ -40,6 +40,12 @@ export const Input = ({
           if (e.target.value.length == 0) setIsActive(false)
           else setIsActive(true)
         }}
+        onKeyDown={(e) => {
+          if (e.key === 'Tab') {
+            e.preventDefault();
+            setValue(`${value}${autocomplete}`);
+          }
+        }}
         value={value}
       />
       {
