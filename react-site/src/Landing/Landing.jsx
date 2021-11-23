@@ -45,7 +45,7 @@ class Landing extends React.Component {
                         iconVariant='search' 
                         value={this.state.value}
                         setValue={(newValue) => {
-                            this.setState((state, _) => {
+                            this.setState(() => {
                                 return {
                                     value: newValue
                                 }

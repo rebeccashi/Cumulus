@@ -6,6 +6,9 @@
 
   position: relative;
 }
+.input:not(.with-label) {
+  overflow: hidden;
+}
   
 .input-color--blue {
   background-color: var(--blue);

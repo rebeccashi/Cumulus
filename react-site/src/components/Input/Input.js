@@ -17,7 +17,7 @@ export const Input = ({
   const [isActive, setIsActive] = React.useState(false);
   
   return (
-    <div class={`input ${isActive ? 'active' : ''}`}>
+    <div class={`input ${isActive ? 'active' : ''} ${label.length > 0 ? 'with-label' : ''}`}>
       <span className='input-placeholder'>{
         isActive ?
         label :
