@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Router, Link} from 'react-router-dom';
 import './Navbar.css';
+import Button from '../components/Button';
 
 class Navbar extends React.Component {
     render() {
@@ -9,7 +10,7 @@ class Navbar extends React.Component {
                 <Link to="/" className="link logo">Cumulus</Link>
                 <Link to="/users" className="link pricing">Pricing</Link>
                 <Link to="/about" className="link about">About us</Link>
-                <div id="signup">Sign Up</div>
+                <Button label='Sign Up' />
             </nav>
         )
     }

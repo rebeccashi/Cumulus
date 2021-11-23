@@ -6,6 +6,7 @@ import Cloud3 from '../images/cloud3.svg';
 import Cloud4 from '../images/cloud4.svg';
 import Cloud5 from '../images/cloud5.svg';
 
+
 class Landing extends React.Component {
 
     constructor(props) {

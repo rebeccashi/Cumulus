@@ -8,7 +8,7 @@
     align-items: center;
     height: 70px;
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: repeat(8, 1fr);
     z-index: 2;
 }
 
@@ -27,11 +27,11 @@
 }
 
 .pricing {
-    grid-column: 9/10;
+    grid-column: 5/6;
 }
 
 .about {
-    grid-column: 10/11;
+    grid-column: 6/7;
 }
 
 #signup {
@@ -41,7 +41,7 @@
     height: 48px;
     width: 100px;
     line-height: 48px;
-    grid-column: 11/13;
+    grid-column: 7/9;
     justify-content: center;
     margin: 0 auto;
     font-size: 14px;
