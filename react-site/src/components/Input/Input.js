@@ -7,11 +7,13 @@ export const Input = ({
   color='blue',
   placeholder,
   label,
+  type='text',
   withIcon,
   iconVariant,
   value,
   autocomplete='',
-  setValue
+  setValue,
+  onSubmit=null
 }) => {
   const colorClass = `input-color--${color}`;
 
@@ -29,7 +31,7 @@ export const Input = ({
         <span className='input-autocomplete--autocomplete'>{autocomplete}</span>
       </span>
       <input 
-        type='text' 
+        type={type}
         className={`input-input ${colorClass} ${withIcon ? 'with-icon' : ''}`} 
         onFocus={() => setIsActive(true)}
         onBlur={(e) => {
@@ -41,9 +43,13 @@ export const Input = ({
           else setIsActive(true)
         }}
         onKeyDown={(e) => {
-          if (e.key === 'Tab') {
+          if (e.key === 'Tab' && autocomplete !== '') {
             e.preventDefault();
             setValue(`${value}${autocomplete}`);
+          }
+          if (e.key === 'Enter' && onSubmit != null) {
+            e.preventDefault();
+            onSubmit(e.target.value);
           }
         }}
         value={value}

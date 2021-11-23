@@ -2,7 +2,7 @@
   font-family: 'Inter', 'Arial', sans-serif;
   color: var(--purple);
 
-  min-width: 300px;
+  width: fit-content;
 
   position: relative;
 }
@@ -45,11 +45,12 @@
   white-space: nowrap;
 
   transform: translateY(-50%);
-  transition: ease-in-out 0.1s;
 
   pointer-events: none;
 }
-
+.input.with-label .input-placeholder {
+  transition: ease-in-out 0.1s;
+}
 .input.active .input-placeholder {
   color: var(--purple);
   font-size: 12px;
