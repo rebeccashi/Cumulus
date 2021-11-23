@@ -15,6 +15,9 @@ class Landing extends React.Component {
     constructor(props) {
         super(props)
         this.onSearch = this.onSearch.bind(this)
+        this.state = {
+            value: ''
+        }
     }
 
     onSearch(e) {
@@ -40,7 +43,14 @@ class Landing extends React.Component {
                         color='white' 
                         withIcon={true} 
                         iconVariant='search' 
-                        setValue={() => {}}
+                        value={this.state.value}
+                        setValue={(newValue) => {
+                            this.setState((state, _) => {
+                                return {
+                                    value: newValue
+                                }
+                            })
+                        }}
                     />
                 </div>
             </div>

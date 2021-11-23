@@ -9,6 +9,7 @@ export const Input = ({
   label,
   withIcon,
   iconVariant,
+  value,
   setValue
 }) => {
   const colorClass = `input-color--${color}`;
@@ -34,6 +35,7 @@ export const Input = ({
           if (e.target.value.length == 0) setIsActive(false)
           else setIsActive(true)
         }}
+        value={value}
       />
       {
         withIcon ?
