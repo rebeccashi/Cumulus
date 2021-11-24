@@ -1,0 +1,51 @@
+.placeholder {
+  width: 500px;
+  height: 250px;
+
+  background-color: var(--gray);
+
+  position: relative;
+  overflow: hidden;
+
+  border-radius: 8px;
+}
+
+.placeholder-panel {
+  height: 110%;
+
+  background-color: var(--white);
+
+  position: absolute;
+  top: -5%;
+  
+  transform: skew(-30deg);
+}
+.placeholder-panel--thin {
+  width: 10%;
+  
+  animation: placeholder-thin 3.15s ease-in infinite;
+}
+.placeholder-panel--thick {
+  width: 22%;
+  
+  animation: placeholder-thick 3.15s ease-in infinite;
+}
+
+@keyframes placeholder-thin {
+  0% {
+    left: -157%;
+  }
+
+  100% {
+    left: 207%;
+  }
+}
+@keyframes placeholder-thick {
+  0% {
+    left: -135%;
+  }
+
+  100% {
+    left: 225%;
+  }
+}

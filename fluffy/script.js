@@ -825,6 +825,7 @@ const menuBtnListener = () => {
   }
 }
 
+
 window.addEventListener('touchmove', () => {
   if (document.querySelector('.cta').style.right === '0px') {
     document.querySelector('.menubtn').dispatchEvent( new Event('click') );

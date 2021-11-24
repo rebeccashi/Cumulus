@@ -1,0 +1,32 @@
+.card {
+  font-family: 'Inter', 'Arial', sans-serif;
+
+  width: 500px;
+  height: auto;
+
+  padding: 24px;
+
+  border-radius: 8px;
+}
+.card.interactive:hover {
+  background-color: var(--purple10);
+  cursor: pointer;
+}
+.card.interactive:active {
+  background-color: var(--purple30);
+  cursor: pointer;
+}
+  
+.card-color--blue {
+  background-color: var(--blue);
+}
+.card-color--white {
+  background-color: var(--white);
+}
+
+.card *:first-child {
+  margin-top: 0;
+}
+.card *:last-child {
+  margin-bottom: 0;
+}

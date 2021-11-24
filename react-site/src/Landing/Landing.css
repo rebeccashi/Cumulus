@@ -49,6 +49,7 @@
 #search-bar-text {
     width: 80%;
     display: inline-block;
+    outline: none;
 }
 
 #search-button {
