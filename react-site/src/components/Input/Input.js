@@ -8,6 +8,7 @@ export const Input = ({
   placeholder,
   label,
   type='text',
+  autofocus=false,
   withIcon,
   iconVariant,
   value,
@@ -32,6 +33,7 @@ export const Input = ({
         <span className='input-autocomplete--autocomplete'>{autocomplete}</span>
       </span>
       <input 
+        autoFocus={autofocus}
         type={type}
         className={`input-input ${colorClass} ${withIcon ? 'with-icon' : ''}`} 
         onFocus={() => setIsActive(true)}
