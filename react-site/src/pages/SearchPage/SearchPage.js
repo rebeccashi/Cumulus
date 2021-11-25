@@ -13,6 +13,18 @@ export const SearchPage = ({ searchValue }) => {
   const [autocomplete, setAutocomplete] = React.useState('');
   const [query, setQuery] = React.useState('');
   const [selectedObject, setSelectedObject] = React.useState(null);
+  
+  const [ready, setReady] = React.useState(false);
+  const [data, setData] = React.useState([]);
+
+  React.useEffect(() => {
+    if (data.length > 0) {
+      const first = data[0].name;
+      setAutocomplete(first.slice(query.length + first.toLocaleLowerCase().indexOf(query.toLocaleLowerCase())))
+    } else {
+      setAutocomplete('')
+    }
+  }, [data, setAutocomplete, query])
 
   React.useEffect(() => {
     if (searchValue && searchValue.length > 0) {
@@ -24,6 +36,27 @@ export const SearchPage = ({ searchValue }) => {
     if (selectedObject != null) {
       setSelectedObject(null)
     }
+    
+    setReady(false)
+
+    const updateMockData = () => {
+      setData([
+        { name: 'Software Engineer', listings: '33,307' },
+        { name: 'Microsoft Co.', listings: '14,566' },
+        { name: 'Software Development', listings: '13,724' },
+        { name: 'SoFi Co.', listings: '4,194' },
+        { name: 'Cloud Software Engineer', listings: '3,163' },
+        { name: 'Sofitel Co.', listings: '789' },
+        { name: 'Software Security', listings: '273' },
+        { name: 'Cisco (Software)', listings: '156' },
+        { name: 'Softbank Co.', listings: '89' },
+      ])
+      setReady(true)
+    }
+
+    fetch('https://www.slowwebsite.com', {mode: 'no-cors'})
+      .then(updateMockData)
+      .catch(updateMockData)
   }, [query])
 
   return (
@@ -68,7 +101,7 @@ export const SearchPage = ({ searchValue }) => {
                   </Text>
                 </>
               ) :
-              <ResultsPage query={query} setAutocomplete={setAutocomplete} setSelectedObject={setSelectedObject} />
+              <ResultsPage query={query} data={data} ready={ready} setAutocomplete={setAutocomplete} setSelectedObject={setSelectedObject} />
             ) :
             <>
               <Heading variant='h1'>{selectedObject}</Heading>
