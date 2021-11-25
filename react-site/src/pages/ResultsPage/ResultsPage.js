@@ -7,6 +7,8 @@ import Heading from '../../components/Heading';
 import Placeholder from '../../components/Placeholder';
 import Text from '../../components/Text';
 
+const FEATUREDLENGTH = 4;
+
 export const ResultsPage = ({ query, setAutocomplete, setSelectedObject }) => {
   const [ready, setReady] = React.useState(false);
   const [data, setData] = React.useState([]);
@@ -51,7 +53,7 @@ export const ResultsPage = ({ query, setAutocomplete, setSelectedObject }) => {
           {
             !ready ?
             (
-              Array.from(Array(4)).map(() => {
+              Array.from(Array(FEATUREDLENGTH)).map(() => {
                 return (
                   <div className='result'>
                     <Placeholder style={{
@@ -63,7 +65,7 @@ export const ResultsPage = ({ query, setAutocomplete, setSelectedObject }) => {
               })
             ) :
             (
-              data.slice(0,4).map(result => {
+              data.slice(0,FEATUREDLENGTH).map(result => {
                 return (
                   <div className='result'>
                     <Card
@@ -91,7 +93,7 @@ export const ResultsPage = ({ query, setAutocomplete, setSelectedObject }) => {
           {
             !ready ?
             (
-              Array.from(Array(8)).map(() => {
+              Array.from(Array(2*FEATUREDLENGTH)).map(() => {
                 return (
                   <div className='result'>
                     <Placeholder style={{
@@ -103,7 +105,7 @@ export const ResultsPage = ({ query, setAutocomplete, setSelectedObject }) => {
               })
             ) :
             (
-              data.slice(4).map(result => {
+              data.slice(FEATUREDLENGTH).map(result => {
                 return (
                   <div className='result'>
                     <Card
