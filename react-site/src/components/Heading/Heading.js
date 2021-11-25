@@ -28,6 +28,9 @@ export const Heading = ({
     case 'h6': return (
       <h6 className={colorClass}>{children}</h6>
     );
+    case 'cta': return (
+      <span className='cta'>{children}</span>
+    )
     default: return (
       <h1 className={colorClass}>{children}</h1>
     );

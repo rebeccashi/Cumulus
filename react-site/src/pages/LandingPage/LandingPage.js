@@ -17,7 +17,6 @@ export const LandingPage = ({ setSearchValue, transitionToSearch }) => {
         <br />
         <Input 
           placeholder='Job title, keywords, company, or location'
-          color='white' 
           withIcon={true} 
           iconVariant='search' 
           value={value}
