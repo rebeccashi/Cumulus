@@ -43,6 +43,9 @@ export const SearchPage = ({ searchValue }) => {
             setValue={(newValue) => {
               setQuery(newValue)
             }}
+            onSubmit={(value) => {
+              setSelectedObject(value)
+            }}
             style={{
               width: '100%'
             }}
