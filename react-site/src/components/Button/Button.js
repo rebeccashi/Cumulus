@@ -7,12 +7,13 @@ export const Button = ({
   color='blue',
   withIcon,
   iconVariant,
-  label
+  label,
+  onClick
 }) => {
   const colorClass = `button-color--${color}`;
   
   return (
-    <div className={`button ${colorClass} ${withIcon ? 'with-icon' : ''}`}>
+    <div className={`button ${colorClass} ${withIcon ? 'with-icon' : ''}`} onClick={onClick} >
       <span className='button-label'>
         {label}
       </span>

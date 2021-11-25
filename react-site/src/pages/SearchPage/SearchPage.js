@@ -2,6 +2,9 @@ import React from 'react';
 
 import './SearchPage.css';
 
+import ResultsPage from '../ResultsPage';
+
+import Button from '../../components/Button';
 import Input from '../../components/Input';
 import Heading from '../../components/Heading';
 import Text from '../../components/Text';
@@ -58,13 +61,20 @@ export const SearchPage = ({ searchValue }) => {
               ) :
               (
                 <>
-                  results for {query}
+                  <ResultsPage query={query} setSelectedObject={setSelectedObject} />
                 </>
               )
             ) :
             (
               <>
-                object selected {selectedObject}
+                <Heading variant='h1'>{selectedObject}</Heading>
+                <Button
+                  color='white'
+                  onClick={() => {
+                    setSelectedObject(null)
+                  }}
+                  label='Unselect'
+                />
               </>
             )
           }
