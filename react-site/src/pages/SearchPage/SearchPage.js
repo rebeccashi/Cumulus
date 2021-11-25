@@ -68,24 +68,18 @@ export const SearchPage = ({ searchValue }) => {
                   </Text>
                 </>
               ) :
-              (
-                <>
-                  <ResultsPage query={query} setAutocomplete={setAutocomplete} setSelectedObject={setSelectedObject} />
-                </>
-              )
+              <ResultsPage query={query} setAutocomplete={setAutocomplete} setSelectedObject={setSelectedObject} />
             ) :
-            (
-              <>
-                <Heading variant='h1'>{selectedObject}</Heading>
-                <Button
-                  color='white'
-                  onClick={() => {
-                    setSelectedObject(null)
-                  }}
-                  label='Unselect'
-                />
-              </>
-            )
+            <>
+              <Heading variant='h1'>{selectedObject}</Heading>
+              <Button
+                color='white'
+                onClick={() => {
+                  setSelectedObject(null)
+                }}
+                label='Unselect'
+              />
+            </>
           }
         </div>
       </div>
