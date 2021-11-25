@@ -20,6 +20,12 @@ export const SearchPage = ({ searchValue }) => {
     }
   }, [searchValue])
 
+  React.useEffect(() => {
+    if (selectedObject != null) {
+      setSelectedObject(null)
+    }
+  }, [query])
+
   return (
     <>
       <div className='search'>
@@ -33,7 +39,7 @@ export const SearchPage = ({ searchValue }) => {
             placeholder='Job title, keywords, company, or location'
             withIcon={true} 
             iconVariant='search' 
-            value={query}
+            value={selectedObject == null ? query : selectedObject}
             setValue={(newValue) => {
               setQuery(newValue)
             }}
@@ -61,7 +67,7 @@ export const SearchPage = ({ searchValue }) => {
               ) :
               (
                 <>
-                  <ResultsPage query={query} setSelectedObject={setSelectedObject} />
+                  <ResultsPage query={query} setAutocomplete={setAutocomplete} setSelectedObject={setSelectedObject} />
                 </>
               )
             ) :

@@ -7,18 +7,41 @@ import Heading from '../../components/Heading';
 import Placeholder from '../../components/Placeholder';
 import Text from '../../components/Text';
 
-export const ResultsPage = ({ query, setSelectedObject }) => {
-  const [data, setData] = React.useState([
-    { name: 'Software Engineer', listings: '13,505' },
-    { name: 'Software Engineer', listings: '13,505' },
-    { name: 'Software Engineer', listings: '13,505' },
-    { name: 'Software Engineer', listings: '13,505' },
-    { name: 'Software Engineer', listings: '13,505' },
-    { name: 'Software Engineer', listings: '13,505' },
-    { name: 'Software Engineer', listings: '13,505' },
-    { name: 'Software Engineer', listings: '13,505' },
-    { name: 'Software Engineer', listings: '13,505' },
-  ]);
+export const ResultsPage = ({ query, setAutocomplete, setSelectedObject }) => {
+  const [ready, setReady] = React.useState(false);
+  const [data, setData] = React.useState([]);
+
+  React.useEffect(() => {
+    if (data.length > 0) {
+      const first = data[0].name;
+      setAutocomplete(first.slice(query.length + first.toLocaleLowerCase().indexOf(query.toLocaleLowerCase())))
+    } else {
+      setAutocomplete('')
+    }
+  }, [data, setAutocomplete, query])
+
+  React.useEffect(() => {
+    setReady(false)
+
+    const updateMockData = () => {
+      setData([
+        { name: 'Software Engineer', listings: '33,307' },
+        { name: 'Microsoft Co.', listings: '14,566' },
+        { name: 'Software Development', listings: '13,724' },
+        { name: 'SoFi Co.', listings: '4,194' },
+        { name: 'Cloud Software Engineer', listings: '3,163' },
+        { name: 'Sofitel Co.', listings: '789' },
+        { name: 'Software Security', listings: '273' },
+        { name: 'Cisco (Software)', listings: '156' },
+        { name: 'Softbank Co.', listings: '89' },
+      ])
+      setReady(true)
+    }
+
+    fetch('https://www.slowwebsite.com', {mode: 'no-cors'})
+      .then(updateMockData)
+      .catch(updateMockData)
+  }, [query])
 
   return (
     <>
@@ -26,7 +49,7 @@ export const ResultsPage = ({ query, setSelectedObject }) => {
       <div className="results">
         <div className="featured">
           {
-            data.length === 0 ?
+            !ready ?
             (
               Array.from(Array(4)).map(() => {
                 return (
@@ -47,6 +70,7 @@ export const ResultsPage = ({ query, setSelectedObject }) => {
                       variant='interactive'
                       color='white'
                       onClick={() => {
+                        setAutocomplete('')
                         setSelectedObject(result.name)
                       }}
                       style={{
@@ -65,7 +89,7 @@ export const ResultsPage = ({ query, setSelectedObject }) => {
         <div className="more">
           <Heading variant='h2'>More results</Heading>
           {
-            data.length === 0 ?
+            !ready ?
             (
               Array.from(Array(8)).map(() => {
                 return (
@@ -86,13 +110,14 @@ export const ResultsPage = ({ query, setSelectedObject }) => {
                       variant='interactive'
                       color='white'
                       onClick={() => {
+                        setAutocomplete('')
                         setSelectedObject(result.name)
                       }}
                       style={{
                         width: '100%'
                       }}
                     >
-                      <Heading variant='h3'>{result.name}</Heading>
+                      <Heading variant='h6'>{result.name}</Heading>
                     </Card>
                   </div>
                 )
