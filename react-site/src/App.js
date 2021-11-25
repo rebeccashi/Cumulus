@@ -1,11 +1,13 @@
 import './App.css';
-import { render } from 'react-dom'
 import {
   Switch,
   Route
 } from "react-router-dom";
-import Landing from './Landing/Landing'
-import Navbar from './Navbar/Navbar'
+
+import LandingPage from './pages/LandingPage'
+import SearchPage from './pages/SearchPage'
+
+import Navbar from './components/Navbar'
 import Users from './Users/Users'
 import About from './About/About'
 
@@ -17,9 +19,8 @@ function App() {
       <StyleContainer theme='default'>
         <Navbar/>
         <Switch>
-          <Route path="/about" component={About}/>
-          <Route path="/users" component={Users}/>
-          <Route path="/" component={Landing}/>
+          <Route path="/search" component={SearchPage}/>
+          <Route path="/" component={LandingPage}/>
         </Switch>
       </StyleContainer>
     </div>
