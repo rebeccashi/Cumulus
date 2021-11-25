@@ -6,8 +6,8 @@ import Input from '../../components/Input';
 import Heading from '../../components/Heading';
 import Text from '../../components/Text';
 
-export const LandingPage = ({ setSearchValue, transitionToSearch }) => {
-  const [value, _] = React.useState('');
+export const LandingPage = ({ setSearchValue }) => {
+  const [value, setValue] = React.useState('');
 
   return (
     <div className="landing">
@@ -21,8 +21,8 @@ export const LandingPage = ({ setSearchValue, transitionToSearch }) => {
           iconVariant='search' 
           value={value}
           setValue={(newValue) => {
+            setValue(newValue);
             setSearchValue(newValue);
-            transitionToSearch();
           }}
           style={{
             width: '100%'
