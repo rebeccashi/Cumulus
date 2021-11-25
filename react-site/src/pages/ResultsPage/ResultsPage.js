@@ -9,41 +9,7 @@ import Text from '../../components/Text';
 
 const FEATUREDLENGTH = 4;
 
-export const ResultsPage = ({ query, setAutocomplete, setSelectedObject }) => {
-  const [ready, setReady] = React.useState(false);
-  const [data, setData] = React.useState([]);
-
-  React.useEffect(() => {
-    if (data.length > 0) {
-      const first = data[0].name;
-      setAutocomplete(first.slice(query.length + first.toLocaleLowerCase().indexOf(query.toLocaleLowerCase())))
-    } else {
-      setAutocomplete('')
-    }
-  }, [data, setAutocomplete, query])
-
-  React.useEffect(() => {
-    setReady(false)
-
-    const updateMockData = () => {
-      setData([
-        { name: 'Software Engineer', listings: '33,307' },
-        { name: 'Microsoft Co.', listings: '14,566' },
-        { name: 'Software Development', listings: '13,724' },
-        { name: 'SoFi Co.', listings: '4,194' },
-        { name: 'Cloud Software Engineer', listings: '3,163' },
-        { name: 'Sofitel Co.', listings: '789' },
-        { name: 'Software Security', listings: '273' },
-        { name: 'Cisco (Software)', listings: '156' },
-        { name: 'Softbank Co.', listings: '89' },
-      ])
-      setReady(true)
-    }
-
-    fetch('https://www.slowwebsite.com', {mode: 'no-cors'})
-      .then(updateMockData)
-      .catch(updateMockData)
-  }, [query])
+export const ResultsPage = ({ query, data, ready, setSelectedObject }) => {
 
   return (
     <>
@@ -72,8 +38,7 @@ export const ResultsPage = ({ query, setAutocomplete, setSelectedObject }) => {
                       variant='interactive'
                       color='white'
                       onClick={() => {
-                        setAutocomplete('')
-                        setSelectedObject(result.name)
+                        setSelectedObject(result)
                       }}
                       style={{
                         width: '100%'
@@ -112,7 +77,6 @@ export const ResultsPage = ({ query, setAutocomplete, setSelectedObject }) => {
                       variant='interactive'
                       color='white'
                       onClick={() => {
-                        setAutocomplete('')
                         setSelectedObject(result.name)
                       }}
                       style={{

@@ -72,12 +72,15 @@ export const SearchPage = ({ searchValue }) => {
             placeholder='Job title, keywords, company, or location'
             withIcon={true} 
             iconVariant='search' 
-            value={selectedObject == null ? query : selectedObject}
+            value={selectedObject == null ? query : selectedObject.name}
             setValue={(newValue) => {
               setQuery(newValue)
             }}
             onSubmit={(value) => {
-              setSelectedObject(value)
+              if (data.length > 0) {
+                setAutocomplete('')
+                setSelectedObject(data[0])
+              }
             }}
             style={{
               width: '100%'
@@ -101,10 +104,10 @@ export const SearchPage = ({ searchValue }) => {
                   </Text>
                 </>
               ) :
-              <ResultsPage query={query} data={data} ready={ready} setAutocomplete={setAutocomplete} setSelectedObject={setSelectedObject} />
+              <ResultsPage query={query} data={data} ready={ready} setSelectedObject={(obj) => { setAutocomplete(''); setSelectedObject(obj); }} />
             ) :
             <>
-              <Heading variant='h1'>{selectedObject}</Heading>
+              <Heading variant='h1'>{selectedObject.name}</Heading>
               <Button
                 color='white'
                 onClick={() => {
