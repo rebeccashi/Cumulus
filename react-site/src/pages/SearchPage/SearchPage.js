@@ -4,10 +4,10 @@ import './SearchPage.css';
 
 import ResultsPage from '../ResultsPage';
 
-import Button from '../../components/Button';
 import Input from '../../components/Input';
 import Heading from '../../components/Heading';
 import Text from '../../components/Text';
+import { OverviewPage } from '../OverviewPage/OverviewPage';
 
 export const SearchPage = ({ searchValue }) => {
   const [autocomplete, setAutocomplete] = React.useState('');
@@ -109,14 +109,7 @@ export const SearchPage = ({ searchValue }) => {
               <ResultsPage query={query} data={data.query === query ? data : emptyData} ready={data.query === query} setSelectedObject={(obj) => { setAutocomplete(''); setSelectedObject(obj); }} />
             ) :
             <>
-              <Heading variant='h1'>{selectedObject.name}</Heading>
-              <Button
-                color='white'
-                onClick={() => {
-                  setSelectedObject(null)
-                }}
-                label='Unselect'
-              />
+              <OverviewPage data={selectedObject} />
             </>
           }
         </div>
