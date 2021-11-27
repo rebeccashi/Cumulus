@@ -31,7 +31,7 @@ export const ResultsPage = ({ query, data, ready, setSelectedObject }) => {
               })
             ) :
             (
-              data.slice(0,FEATUREDLENGTH).map(result => {
+              data.results.slice(0,FEATUREDLENGTH).map(result => {
                 return (
                   <div className='result'>
                     <Card
@@ -70,7 +70,7 @@ export const ResultsPage = ({ query, data, ready, setSelectedObject }) => {
               })
             ) :
             (
-              data.slice(FEATUREDLENGTH).map(result => {
+              data.results.slice(FEATUREDLENGTH).map(result => {
                 return (
                   <div className='result'>
                     <Card

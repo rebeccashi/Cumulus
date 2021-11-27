@@ -14,12 +14,15 @@ export const SearchPage = ({ searchValue }) => {
   const [query, setQuery] = React.useState('');
   const [selectedObject, setSelectedObject] = React.useState(null);
   
-  const [ready, setReady] = React.useState(false);
-  const [data, setData] = React.useState([]);
+  const emptyData = {
+    query: '',
+    results: []
+  }
+  const [data, setData] = React.useState(emptyData);
 
   React.useEffect(() => {
-    if (data.length > 0) {
-      const first = data[0].name;
+    if (data.results.length > 0) {
+      const first = data.results[0].name;
       setAutocomplete(first.slice(query.length + first.toLocaleLowerCase().indexOf(query.toLocaleLowerCase())))
     } else {
       setAutocomplete('')
@@ -36,27 +39,26 @@ export const SearchPage = ({ searchValue }) => {
     if (selectedObject != null) {
       setSelectedObject(null)
     }
-    
-    setReady(false)
 
     const updateMockData = () => {
-      setData([
-        { name: 'Software Engineer', listings: '33,307' },
-        { name: 'Microsoft Co.', listings: '14,566' },
-        { name: 'Software Development', listings: '13,724' },
-        { name: 'SoFi Co.', listings: '4,194' },
-        { name: 'Cloud Software Engineer', listings: '3,163' },
-        { name: 'Sofitel Co.', listings: '789' },
-        { name: 'Software Security', listings: '273' },
-        { name: 'Cisco (Software)', listings: '156' },
-        { name: 'Softbank Co.', listings: '89' },
-      ])
-      setReady(true)
+      setData({
+        query,
+        results: [
+          { name: 'Software Engineer', listings: '33,307' },
+          { name: 'Microsoft Co.', listings: '14,566' },
+          { name: 'Software Developer', listings: '13,724' },
+          { name: 'SoFi Co.', listings: '4,194' },
+          { name: 'Cloud Software Engineer', listings: '3,163' },
+          { name: 'Sofitel Co.', listings: '789' },
+          { name: 'Software Security', listings: '273' },
+          { name: 'Cisco (Software)', listings: '156' },
+          { name: 'Softbank Co.', listings: '89' },
+        ]
+      })
     }
 
     fetch('https://www.slowwebsite.com', {mode: 'no-cors'})
-      .then(updateMockData)
-      .catch(updateMockData)
+      .then(updateMockData);
   }, [query])
 
   return (
@@ -76,10 +78,10 @@ export const SearchPage = ({ searchValue }) => {
             setValue={(newValue) => {
               setQuery(newValue)
             }}
-            onSubmit={(value) => {
-              if (data.length > 0) {
+            onSubmit={() => {
+              if (data.results.length > 0) {
                 setAutocomplete('')
-                setSelectedObject(data[0])
+                setSelectedObject(data.results[0])
               }
             }}
             style={{
@@ -104,7 +106,7 @@ export const SearchPage = ({ searchValue }) => {
                   </Text>
                 </>
               ) :
-              <ResultsPage query={query} data={data} ready={ready} setSelectedObject={(obj) => { setAutocomplete(''); setSelectedObject(obj); }} />
+              <ResultsPage query={query} data={data.query === query ? data : emptyData} ready={data.query === query} setSelectedObject={(obj) => { setAutocomplete(''); setSelectedObject(obj); }} />
             ) :
             <>
               <Heading variant='h1'>{selectedObject.name}</Heading>
