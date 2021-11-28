@@ -19,9 +19,9 @@ export const ResultsPage = ({ query, data, ready, setSelectedObject }) => {
           {
             !ready ?
             (
-              Array.from(Array(FEATUREDLENGTH)).map(() => {
+              Array.from(Array(FEATUREDLENGTH)).map((_, i) => {
                 return (
-                  <div className='result'>
+                  <div key={i} className='result'>
                     <Placeholder style={{
                       height: '128px',
                       width: '100%'
@@ -31,9 +31,9 @@ export const ResultsPage = ({ query, data, ready, setSelectedObject }) => {
               })
             ) :
             (
-              data.results.slice(0,FEATUREDLENGTH).map(result => {
+              data.results.slice(0,FEATUREDLENGTH).map((result, i) => {
                 return (
-                  <div className='result'>
+                  <div key={i} className='result'>
                     <Card
                       variant='interactive'
                       color='white'
@@ -58,9 +58,9 @@ export const ResultsPage = ({ query, data, ready, setSelectedObject }) => {
           {
             !ready ?
             (
-              Array.from(Array(2*FEATUREDLENGTH)).map(() => {
+              Array.from(Array(2*FEATUREDLENGTH)).map((_, i) => {
                 return (
-                  <div className='result'>
+                  <div key={i} className='result'>
                     <Placeholder style={{
                       height: '64px',
                       width: '100%'
@@ -70,9 +70,9 @@ export const ResultsPage = ({ query, data, ready, setSelectedObject }) => {
               })
             ) :
             (
-              data.results.slice(FEATUREDLENGTH).map(result => {
+              data.results.slice(FEATUREDLENGTH).map((result, i) => {
                 return (
-                  <div className='result'>
+                  <div key={i} className='result'>
                     <Card
                       variant='interactive'
                       color='white'

@@ -51,6 +51,7 @@ export const OverviewPage = ({ data }) => {
           case VIEWS.SORT: return <>SORT</>;
           case VIEWS.FILTER: return <>FILTER</>;
           case VIEWS.COMPARE: return <>COMPARE</>;
+          default: return <>DETAILS</>;
         }
       })()}
     </>

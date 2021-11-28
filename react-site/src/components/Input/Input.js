@@ -22,7 +22,7 @@ export const Input = ({
   const [isActive, setIsActive] = React.useState(false);
   
   return (
-    <div class={`input ${isActive ? 'active' : ''} ${label?.length > 0 ? 'with-label' : ''}`} style={style}>
+    <div className={`input ${isActive ? 'active' : ''} ${label?.length > 0 ? 'with-label' : ''}`} style={style}>
       <span className='input-placeholder'>{
         isActive ?
         label :
@@ -38,11 +38,11 @@ export const Input = ({
         className={`input-input ${colorClass} ${withIcon ? 'with-icon' : ''}`} 
         onFocus={() => setIsActive(true)}
         onBlur={(e) => {
-          if (e.target.value.length == 0) setIsActive(false)
+          if (e.target.value.length === 0) setIsActive(false)
         }}
         onChange={(e) => {
           setValue(e.target.value);
-          if (e.target.value.length == 0) setIsActive(false)
+          if (e.target.value.length === 0) setIsActive(false)
           else setIsActive(true)
         }}
         onKeyDown={(e) => {

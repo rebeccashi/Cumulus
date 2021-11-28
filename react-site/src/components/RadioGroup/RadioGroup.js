@@ -10,27 +10,23 @@ export const RadioGroup = ({
   value,
   setValue
 }) => {
-  const colorClass = `radiogroup-color--${color}`;
-  
   return (
     <div className='radiogroup'>
       {
-        options.map(opt => {
+        options.map((opt, i) => {
           return (
-            <>
-              <div className='radiogroup-button'>
-                <Button 
-                  color={color} 
-                  withIcon={typeof opt.icon !== 'undefined'} 
-                  iconVariant={opt.icon} 
-                  forceActive={opt.value === value}
-                  label={opt.label} 
-                  onClick={() => {
-                    setValue(opt.value);
-                  }}
-                />
-              </div>
-            </>
+            <div key={i} className='radiogroup-button'>
+              <Button 
+                color={color} 
+                withIcon={typeof opt.icon !== 'undefined'} 
+                iconVariant={opt.icon} 
+                forceActive={opt.value === value}
+                label={opt.label} 
+                onClick={() => {
+                  setValue(opt.value);
+                }}
+              />
+            </div>
           )
         })
       }

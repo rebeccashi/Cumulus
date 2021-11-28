@@ -36,9 +36,7 @@ export const SearchPage = ({ searchValue }) => {
   }, [searchValue])
 
   React.useEffect(() => {
-    if (selectedObject != null) {
-      setSelectedObject(null)
-    }
+    setSelectedObject(null)
 
     const controller = new AbortController();
 

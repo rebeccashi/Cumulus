@@ -1,5 +1,3 @@
-import { ReactComponent } from 'react';
-
 import './Icon.css';
 
 import { ReactComponent as Add } from './img/Add.svg';
