@@ -19,22 +19,27 @@ export const OverviewPage = ({ data }) => {
     <>
       <Heading variant='h1'>{data.name}</Heading>
       <RadioGroup
+        color='white'
         options={[
           {
             label: 'Details',
-            value: VIEWS.DETAILS
+            value: VIEWS.DETAILS,
+            icon: 'details'
           },
           {
             label: 'Sort',
-            value: VIEWS.SORT
+            value: VIEWS.SORT,
+            icon: 'sort'
           },
           {
             label: 'Filter',
-            value: VIEWS.FILTER
+            value: VIEWS.FILTER,
+            icon: 'filter'
           },
           {
             label: 'Compare',
-            value: VIEWS.COMPARE
+            value: VIEWS.COMPARE,
+            icon: 'compare'
           }
         ]}
         value={view}
