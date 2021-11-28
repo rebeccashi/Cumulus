@@ -1,59 +1,64 @@
-import React from 'react';
+import React from "react";
 
-import './OverviewPage.css';
+import "./OverviewPage.css";
 
-import Heading from '../../components/Heading';
-import RadioGroup  from '../../components/RadioGroup';
+import Heading from "../../components/Heading";
+import RadioGroup from "../../components/RadioGroup";
 
 const VIEWS = {
-  DETAILS: 'details',
-  SORT: 'sort',
-  FILTER: 'filter',
-  COMPARE: 'compare'
-}
+  DETAILS: "details",
+  SORT: "sort",
+  FILTER: "filter",
+  COMPARE: "compare",
+};
 
 export const OverviewPage = ({ data }) => {
-  const [view, setView] = React.useState(VIEWS.DETAILS)
+  const [view, setView] = React.useState(VIEWS.DETAILS);
 
   return (
     <>
-      <Heading variant='h1'>{data.name}</Heading>
+      <Heading variant="h1">{data.name}</Heading>
       <RadioGroup
-        color='white'
+        color="white"
         options={[
           {
-            label: 'Details',
+            label: "Details",
             value: VIEWS.DETAILS,
-            icon: 'details'
+            icon: "details",
           },
           {
-            label: 'Sort',
+            label: "Sort",
             value: VIEWS.SORT,
-            icon: 'sort'
+            icon: "sort",
           },
           {
-            label: 'Filter',
+            label: "Filter",
             value: VIEWS.FILTER,
-            icon: 'filter'
+            icon: "filter",
           },
           {
-            label: 'Compare',
+            label: "Compare",
             value: VIEWS.COMPARE,
-            icon: 'compare'
-          }
+            icon: "compare",
+          },
         ]}
         value={view}
         setValue={setView}
       />
       {(() => {
-        switch(view) {
-          case VIEWS.DETAILS: return <>DETAILS</>;
-          case VIEWS.SORT: return <>SORT</>;
-          case VIEWS.FILTER: return <>FILTER</>;
-          case VIEWS.COMPARE: return <>COMPARE</>;
-          default: return <>DETAILS</>;
+        switch (view) {
+          case VIEWS.DETAILS:
+            return <>DETAILS</>;
+          case VIEWS.SORT:
+            return <>SORT</>;
+          case VIEWS.FILTER:
+            return <>FILTER</>;
+          case VIEWS.COMPARE:
+            return <>COMPARE</>;
+          default:
+            return <>DETAILS</>;
         }
       })()}
     </>
-  )
-}
+  );
+};

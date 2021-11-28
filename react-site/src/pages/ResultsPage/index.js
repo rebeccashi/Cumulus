@@ -1,3 +1,3 @@
-import { ResultsPage } from './ResultsPage.js';
+import { ResultsPage } from "./ResultsPage.js";
 
 export default ResultsPage;

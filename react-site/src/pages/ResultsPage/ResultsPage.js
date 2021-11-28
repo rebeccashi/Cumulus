@@ -1,97 +1,90 @@
-import React from 'react';
+import React from "react";
 
-import './ResultsPage.css';
+import "./ResultsPage.css";
 
-import Card from '../../components/Card';
-import Heading from '../../components/Heading';
-import Placeholder from '../../components/Placeholder';
-import Text from '../../components/Text';
+import Card from "../../components/Card";
+import Heading from "../../components/Heading";
+import Placeholder from "../../components/Placeholder";
+import Text from "../../components/Text";
 
 const FEATUREDLENGTH = 4;
 
 export const ResultsPage = ({ query, data, ready, setSelectedObject }) => {
-
   return (
     <>
-      <Heading variant='h1'>Looking for &ldquo;{query}&rdquo;</Heading>
+      <Heading variant="h1">Looking for &ldquo;{query}&rdquo;</Heading>
       <div className="results">
         <div className="featured">
-          {
-            !ready ?
-            (
-              Array.from(Array(FEATUREDLENGTH)).map((_, i) => {
+          {!ready
+            ? Array.from(Array(FEATUREDLENGTH)).map((_, i) => {
                 return (
-                  <div key={i} className='result'>
-                    <Placeholder style={{
-                      height: '128px',
-                      width: '100%'
-                    }} />
+                  <div key={i} className="result">
+                    <Placeholder
+                      style={{
+                        height: "128px",
+                        width: "100%",
+                      }}
+                    />
                   </div>
-                )
+                );
               })
-            ) :
-            (
-              data.results.slice(0,FEATUREDLENGTH).map((result, i) => {
+            : data.results.slice(0, FEATUREDLENGTH).map((result, i) => {
                 return (
-                  <div key={i} className='result'>
+                  <div key={i} className="result">
                     <Card
-                      variant='interactive'
-                      color='white'
+                      variant="interactive"
+                      color="white"
                       onClick={() => {
-                        setSelectedObject(result)
+                        setSelectedObject(result);
                       }}
                       style={{
-                        width: '100%'
+                        width: "100%",
                       }}
                     >
-                      <Heading variant='h3'>{result.name}</Heading>
-                      <Text><strong>Listings:</strong> {result.listings}</Text>
+                      <Heading variant="h3">{result.name}</Heading>
+                      <Text>
+                        <strong>Listings:</strong> {result.listings}
+                      </Text>
                     </Card>
                   </div>
-                )
-              })
-            )
-          }
+                );
+              })}
         </div>
         <div className="more">
-          <Heading variant='h2'>More results</Heading>
-          {
-            !ready ?
-            (
-              Array.from(Array(2*FEATUREDLENGTH)).map((_, i) => {
+          <Heading variant="h2">More results</Heading>
+          {!ready
+            ? Array.from(Array(2 * FEATUREDLENGTH)).map((_, i) => {
                 return (
-                  <div key={i} className='result'>
-                    <Placeholder style={{
-                      height: '64px',
-                      width: '100%'
-                    }} />
+                  <div key={i} className="result">
+                    <Placeholder
+                      style={{
+                        height: "64px",
+                        width: "100%",
+                      }}
+                    />
                   </div>
-                )
+                );
               })
-            ) :
-            (
-              data.results.slice(FEATUREDLENGTH).map((result, i) => {
+            : data.results.slice(FEATUREDLENGTH).map((result, i) => {
                 return (
-                  <div key={i} className='result'>
+                  <div key={i} className="result">
                     <Card
-                      variant='interactive'
-                      color='white'
+                      variant="interactive"
+                      color="white"
                       onClick={() => {
-                        setSelectedObject(result)
+                        setSelectedObject(result);
                       }}
                       style={{
-                        width: '100%'
+                        width: "100%",
                       }}
                     >
-                      <Heading variant='h6'>{result.name}</Heading>
+                      <Heading variant="h6">{result.name}</Heading>
                     </Card>
                   </div>
-                )
-              })
-            )
-          }
+                );
+              })}
         </div>
       </div>
     </>
-  )
-}
+  );
+};

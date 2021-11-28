@@ -1,3 +1,3 @@
-import { Heading } from './Heading.js';
+import { Heading } from "./Heading.js";
 
 export default Heading;
