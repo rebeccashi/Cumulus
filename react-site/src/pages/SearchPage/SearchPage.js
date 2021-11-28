@@ -40,6 +40,8 @@ export const SearchPage = ({ searchValue }) => {
       setSelectedObject(null)
     }
 
+    const controller = new AbortController();
+
     const updateMockData = () => {
       setData({
         query,
@@ -57,8 +59,11 @@ export const SearchPage = ({ searchValue }) => {
       })
     }
 
-    fetch('https://www.slowwebsite.com', {mode: 'no-cors'})
-      .then(updateMockData);
+    fetch('http://neverssl.com', {mode: 'no-cors', signal: controller.signal})
+      .then(updateMockData)
+      .catch(err => {});
+    
+    return () => { controller.abort() }
   }, [query])
 
   return (
