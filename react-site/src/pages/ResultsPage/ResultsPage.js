@@ -77,7 +77,7 @@ export const ResultsPage = ({ query, data, ready, setSelectedObject }) => {
                       variant='interactive'
                       color='white'
                       onClick={() => {
-                        setSelectedObject(result.name)
+                        setSelectedObject(result)
                       }}
                       style={{
                         width: '100%'
