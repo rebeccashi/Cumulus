@@ -2,8 +2,13 @@ const express = require('express');
 const fs = require('fs');
 const cors = require('cors');
 const app = express();
+const {MongoClient} = require('mongodb');
 app.use(express.json());
 app.use(cors());
+
+//MongoDB connection string
+const uri = "mongodb+srv://cumulus:headintheclouds@jobs.tcmdh.mongodb.net/jobs?retryWrites=true&w=majority"
+const client = new MongoClient(uri);
 
 // pretend reading from file system is like a database lol
 const jobDb = JSON.parse(fs.readFileSync("../droplets/input/json/jobData.json", 'utf-8'));
@@ -18,44 +23,196 @@ Object.keys(keywords).forEach(l => {
   amt += keywords[l];
 })
 
+
+
+
+
+
+  var results = '{"autocomplete": "", "results": []}';
+
+
+ async function searchCompanies() {
+    try{
+
+      //connect to mongo
+      await client.connect();
+
+      var jsonObj = JSON.parse(results);
+
+  var cursor = client.db("jobs").collection("companies").find({
+    "name" : { $regex: "d"}
+  });
+
+  const companies = await cursor.toArray();
+
+  if(companies.length > 0 ){
+    companies.forEach((result, i) => {
+
+      company = {
+        "_id": result._id,
+        "name": result.name,
+        "category": "Company",
+        "listings": result.copies[0]
+
+      }
+
+      jsonObj['results'].push(company);
+    });
+  }
+
+
+     cursor = client.db("jobs").collection("skills").find({
+      "name" : {$regex: "d"}
+    });
+    const skills = await cursor.toArray();
+
+    
+    if(skills.length > 0 ){
+      skills.forEach((result, i) => {
+
+        skill = {
+          "_id" : result._id,
+          "name": result.name,
+          "category": "Skill",
+          "listings": result.copies[0].numJobs
+        }
+
+        jsonObj["results"].push(skill);
+      });
+     }
+
+     cursor = client.db("jobs").collection("titles").find({
+      "name" :{$regex: "d"}
+     });
+
+     const titles = await cursor.toArray();
+
+     if(titles.length > 0 ){
+      titles.forEach((result, i ) =>{
+
+        title = {
+          "_id": result._id,
+          "name": result.name,
+          "category": "Title",
+          "listings": result.copies[0]
+        }
+
+        jsonObj["results"].push(title);
+      });
+      results = JSON.stringify(jsonObj);
+     }
+
+
+ }
+
+ catch (error){
+  console.log(error);
+ }
+
+ return results;
+  
+}
+
+
+  
+
+
+
+
+searchCompanies().then(res => console.log(res));
+
+
+
+
+
+
+
+
+
 /*
   { "query": "software engineering internship new york" }
 */
-app.get('/api/keywords', (req, res) => {
+app.get('/api/search', (req, res) => {
   if (!req.query.q) {
     res.status(406).send('Missing data');
     return;
   }
 
-  // if we had a search it would go here
-  let foundJobs = jobDb.filter(job => job.title.toLowerCase().indexOf(req.query.q.trim().toLowerCase()) >= 0); // fix this
+  var results = '{"autocomplete": "", "results": []}'
 
-  let keywordsObj = {};
 
-  foundJobs.forEach(job => {
-    Object.keys(job.keywords).forEach(keyword => {
-      if (!keywordsObj[keyword]) keywordsObj[keyword] = job.keywords[keyword];
-      else keywordsObj[keyword] += job.keywords[keyword];
-    });
-  });
+ async function searchCompanies() {
+    try{
 
-  let currAmt = 0;
-  let arrayJobs = new Array(10);
-  let index = 0;
+      var jsonObj = JSON.parse(results);
 
-  Object.keys(keywordsObj).forEach(l => {
-    arrayJobs[index] = { language: l, count: keywordsObj[l] };
-    currAmt += keywordsObj[l];
-    index++;
+  const cursor = client.db("jobs").collection("companies").find({
+    "name" : { $regex: req.query.q}
   })
 
-  let sortedKeywords = arrayJobs.sort((a,b) => b.count - a.count);
+  const companies = await cursor.toArray();
 
-  let top10 = sortedKeywords.slice(0, 10);
+  if(companies.length > 0 ){
+    companies.forEach((result, i) => {
 
-  let withPercentages = top10.map(el => { el.percent = (el.count / currAmt).toFixed(5); return el; });
+      company = {
+        "_id": result._id,
+        "name": result.name,
+        "category": "Company",
+        "listings": result.copies[0]
 
-  res.send(withPercentages.filter(el => (el !== null && el.count > 0)))
+      }
+
+      jsonObj['results'].push(company);
+    });
+    results = JSON.stringify(jsonObj);
+  }
+ }
+
+ catch (error){
+  console.log(error);
+ }
+  
+}
+
+async function searchSkills(){
+  try{
+
+
+    var jsonObj = JSON.parse(results);
+
+
+    const cursor = client.db("jobs").collection("skills").find({
+      "name" : {$regex: req.query.q}
+    })
+
+    const skills = await cursor.toArray();
+
+    
+    if(skills.length > 0 ){
+      skills.forEach((result, i) => {
+
+        skill = {
+          "_id" : result._id,
+          "name": result.name,
+          "category": "Skill",
+          "listings": result.copies[0].numJobs
+        }
+
+        jsonObj["results"].push(skill);
+      });
+      results = JSON.stringify(jsonObj);
+     }
+
+  }
+
+  catch(error){
+    console.log(error);
+  }
+}
+
+searchCompanies();
+searchSkills();
 });
 
 /*
