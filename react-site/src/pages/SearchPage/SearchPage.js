@@ -96,10 +96,6 @@ export const SearchPage = ({ searchValue }) => {
               width: "100%",
             }}
           />
-          <br />
-          <Text>
-            Auto-generated suggestions will appear here throughout your search.
-          </Text>
         </div>
         <div className="main">
           {selectedObject == null ? (
