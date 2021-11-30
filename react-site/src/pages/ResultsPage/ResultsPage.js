@@ -51,7 +51,7 @@ export const ResultsPage = ({ query, data, ready, setSelectedObject }) => {
               })}
         </div>
         <div className="more">
-          <Heading variant="h2">More results</Heading>
+          <Heading variant="h4">More results</Heading>
           {!ready
             ? Array.from(Array(2 * FEATUREDLENGTH)).map((_, i) => {
                 return (
