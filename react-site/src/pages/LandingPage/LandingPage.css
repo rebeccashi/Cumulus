@@ -1,0 +1,13 @@
+.landing {
+  width: 100vw;
+  height: 100vh;
+
+  display: grid;
+  place-content: center;
+
+  background: var(--white);
+}
+
+.tagline {
+  max-width: 60ch;
+}

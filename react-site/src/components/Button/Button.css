@@ -34,6 +34,15 @@
   color: var(--white);
 }
 
+.button:hover {
+  background-color: var(--purple10);
+  cursor: pointer;
+}
+.button:active, .button.active {
+  background-color: var(--purple);
+  color: var(--white);
+}
+
 .button-label {
     padding-left: 20px;
     padding-right: 12px;
@@ -41,25 +50,13 @@
     display: grid;
     place-content: center;
 }
-.button-color--cta.button:hover .button-label {
+.button:not(.active):hover .button-label {
   color: var(--purple);
 }
-.button-color--cta.button:active .button-label {
+.button:not(.active):active .button-label {
   color: var(--white);
 }
 
 .button-icon {
     align-self: center;
 }
-
-.button:hover {
-  background-color: var(--purple10);
-  cursor: pointer;
-}
-
-.button:active, .button.active {
-  background-color: var(--purple);
-  color: var(--white);
-}
-
-

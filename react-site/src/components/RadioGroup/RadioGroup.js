@@ -1,30 +1,28 @@
 import React from "react";
 
-import './RadioGroup.css';
+import "./RadioGroup.css";
 
-export const RadioGroup = ({
-  color='blue',
-  options,
-  value,
-  setValue
-}) => {
-  const colorClass = `radiogroup-color--${color}`;
-  
+import Button from "../Button";
+
+export const RadioGroup = ({ color = "blue", options, value, setValue }) => {
   return (
-    <div className='radiogroup'>
-      {
-        options.map(opt => {
-          return (
-            <>
-              <div className={`radiogroup-button ${value === opt.value ? 'active' : ''} ${colorClass}`} onClick={() => {
+    <div className="radiogroup">
+      {options.map((opt, i) => {
+        return (
+          <div key={i} className="radiogroup-button">
+            <Button
+              color={color}
+              withIcon={typeof opt.icon !== "undefined"}
+              iconVariant={opt.icon}
+              forceActive={opt.value === value}
+              label={opt.label}
+              onClick={() => {
                 setValue(opt.value);
-              }}>
-                <span className='radiogroup-button--text'>{opt.label}</span>
-              </div>
-            </>
-          )
-        })
-      }
+              }}
+            />
+          </div>
+        );
+      })}
     </div>
   );
-}
+};

@@ -1,12 +1,7 @@
-import './StyleContainer.css'
+import "./StyleContainer.css";
 
-export const StyleContainer = ({
-  theme='default',
-  children
-}) => {
+export const StyleContainer = ({ theme = "default", children }) => {
   const themeClass = `theme--${theme}`;
 
-  return (
-    <div className={themeClass}>{children}</div>
-  );
-}
+  return <div className={themeClass}>{children}</div>;
+};

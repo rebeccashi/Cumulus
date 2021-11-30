@@ -1,25 +1,42 @@
-import './App.css';
-import { render } from 'react-dom'
-import {
-  Switch,
-  Route
-} from "react-router-dom";
-import Landing from './Landing/Landing'
-import Navbar from './Navbar/Navbar'
-import Users from './Users/Users'
-import About from './About/About'
+import "./App.css";
+import { Switch, Route, useHistory, useLocation } from "react-router-dom";
 
-import StyleContainer from './components/StyleContainer';
+import LandingPage from "./pages/LandingPage";
+import SearchPage from "./pages/SearchPage";
+
+import Navbar from "./components/Navbar";
+
+import StyleContainer from "./components/StyleContainer";
+import React from "react";
 
 function App() {
+  const history = useHistory();
+  const location = useLocation();
+
+  const [searchValue, setSearchValue] = React.useState("");
+
+  React.useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (location.pathname.includes("search") && params.has("q")) {
+      setSearchValue(params.get("q"));
+    }
+  }, [location]);
+
   return (
     <div className="App">
-      <StyleContainer theme='default'>
-        <Navbar/>
+      <StyleContainer theme="default">
+        <Navbar />
         <Switch>
-          <Route path="/about" component={About}/>
-          <Route path="/users" component={Users}/>
-          <Route path="/" component={Landing}/>
+          <Route path="/search">
+            <SearchPage searchValue={searchValue} />
+          </Route>
+          <Route path="/">
+            <LandingPage
+              setSearchValue={(newValue) => {
+                history.push(`search?q=${newValue}`);
+              }}
+            />
+          </Route>
         </Switch>
       </StyleContainer>
     </div>

@@ -1,17 +1,12 @@
-import React from 'react';
+import React from "react";
 
-import './Placeholder.css'
+import "./Placeholder.css";
 
-export const Placeholder = ({
-  style
-}) => {
+export const Placeholder = ({ style }) => {
   return (
-    <div 
-      className='placeholder'
-      style={style}
-    >
-      <div className='placeholder-panel placeholder-panel--thick'></div>
-      <div className='placeholder-panel placeholder-panel--thin'></div>
+    <div className="placeholder" style={style}>
+      <div className="placeholder-panel placeholder-panel--thick"></div>
+      <div className="placeholder-panel placeholder-panel--thin"></div>
     </div>
-  )
-}
+  );
+};

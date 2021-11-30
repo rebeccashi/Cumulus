@@ -1,0 +1,24 @@
+.search {
+  min-height: 100vh;
+
+  background-color: var(--blue);
+
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.sidebar {
+  min-height: 100vh;
+  max-width: 50ch;
+
+  background-color: var(--white);
+
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+
+  padding: 20vh 64px;
+}
+
+.main {
+  padding: 20vh 7.5ch;
+}

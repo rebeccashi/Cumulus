@@ -1,0 +1,19 @@
+.results {
+  display: grid;
+  grid-template-columns: minmax(auto,60ch) minmax(auto,40ch);
+  grid-gap: 64px;
+}
+
+.featured {
+  width: 100%;
+}
+
+.more {
+  width: 100%;
+}
+
+.result {
+  width: 100%;
+
+  margin-bottom: 16px;
+}
