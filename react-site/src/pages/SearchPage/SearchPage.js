@@ -72,7 +72,9 @@ export const SearchPage = ({ searchValue }) => {
     <>
       <div className="search">
         <div className="sidebar">
-          <Heading variant="h2">/search</Heading>
+          <Heading variant="h2">
+            /{selectedObject == null ? "search" : "overview"}
+          </Heading>
           <Input
             autofocus={true}
             autocomplete={autocomplete}

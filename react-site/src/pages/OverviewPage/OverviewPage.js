@@ -45,48 +45,87 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
 
   return (
     <>
-      <Heading variant="h1">
-        {selectedObject.name}
+      <Heading variant="h1">{selectedObject.name}</Heading>
+      <Card
+        color="white"
+        style={{
+          width: "fit-content",
+        }}
+      >
         {ready ? (
-          <Text>{data.category}</Text>
+          <div className="metadata">
+            <Text>
+              <strong>Listings:</strong>
+            </Text>
+            <Text>
+              {data.listings[0].listings.toLocaleString("en", {
+                useGrouping: true,
+              })}
+            </Text>
+            <Text>
+              <strong>Category:</strong>
+            </Text>
+            <Text>{data.category}</Text>
+          </div>
         ) : (
-          <Text>
+          <div className="metadata">
             <Placeholder
               style={{
-                height: "1rem",
+                height: "1em",
                 width: "8ch",
               }}
             />
-          </Text>
+            <Placeholder
+              style={{
+                height: "1em",
+                width: "8ch",
+              }}
+            />
+            <Placeholder
+              style={{
+                height: "1em",
+                width: "8ch",
+              }}
+            />
+            <Placeholder
+              style={{
+                height: "1em",
+                width: "8ch",
+              }}
+            />
+          </div>
         )}
-      </Heading>
-      <RadioGroup
-        color="white"
-        options={[
-          {
-            label: "Details",
-            value: VIEWS.DETAILS,
-            icon: "details",
-          },
-          {
-            label: "Sort",
-            value: VIEWS.SORT,
-            icon: "sort",
-          },
-          {
-            label: "Filter",
-            value: VIEWS.FILTER,
-            icon: "filter",
-          },
-          {
-            label: "Compare",
-            value: VIEWS.COMPARE,
-            icon: "compare",
-          },
-        ]}
-        value={view}
-        setValue={setView}
-      />
+      </Card>
+      <Heading variant="h2">Overview</Heading>
+      <div className="selectGroup">
+        <RadioGroup
+          color="white"
+          options={[
+            {
+              label: "Details",
+              value: VIEWS.DETAILS,
+              icon: "details",
+            },
+            {
+              label: "Sort",
+              value: VIEWS.SORT,
+              icon: "sort",
+            },
+            {
+              label: "Filter",
+              value: VIEWS.FILTER,
+              icon: "filter",
+            },
+            {
+              label: "Compare",
+              value: VIEWS.COMPARE,
+              icon: "compare",
+            },
+          ]}
+          value={view}
+          setValue={setView}
+        />
+      </div>
       {ready
         ? data.data.map((datum, i) => {
             return (
