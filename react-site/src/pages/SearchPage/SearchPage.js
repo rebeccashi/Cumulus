@@ -42,6 +42,7 @@ export const SearchPage = ({ searchValue }) => {
 
   React.useEffect(() => {
     setSelectedObject(null);
+    setAutocomplete("");
 
     const controller = new AbortController();
 
@@ -62,8 +63,16 @@ export const SearchPage = ({ searchValue }) => {
       });
     };
 
-    fetch("http://neverssl.com", { mode: "no-cors", signal: controller.signal })
-      .then(updateMockData)
+    fetch(`http://localhost:3000/api/search?q=${query}`, {
+      signal: controller.signal,
+    })
+      .then((response) => response.json())
+      .then((data) =>
+        setData({
+          query,
+          results: data.results,
+        })
+      )
       .catch((err) => {});
 
     return () => {
