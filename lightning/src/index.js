@@ -1,5 +1,4 @@
 import express from "express";
-import fs from "fs";
 import cors from "cors";
 const app = express();
 import { MongoClient } from "mongodb";
@@ -53,7 +52,7 @@ app.get("/api/search", (req, res) => {
               Number(result.copies[0].skills[i].numJobs.replace(",", ""));
           }
 
-          company = {
+          const company = {
             _id: result._id,
             name: result.name,
             category: "Company",
@@ -122,7 +121,7 @@ app.get("/api/search", (req, res) => {
     return results;
   }
 
-  search().then((results) => res.stauts(200).send(results));
+  search().then((results) => res.status(200).send(results));
 });
 
 app.get("/api/overview", (req, res) => {
