@@ -52,7 +52,7 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
           width: "fit-content",
         }}
       >
-        {ready ? (
+        {ready && data && data.listings ? (
           <div className="metadata">
             <Text>
               <strong>Listings:</strong>
