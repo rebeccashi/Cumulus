@@ -127,7 +127,7 @@ app.get("/api/overview", (req, res) => {
         return {
           _id: data._id,
           name: data.name,
-          category: "Title",
+          category: "Company",
           listings: data.copies.map((copy) => {
             return {
               date: copy.date,
@@ -181,7 +181,7 @@ app.get("/api/overview", (req, res) => {
         return {
           _id: data._id,
           name: data.name,
-          category: "Title",
+          category: "Skill",
           listings: data.copies.map((copy) => {
             return {
               date: copy.date,
