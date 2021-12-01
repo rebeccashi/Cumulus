@@ -1,17 +1,11 @@
 import React from "react";
 
-import './TextLink.css';
+import "./TextLink.css";
 
-export const TextLink = ({
-    href,
-    children
-  }) => {
-    return (
-      <a href={href} className='textlink'>
-      <span className= 'textlink-label'>
-        {children}
-      </span>
-      </a>
-
-    )
-  }
+export const TextLink = ({ href, children }) => {
+  return (
+    <a href={href} className="textlink">
+      <span className="textlink-label">{children}</span>
+    </a>
+  );
+};
