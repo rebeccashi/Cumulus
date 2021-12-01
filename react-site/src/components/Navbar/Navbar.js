@@ -6,6 +6,7 @@ import "./Navbar.css";
 import Button from "../Button";
 import Heading from "../Heading";
 import Text from "../Text";
+import TextLink from "../TextLink";
 
 export const Navbar = ({ signedIn = false }) => {
   return (
@@ -15,8 +16,8 @@ export const Navbar = ({ signedIn = false }) => {
           <Heading variant="cta">cumulus</Heading>
         </Link>
       </div>
-      <Text>Pricing</Text>
-      <Text>About Us</Text>
+      <TextLink href="/pricing">Pricing</TextLink>
+      <TextLink href="/about">About Us</TextLink>
       {signedIn ? null : (
         <div className="cta-button">
           <Button color="cta" label="Sign Up" />
