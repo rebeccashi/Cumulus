@@ -4,6 +4,7 @@ import "./OverviewPage.css";
 
 import Card from "../../components/Card";
 import Heading from "../../components/Heading";
+import Placeholder from "../../components/Placeholder";
 import RadioGroup from "../../components/RadioGroup";
 import Text from "../../components/Text";
 
@@ -24,15 +25,21 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
     data: [],
   };
   const [data, setData] = React.useState(emptyData);
+  const [ready, setReady] = React.useState(false);
 
   React.useEffect(() => {
+    setReady(false);
+
     fetch(
       `${
         process.env.REACT_APP_API || ""
       }/api/overview?name=${encodeURIComponent(selectedObject.name)}`
     )
       .then((response) => response.json())
-      .then((data) => setData(data))
+      .then((data) => {
+        setData(data);
+        setReady(true);
+      })
       .catch(() => {});
   }, [selectedObject]);
 
@@ -40,7 +47,18 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
     <>
       <Heading variant="h1">
         {selectedObject.name}
-        <Text>{data.category}</Text>
+        {ready ? (
+          <Text>{data.category}</Text>
+        ) : (
+          <Text>
+            <Placeholder
+              style={{
+                height: "1rem",
+                width: "8ch",
+              }}
+            />
+          </Text>
+        )}
       </Heading>
       <RadioGroup
         color="white"
@@ -69,38 +87,51 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
         value={view}
         setValue={setView}
       />
-      {data.data.map((datum, i) => {
-        return (
-          <div key={i} className="result">
-            <Card
-              variant="interactive"
-              color="white"
-              onClick={() => {
-                setSelectedObject(datum);
-              }}
-              style={{
-                width: "100%",
-              }}
-            >
-              <Heading variant="h3">{datum.name}</Heading>
-              <div className="resultData">
-                <Text>
-                  <strong>Listings:</strong>
-                </Text>
-                <Text>
-                  {datum.listings.toLocaleString("en", {
-                    useGrouping: true,
-                  })}
-                </Text>
-                <Text>
-                  <strong>Category:</strong>
-                </Text>
-                <Text>{datum.category}</Text>
+      {ready
+        ? data.data.map((datum, i) => {
+            return (
+              <div key={i} className="result">
+                <Card
+                  variant="interactive"
+                  color="white"
+                  onClick={() => {
+                    setSelectedObject(datum);
+                  }}
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  <Heading variant="h3">{datum.name}</Heading>
+                  <div className="resultData">
+                    <Text>
+                      <strong>Listings:</strong>
+                    </Text>
+                    <Text>
+                      {datum.listings.toLocaleString("en", {
+                        useGrouping: true,
+                      })}
+                    </Text>
+                    <Text>
+                      <strong>Category:</strong>
+                    </Text>
+                    <Text>{datum.category}</Text>
+                  </div>
+                </Card>
               </div>
-            </Card>
-          </div>
-        );
-      })}
+            );
+          })
+        : Array.from(Array(4)).map((_, i) => {
+            return (
+              <div key={i} className="result">
+                <Placeholder
+                  style={{
+                    height: "128px",
+                    width: "100%",
+                  }}
+                />
+              </div>
+            );
+          })}
       {(() => {
         switch (view) {
           case VIEWS.DETAILS:
