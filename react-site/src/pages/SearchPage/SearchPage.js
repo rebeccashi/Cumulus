@@ -63,7 +63,7 @@ export const SearchPage = ({ searchValue }) => {
       });
     };
 
-    fetch(`http://localhost:3000/api/search?q=${query}`, {
+    fetch(`${process.env.REACT_APP_API || ""}/api/search?q=${query}`, {
       signal: controller.signal,
     })
       .then((response) => response.json())

@@ -66,44 +66,42 @@ export const ResultsPage = ({ query, data, ready, setSelectedObject }) => {
             <Text>No results to display!</Text>
           )}
         </div>
-        <div className="more">
-          <Heading variant="h2">More results</Heading>
-          {!ready ? (
-            Array.from(Array(2 * FEATUREDLENGTH)).map((_, i) => {
-              return (
-                <div key={i} className="result">
-                  <Placeholder
-                    style={{
-                      height: "64px",
-                      width: "100%",
-                    }}
-                  />
-                </div>
-              );
-            })
-          ) : data.results.length > 0 ? (
-            data.results.slice(FEATUREDLENGTH).map((result, i) => {
-              return (
-                <div key={i} className="result">
-                  <Card
-                    variant="interactive"
-                    color="white"
-                    onClick={() => {
-                      setSelectedObject(result);
-                    }}
-                    style={{
-                      width: "100%",
-                    }}
-                  >
-                    <Heading variant="h6">{result.name}</Heading>
-                  </Card>
-                </div>
-              );
-            })
-          ) : (
-            <Text>No results to display!</Text>
-          )}
-        </div>
+        {data.results.length > FEATUREDLENGTH ? (
+          <div className="more">
+            <Heading variant="h2">More results</Heading>
+            {!ready
+              ? Array.from(Array(2 * FEATUREDLENGTH)).map((_, i) => {
+                  return (
+                    <div key={i} className="result">
+                      <Placeholder
+                        style={{
+                          height: "64px",
+                          width: "100%",
+                        }}
+                      />
+                    </div>
+                  );
+                })
+              : data.results.slice(FEATUREDLENGTH).map((result, i) => {
+                  return (
+                    <div key={i} className="result">
+                      <Card
+                        variant="interactive"
+                        color="white"
+                        onClick={() => {
+                          setSelectedObject(result);
+                        }}
+                        style={{
+                          width: "100%",
+                        }}
+                      >
+                        <Heading variant="h6">{result.name}</Heading>
+                      </Card>
+                    </div>
+                  );
+                })}
+          </div>
+        ) : null}
       </div>
     </>
   );

@@ -42,7 +42,7 @@ app.get("/api/search", (req, res) => {
 
       const query = { name: { $regex: req.query.q, $options: "i" } };
 
-      let cursor = companies.find(query, {});
+      let cursor = companies.find(query, {}).limit(100);
 
       await cursor.forEach((company) => {
         response.results.push({
@@ -62,7 +62,7 @@ app.get("/api/search", (req, res) => {
       // skill results
       const skills = db.collection(COLLECTIONS.SKILLS);
 
-      cursor = skills.find(query, {});
+      cursor = skills.find(query, {}).limit(100);
 
       await cursor.forEach((skill) => {
         response.results.push({
@@ -76,7 +76,7 @@ app.get("/api/search", (req, res) => {
       // titles results
       const titles = db.collection(COLLECTIONS.TITLES);
 
-      cursor = titles.find(query, {});
+      cursor = titles.find(query, {}).limit(100);
 
       await cursor.forEach((title) => {
         response.results.push({
