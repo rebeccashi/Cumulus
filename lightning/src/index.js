@@ -159,7 +159,7 @@ app.get("/api/overview", (req, res) => {
 
       let subData = [];
 
-      if (data.copies.length > 0) {
+      if (data && data.copies.length > 0) {
         data.copies[0].titles.forEach((title) => {
           subData.push({
             name: title.name,
