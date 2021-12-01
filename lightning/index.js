@@ -160,6 +160,100 @@ app.get('/api/search', (req, res) => {
 search().then(results => res.stauts(200).send(results));
 });
 
+
+app.get('/api/overview', (req, res) => {
+  if (!req.query.q) {
+    res.status(406).send('Missing data');
+    return;
+  }
+
+  var results = '{}';
+
+  async function search(){
+     try{
+
+      //connect to mongo
+      await client.connect();
+
+      var jsonObj = JSON.parse(results);
+
+      //grab results 
+      var cursor = client.db("jobs").collection("companies").find({
+        "_id": req.query.q
+    });
+     const companies = await cursor.toArray();
+     //go through array of results
+     if(companies.length > 0){
+      companies.forEach((result, i) => {
+
+        company = {
+          "_id": result._id,
+          "name": result.name,
+          "category": "Company",
+          "listings": result.copies
+        }
+        //push company to jsonObj
+        jsonObj.push(company);
+
+      });
+     }
+
+     cursor = client.db("jobs").collection("skills").find({
+      "_id": req.query.q
+     });
+
+     const skills = await cursor.toArray();
+
+     if(skills.length > 0){
+      skills.forEach((result, i) => {
+
+        skill = {
+          "_id": result._id,
+          "name": result.name,
+          "category": "Skill",
+          "listings": result.copies
+
+        }
+
+        jsonObj.push(skill);
+
+      });
+     }
+
+     cursor = client.db('jobs').collection("titles").find({
+      "_id": req.query.q
+     });
+
+     const titles = await cursor.toArray();
+
+     if(titles.length > 0 ){
+      titles.forEach((result, i ) =>{
+
+        title = {
+          "_id": result._id,
+          "name": result.name,
+          "category": "Title",
+          "listings": result.copies
+        }
+
+        jsonObj.push(title);
+      });
+     }
+      results = JSON.stringify(jsonObj);
+
+
+
+    }
+
+catch(error){
+  console.log(error);
+}
+
+
+  }
+search().then(results => res.stauts(200).send(results));
+});
+
 /*
   { "query": "software engineering internship new york" }
 */
