@@ -3,6 +3,7 @@ import { Switch, Route, useHistory, useLocation } from "react-router-dom";
 
 import LandingPage from "./pages/LandingPage";
 import SearchPage from "./pages/SearchPage";
+import SignInPage from "./pages/SignInPage";
 
 import Navbar from "./components/Navbar";
 
@@ -29,6 +30,9 @@ function App() {
         <Switch>
           <Route path="/search">
             <SearchPage searchValue={searchValue} />
+          </Route>
+          <Route path="/signin">
+            <SignInPage />
           </Route>
           <Route path="/">
             <LandingPage

@@ -17,17 +17,17 @@
 
   position: absolute;
   top: -5%;
-  
+
   transform: skew(-30deg);
 }
 .placeholder-panel--thin {
   width: 10%;
-  
+
   animation: placeholder-thin 3.15s ease-in infinite;
 }
 .placeholder-panel--thick {
   width: 22%;
-  
+
   animation: placeholder-thick 3.15s ease-in infinite;
 }
 

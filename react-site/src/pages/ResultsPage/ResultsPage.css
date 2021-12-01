@@ -1,6 +1,6 @@
 .results {
   display: grid;
-  grid-template-columns: minmax(auto,60ch) minmax(auto,40ch);
+  grid-template-columns: minmax(auto, 60ch) minmax(auto, 40ch);
   grid-gap: 64px;
 }
 

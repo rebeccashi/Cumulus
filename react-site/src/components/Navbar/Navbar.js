@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import "./Navbar.css";
 
@@ -9,6 +9,8 @@ import Text from "../Text";
 import TextLink from "../TextLink";
 
 export const Navbar = ({ signedIn = false }) => {
+  const history = useHistory();
+
   return (
     <nav className="navbar">
       <div className="logo">
@@ -16,11 +18,15 @@ export const Navbar = ({ signedIn = false }) => {
           <Heading variant="cta">cumulus</Heading>
         </Link>
       </div>
-      <TextLink href="/pricing">Pricing</TextLink>
       <TextLink href="/about">About Us</TextLink>
+      <TextLink href="/signin">Sign In</TextLink>
       {signedIn ? null : (
         <div className="cta-button">
-          <Button color="cta" label="Sign Up" />
+          <Button
+            color="cta"
+            label="Sign Up"
+            onClick={() => history.push("/signin")}
+          />
         </div>
       )}
     </nav>
