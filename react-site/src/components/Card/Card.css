@@ -1,5 +1,5 @@
 .card {
-  font-family: 'Inter', 'Arial', sans-serif;
+  font-family: "Inter", "Arial", sans-serif;
 
   width: 500px;
   height: auto;
@@ -16,7 +16,7 @@
   background-color: var(--purple30);
   cursor: pointer;
 }
-  
+
 .card-color--blue {
   background-color: var(--blue);
 }

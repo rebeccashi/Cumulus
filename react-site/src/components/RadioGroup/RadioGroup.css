@@ -1,12 +1,12 @@
 .radiogroup {
-  font-family: 'Inter', 'Arial', sans-serif;
+  font-family: "Inter", "Arial", sans-serif;
 
   display: flex;
   flex-flow: row wrap;
 
   width: fit-content;
 }
-  
+
 .radiogroup-color--blue {
   background-color: var(--blue);
 }

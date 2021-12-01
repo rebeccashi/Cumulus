@@ -1,5 +1,5 @@
 .input {
-  font-family: 'Inter', 'Arial', sans-serif;
+  font-family: "Inter", "Arial", sans-serif;
   color: var(--purple);
 
   width: fit-content;
@@ -9,7 +9,7 @@
 .input:not(.with-label) {
   overflow: hidden;
 }
-  
+
 .input-color--blue {
   background-color: var(--blue);
 }
@@ -18,7 +18,7 @@
 }
 
 .input-input {
-  font-family: 'Inter', 'Arial', sans-serif;
+  font-family: "Inter", "Arial", sans-serif;
   color: var(--purple);
   font-size: 1em;
 

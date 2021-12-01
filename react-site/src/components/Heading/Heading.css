@@ -1,5 +1,10 @@
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Inter', 'Arial', sans-serif;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Inter", "Arial", sans-serif;
 }
 
 .heading-color--purple {
@@ -34,7 +39,7 @@ h6 {
   font-weight: 600;
 }
 .cta {
-  font-family: 'Telegraf';
+  font-family: "Telegraf";
   font-size: 24px;
   font-weight: 900;
 

@@ -1,45 +1,45 @@
 .signin {
-    width: 100vw;
-    height: 100vh;
-  
-    display: grid;
-    place-content: center;
-  
-    background: var(--blue);
-  }
-  
-  .tagline {
-    max-width: 60ch;
-  }
+  width: 100vw;
+  height: 100vh;
 
-  .spacer {
-      height: 2rem;
-      width: 100%;
-  }
+  display: grid;
+  place-content: center;
 
-  .signin-inputs {
-      display: grid;
-      grid-auto-flow: row;
-      grid-gap: 32px;
-  }
+  background: var(--blue);
+}
 
-  .signin-inputs--cta {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      grid-template-rows: 1fr;
-      grid-gap: 32px;
+.tagline {
+  max-width: 60ch;
+}
 
-      align-items: center;
-  }
+.spacer {
+  height: 2rem;
+  width: 100%;
+}
 
-  .top-left-cloud {
-      position: fixed;
-      top: 2vh;
-      left: 2vw;
-  }
+.signin-inputs {
+  display: grid;
+  grid-auto-flow: row;
+  grid-gap: 32px;
+}
 
-  .bottom-right-cloud {
-    position: fixed;
-    bottom: 8vh;
-    right: 10vw;
+.signin-inputs--cta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr;
+  grid-gap: 32px;
+
+  align-items: center;
+}
+
+.top-left-cloud {
+  position: fixed;
+  top: 2vh;
+  left: 2vw;
+}
+
+.bottom-right-cloud {
+  position: fixed;
+  bottom: 8vh;
+  right: 10vw;
 }

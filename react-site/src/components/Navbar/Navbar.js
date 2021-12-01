@@ -22,7 +22,11 @@ export const Navbar = ({ signedIn = false }) => {
       <TextLink href="/signin">Sign In</TextLink>
       {signedIn ? null : (
         <div className="cta-button">
-          <Button color="cta" label="Sign Up" onClick={() => history.push("/signin")} />
+          <Button
+            color="cta"
+            label="Sign Up"
+            onClick={() => history.push("/signin")}
+          />
         </div>
       )}
     </nav>
