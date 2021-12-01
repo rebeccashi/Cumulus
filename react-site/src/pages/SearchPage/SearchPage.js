@@ -42,29 +42,26 @@ export const SearchPage = ({ searchValue }) => {
 
   React.useEffect(() => {
     setSelectedObject(null);
+    setAutocomplete("");
 
     const controller = new AbortController();
 
-    const updateMockData = () => {
-      setData({
-        query,
-        results: [
-          { name: "Software Engineer", listings: "33,307" },
-          { name: "Microsoft Co.", listings: "14,566" },
-          { name: "Software Developer", listings: "13,724" },
-          { name: "SoFi Co.", listings: "4,194" },
-          { name: "Cloud Software Engineer", listings: "3,163" },
-          { name: "Sofitel Co.", listings: "789" },
-          { name: "Software Security", listings: "273" },
-          { name: "Cisco (Software)", listings: "156" },
-          { name: "Softbank Co.", listings: "89" },
-        ],
-      });
-    };
-
-    fetch("http://neverssl.com", { mode: "no-cors", signal: controller.signal })
-      .then(updateMockData)
-      .catch((err) => {});
+    fetch(
+      `${process.env.REACT_APP_API || ""}/api/search?q=${encodeURIComponent(
+        query
+      )}`,
+      {
+        signal: controller.signal,
+      }
+    )
+      .then((response) => response.json())
+      .then((data) =>
+        setData({
+          query,
+          results: data.results,
+        })
+      )
+      .catch(() => {});
 
     return () => {
       controller.abort();
@@ -75,7 +72,9 @@ export const SearchPage = ({ searchValue }) => {
     <>
       <div className="search">
         <div className="sidebar">
-          <Heading variant="h2">/search</Heading>
+          <Heading variant="h2">
+            /{selectedObject == null ? "search" : "overview"}
+          </Heading>
           <Input
             autofocus={true}
             autocomplete={autocomplete}
@@ -119,7 +118,10 @@ export const SearchPage = ({ searchValue }) => {
             )
           ) : (
             <>
-              <OverviewPage data={selectedObject} />
+              <OverviewPage
+                selectedObject={selectedObject}
+                setSelectedObject={setSelectedObject}
+              />
             </>
           )}
         </div>

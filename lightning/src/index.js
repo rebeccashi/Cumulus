@@ -42,7 +42,7 @@ app.get("/api/search", (req, res) => {
 
       const query = { name: { $regex: req.query.q, $options: "i" } };
 
-      let cursor = companies.find(query, {});
+      let cursor = companies.find(query, {}).limit(100);
 
       await cursor.forEach((company) => {
         response.results.push({
@@ -62,7 +62,7 @@ app.get("/api/search", (req, res) => {
       // skill results
       const skills = db.collection(COLLECTIONS.SKILLS);
 
-      cursor = skills.find(query, {});
+      cursor = skills.find(query, {}).limit(100);
 
       await cursor.forEach((skill) => {
         response.results.push({
@@ -76,7 +76,7 @@ app.get("/api/search", (req, res) => {
       // titles results
       const titles = db.collection(COLLECTIONS.TITLES);
 
-      cursor = titles.find(query, {});
+      cursor = titles.find(query, {}).limit(100);
 
       await cursor.forEach((title) => {
         response.results.push({
@@ -127,7 +127,7 @@ app.get("/api/overview", (req, res) => {
         return {
           _id: data._id,
           name: data.name,
-          category: "Title",
+          category: "Company",
           listings: data.copies.map((copy) => {
             return {
               date: copy.date,
@@ -159,7 +159,7 @@ app.get("/api/overview", (req, res) => {
 
       let subData = [];
 
-      if (data.copies.length > 0) {
+      if (data && data.copies.length > 0) {
         data.copies[0].titles.forEach((title) => {
           subData.push({
             name: title.name,
@@ -181,7 +181,7 @@ app.get("/api/overview", (req, res) => {
         return {
           _id: data._id,
           name: data.name,
-          category: "Title",
+          category: "Skill",
           listings: data.copies.map((copy) => {
             return {
               date: copy.date,
