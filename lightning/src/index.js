@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 const app = express();
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -29,7 +29,7 @@ app.get("/api/search", (req, res) => {
     return;
   }
 
-  var response = { results: [] };
+  const response = { results: [] };
 
   async function search() {
     try {
@@ -40,7 +40,7 @@ app.get("/api/search", (req, res) => {
       const db = client.db(DATABASE);
       const companies = db.collection(COLLECTIONS.COMPANIES);
 
-      let query = { name: { $regex: req.query.q, $options: "i" } };
+      const query = { name: { $regex: req.query.q, $options: "i" } };
 
       let cursor = companies.find(query, {});
 
@@ -62,8 +62,6 @@ app.get("/api/search", (req, res) => {
       // skill results
       const skills = db.collection(COLLECTIONS.SKILLS);
 
-      query = { name: { $regex: req.query.q, $options: "i" } };
-
       cursor = skills.find(query, {});
 
       await cursor.forEach((skill) => {
@@ -77,8 +75,6 @@ app.get("/api/search", (req, res) => {
 
       // titles results
       const titles = db.collection(COLLECTIONS.TITLES);
-
-      query = { name: { $regex: req.query.q, $options: "i" } };
 
       cursor = titles.find(query, {});
 
@@ -109,82 +105,134 @@ app.get("/api/search", (req, res) => {
 });
 
 app.get("/api/overview", (req, res) => {
-  if (!req.query.q) {
+  if (!req.query.name) {
     res.status(406).send("Missing data");
     return;
   }
 
-  var results = "{}";
-
   async function search() {
     try {
-      //connect to mongo
+      // connect to mongo
       await client.connect();
 
-      var jsonObj = JSON.parse(results);
+      // company results
+      const db = client.db(DATABASE);
+      const companies = db.collection(COLLECTIONS.COMPANIES);
 
-      //grab results
-      var cursor = client.db("jobs").collection("companies").find({
-        _id: req.query.q,
-      });
-      const companies = await cursor.toArray();
-      //go through array of results
-      if (companies.length > 0) {
-        companies.forEach((result, i) => {
-          company = {
-            _id: result._id,
-            name: result.name,
-            category: "Company",
-            listings: result.copies,
-          };
-          //push company to jsonObj
-          jsonObj.push(company);
-        });
+      let query = { name: req.query.name };
+
+      let data = await companies.findOne(query, {});
+
+      if (data) {
+        return {
+          _id: data._id,
+          name: data.name,
+          category: "Title",
+          listings: data.copies.map((copy) => {
+            return {
+              date: copy.date,
+              listings: copy.skills.reduce(
+                (acc, curr) => acc + parseInt(curr.numJobs.replace(/,/g, "")),
+                0
+              ),
+            };
+          }),
+          data:
+            data.copies.length > 0
+              ? data.copies[0].skills
+                  .map((skill) => {
+                    return {
+                      name: skill.name,
+                      category: "Skill",
+                      listings: parseInt(skill.numJobs.replace(/,/g, "")),
+                    };
+                  })
+                  .sort((a, b) => b.listings - a.listings)
+              : [],
+        };
       }
 
-      cursor = client.db("jobs").collection("skills").find({
-        _id: req.query.q,
-      });
+      // skill results
+      const skills = db.collection(COLLECTIONS.SKILLS);
 
-      const skills = await cursor.toArray();
+      data = await skills.findOne(query, {});
 
-      if (skills.length > 0) {
-        skills.forEach((result, i) => {
-          skill = {
-            _id: result._id,
-            name: result.name,
-            category: "Skill",
-            listings: result.copies,
-          };
+      let subData = [];
 
-          jsonObj.push(skill);
-        });
-      }
-
-      cursor = client.db("jobs").collection("titles").find({
-        _id: req.query.q,
-      });
-
-      const titles = await cursor.toArray();
-
-      if (titles.length > 0) {
-        titles.forEach((result, i) => {
-          title = {
-            _id: result._id,
-            name: result.name,
+      if (data.copies.length > 0) {
+        data.copies[0].titles.forEach((title) => {
+          subData.push({
+            name: title.name,
             category: "Title",
-            listings: result.copies,
-          };
+            listings: parseInt(title.numJobs.replace(/,/g, "")),
+          });
+        });
 
-          jsonObj.push(title);
+        data.copies[0].companies.forEach((company) => {
+          subData.push({
+            name: company.name,
+            category: "Company",
+            listings: parseInt(company.numJobs.replace(/,/g, "")),
+          });
         });
       }
-      results = JSON.stringify(jsonObj);
+
+      if (data) {
+        return {
+          _id: data._id,
+          name: data.name,
+          category: "Title",
+          listings: data.copies.map((copy) => {
+            return {
+              date: copy.date,
+              listings: copy.numJobs.replace(/,/g, ""),
+            };
+          }),
+          data: subData.sort((a, b) => b.listings - a.listings),
+        };
+      }
+
+      // titles results
+      const titles = db.collection(COLLECTIONS.TITLES);
+
+      data = await titles.findOne(query, {});
+
+      if (data) {
+        return {
+          _id: data._id,
+          name: data.name,
+          category: "Title",
+          listings: data.copies.map((copy) => {
+            return {
+              date: copy.date,
+              listings: copy.skills.reduce(
+                (acc, curr) => acc + parseInt(curr.numJobs.replace(/,/g, "")),
+                0
+              ),
+            };
+          }),
+          data:
+            data.copies.length > 0
+              ? data.copies[0].skills
+                  .map((skill) => {
+                    return {
+                      name: skill.name,
+                      category: "Skill",
+                      listings: parseInt(skill.numJobs.replace(/,/g, "")),
+                    };
+                  })
+                  .sort((a, b) => b.listings - a.listings)
+              : [],
+        };
+      }
     } catch (error) {
       console.log(error);
     }
+
+    return {};
   }
-  search().then((results) => res.stauts(200).send(results));
+
+  search().then((results) => res.status(200).send(results));
 });
 
 app.listen(process.env.PORT || 3000, () => {
