@@ -19,6 +19,8 @@
   display: grid;
   grid-template-columns: 1fr 30vw;
   grid-gap: 64px;
+
+  max-width: 100%;
 }
 
 .selectGroup {

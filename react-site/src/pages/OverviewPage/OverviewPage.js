@@ -10,6 +10,8 @@ import Text from "../../components/Text";
 
 import DetailsPage from "../DetailsPage";
 
+import LineGraph from "../../visualizations/LineGraph";
+
 const VIEWS = {
   DETAILS: "details",
   SORT: "sort",
@@ -131,8 +133,38 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
       </div>
       <div className="overviewColumns">
         <div>
-          {ready
-            ? data.data.map((datum, i) => {
+          {ready ? (
+            <>
+              {data.category === "Skill" ? (
+                <Card
+                  color="white"
+                  style={{
+                    padding: "32px",
+                    marginBottom: "16px",
+                  }}
+                >
+                  <Heading variant="h2">Listings over time</Heading>
+                  <LineGraph
+                    data={data.listings.map((l) => {
+                      console.log(data);
+                      return {
+                        date: l.date,
+                        listings: l.listings,
+                      };
+                    })}
+                    x={(d) => {
+                      return new Date(
+                        d.date.split("-")[1],
+                        d.date.split("-")[0] - 1,
+                        1
+                      );
+                    }}
+                    y={(d) => parseInt(d.listings)}
+                    title={() => data.name}
+                  />
+                </Card>
+              ) : null}
+              {data.data.map((datum, i) => {
                 return (
                   <div key={i} className="result">
                     <Card
@@ -171,19 +203,22 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
                     </Card>
                   </div>
                 );
-              })
-            : Array.from(Array(4)).map((_, i) => {
-                return (
-                  <div key={i} className="result">
-                    <Placeholder
-                      style={{
-                        height: "128px",
-                        width: "100%",
-                      }}
-                    />
-                  </div>
-                );
               })}
+            </>
+          ) : (
+            Array.from(Array(4)).map((_, i) => {
+              return (
+                <div key={i} className="result">
+                  <Placeholder
+                    style={{
+                      height: "128px",
+                      width: "100%",
+                    }}
+                  />
+                </div>
+              );
+            })
+          )}
         </div>
         {(() => {
           switch (view) {

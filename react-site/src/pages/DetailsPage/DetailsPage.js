@@ -43,7 +43,7 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
   return (
     <>
       <div className="details">
-        <Heading variant="h1">Details</Heading>
+        <Heading variant="h2">Details</Heading>
         {dataFromParent.length === 0 ? (
           <>
             <Text>
@@ -61,7 +61,7 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
                     marginBottom: "16px",
                   }}
                 >
-                  <Heading variant="h2">Comparing {data.length} items</Heading>
+                  <Heading variant="h3">Comparing {data.length} items</Heading>
                   {data.map((d, i) => (
                     <Text key={i}>{d.name}</Text>
                   ))}
@@ -74,7 +74,7 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
                   marginBottom: "16px",
                 }}
               >
-                <Heading variant="h2">{data[0].name}</Heading>
+                <Heading variant="h3">{data[0].name}</Heading>
               </Card>
             )}
             <Card
@@ -83,7 +83,7 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
                 padding: "32px",
               }}
             >
-              <Heading variant="h2">Historical Trends</Heading>
+              <Heading variant="h3">Historical Trends</Heading>
               <LineGraph
                 data={data
                   .map((d) => {
