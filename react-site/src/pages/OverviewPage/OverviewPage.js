@@ -52,56 +52,82 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
   return (
     <>
       <Heading variant="h1">{selectedObject.name}</Heading>
-      <Card
-        color="white"
-        style={{
-          width: "fit-content",
-        }}
-      >
-        {ready && data && data.listings ? (
-          <div className="metadata">
-            <Text>
-              <strong>Listings:</strong>
-            </Text>
-            <Text>
-              {data.listings[0].listings.toLocaleString("en", {
-                useGrouping: true,
-              })}
-            </Text>
-            <Text>
-              <strong>Category:</strong>
-            </Text>
-            <Text>{data.category}</Text>
+      <Heading variant="h2">Overview</Heading>
+      <div className="overview">
+        {data.category === "Skill" ? (
+          <div className="trend-card">
+            {ready && data && data.listings ? (
+              <Card
+                color="white"
+                style={{
+                  padding: "32px",
+                  marginBottom: "16px",
+                }}
+              >
+                <Heading variant="h3">Listings over time</Heading>
+                <LineGraph
+                  data={data.listings.map((l) => {
+                    console.log(data);
+                    return {
+                      date: l.date,
+                      listings: l.listings,
+                    };
+                  })}
+                  x={(d) => {
+                    return new Date(
+                      d.date.split("-")[1],
+                      d.date.split("-")[0] - 1,
+                      1
+                    );
+                  }}
+                  y={(d) => parseInt(d.listings)}
+                  title={() => data.name}
+                />
+              </Card>
+            ) : (
+              <Placeholder
+                style={{
+                  height: "128px",
+                  width: "100%",
+                }}
+              />
+            )}
           </div>
-        ) : (
-          <div className="metadata">
+        ) : null}
+        <div className="metadata-card">
+          {ready && data && data.listings ? (
+            <Card
+              color="white"
+              style={{
+                width: "fit-content",
+              }}
+            >
+              <div className="metadata">
+                <Text>
+                  <strong>Listings:</strong>
+                </Text>
+                <Text>
+                  {data.listings[0].listings.toLocaleString("en", {
+                    useGrouping: true,
+                  })}
+                </Text>
+                <Text>
+                  <strong>Category:</strong>
+                </Text>
+                <Text>{data.category}</Text>
+              </div>
+            </Card>
+          ) : (
             <Placeholder
               style={{
-                height: "1em",
-                width: "8ch",
+                height: "6rem",
+                width: "20ch",
               }}
             />
-            <Placeholder
-              style={{
-                height: "1em",
-                width: "8ch",
-              }}
-            />
-            <Placeholder
-              style={{
-                height: "1em",
-                width: "8ch",
-              }}
-            />
-            <Placeholder
-              style={{
-                height: "1em",
-                width: "8ch",
-              }}
-            />
-          </div>
-        )}
-      </Card>
+          )}
+        </div>
+      </div>
+      <Heading variant="h2">Relevant items</Heading>
       <div className="selectGroup">
         <RadioGroup
           color="white"
@@ -128,42 +154,16 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
             },
           ]}
           value={view}
-          setValue={setView}
+          setValue={(newView) => {
+            setView(newView);
+            setDetailObject([]);
+          }}
         />
       </div>
       <div className="overviewColumns">
         <div>
           {ready ? (
             <>
-              {data.category === "Skill" ? (
-                <Card
-                  color="white"
-                  style={{
-                    padding: "32px",
-                    marginBottom: "16px",
-                  }}
-                >
-                  <Heading variant="h2">Listings over time</Heading>
-                  <LineGraph
-                    data={data.listings.map((l) => {
-                      console.log(data);
-                      return {
-                        date: l.date,
-                        listings: l.listings,
-                      };
-                    })}
-                    x={(d) => {
-                      return new Date(
-                        d.date.split("-")[1],
-                        d.date.split("-")[0] - 1,
-                        1
-                      );
-                    }}
-                    y={(d) => parseInt(d.listings)}
-                    title={() => data.name}
-                  />
-                </Card>
-              ) : null}
               {data.data.map((datum, i) => {
                 return (
                   <div key={i} className="result">
@@ -175,6 +175,7 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
                           : "white"
                       }
                       onClick={() => {
+                        setView(VIEWS.DETAILS);
                         if (detailObject.some((d) => d.name === datum.name))
                           setDetailObject(
                             detailObject.filter((d) => d.name !== datum.name)

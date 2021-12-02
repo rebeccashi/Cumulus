@@ -6,7 +6,8 @@ import Card from "../../components/Card";
 import Heading from "../../components/Heading";
 import Placeholder from "../../components/Placeholder";
 import Text from "../../components/Text";
-import { LineGraph } from "../../visualizations/LineGraph/LineGraph";
+import TextLink from "../../components/TextLink";
+import LineGraph from "../../visualizations/LineGraph";
 import Button from "../../components/Button";
 
 export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
@@ -59,11 +60,16 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
                   color="white"
                   style={{
                     marginBottom: "16px",
+                    maxWidth: "100%",
                   }}
                 >
                   <Heading variant="h3">Comparing {data.length} items</Heading>
                   {data.map((d, i) => (
-                    <Text key={i}>{d.name}</Text>
+                    <Text>
+                      <TextLink key={i} href={`/overview?name=${d.name}`}>
+                        {d.name}
+                      </TextLink>
+                    </Text>
                   ))}
                 </Card>
               </>
@@ -72,6 +78,7 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
                 color="white"
                 style={{
                   marginBottom: "16px",
+                  maxWidth: "100%",
                 }}
               >
                 <Heading variant="h3">{data[0].name}</Heading>
@@ -81,6 +88,7 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
               color="white"
               style={{
                 padding: "32px",
+                maxWidth: "100%",
               }}
             >
               <Heading variant="h3">Historical Trends</Heading>
@@ -123,20 +131,21 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
               style={{
                 height: "3rem",
                 width: "100%",
-                marginBottom: "5rem",
+                marginBottom: "16px",
               }}
             />
             <Placeholder
               style={{
-                height: "1rem",
+                height: "96px",
                 width: "100%",
+                marginBottom: "16px",
               }}
             />
-            <Heading variant="h3">Historical Trends</Heading>
             <Placeholder
               style={{
                 height: "128px",
                 width: "100%",
+                marginBottom: "16px",
               }}
             />
           </>

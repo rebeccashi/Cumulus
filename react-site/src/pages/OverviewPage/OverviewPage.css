@@ -1,3 +1,9 @@
+.overview {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 16px;
+}
+
 .metadata {
   display: grid;
   grid-template-rows: 1fr 1fr;
