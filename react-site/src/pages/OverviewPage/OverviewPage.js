@@ -109,7 +109,7 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
                   <strong>Listings:</strong>
                 </Text>
                 <Text>
-                  {data.listings[0].listings.toLocaleString("en", {
+                  {parseInt(data.listings[0].listings).toLocaleString("en", {
                     useGrouping: true,
                   })}
                 </Text>
@@ -244,6 +244,10 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
                     setDetailObject(emptyData);
                     setReady(false);
                     setSelectedObject(newObject);
+                  }}
+                  switchToCompare={(toCompare) => {
+                    setView(VIEWS.COMPARE);
+                    setCompareObject([toCompare]);
                   }}
                 />
               );

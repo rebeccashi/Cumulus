@@ -10,7 +10,11 @@ import TextLink from "../../components/TextLink";
 import LineGraph from "../../visualizations/LineGraph";
 import Button from "../../components/Button";
 
-export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
+export const DetailsPage = ({
+  dataFromParent,
+  setSelectedObject,
+  switchToCompare,
+}) => {
   const emptyData = {
     name: "",
     category: "",
@@ -44,10 +48,7 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
         <Heading variant="h2">Details</Heading>
         {dataFromParent.name === "" ? (
           <>
-            <Text>
-              Click on a result to see related information, or click on multiple
-              for a quick comparison.
-            </Text>
+            <Text>Click on a result to see related information.</Text>
           </>
         ) : ready ? (
           <>
@@ -89,11 +90,18 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
               />
             </Card>
             <br />
-            <Button
-              color="white"
-              label={`Explore this ${data.category.toLocaleLowerCase()}`}
-              onClick={() => setSelectedObject(data)}
-            />
+            <div className="details-buttons">
+              <Button
+                color="white"
+                label={`Explore this ${data.category.toLocaleLowerCase()}`}
+                onClick={() => setSelectedObject(data)}
+              />
+              <Button
+                color="white"
+                label={`Compare this ${data.category.toLocaleLowerCase()}`}
+                onClick={() => switchToCompare(dataFromParent)}
+              />
+            </div>
           </>
         ) : (
           <>
