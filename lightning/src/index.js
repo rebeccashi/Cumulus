@@ -40,7 +40,7 @@ app.get("/api/search", (req, res) => {
       const db = client.db(DATABASE);
       const companies = db.collection(COLLECTIONS.COMPANIES);
 
-      const query = { name: { $regex: req.query.q, $options: "i" } };
+      const query = { name: { $regex: `^${req.query.q}`, $options: "i" } };
 
       let cursor = companies.find(query, {}).limit(100);
 
