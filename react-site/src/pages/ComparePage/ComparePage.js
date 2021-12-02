@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./DetailsPage.css";
+import "./ComparePage.css";
 
 import Card from "../../components/Card";
 import Heading from "../../components/Heading";
@@ -8,16 +8,15 @@ import Placeholder from "../../components/Placeholder";
 import Text from "../../components/Text";
 import TextLink from "../../components/TextLink";
 import LineGraph from "../../visualizations/LineGraph";
-import Button from "../../components/Button";
 
-export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
+export const ComparePage = ({ dataFromParent, setSelectedObject }) => {
   const emptyData = {
     name: "",
     category: "",
     listings: [],
     data: [],
   };
-  const [data, setData] = React.useState(emptyData);
+  const [data, setData] = React.useState([emptyData]);
   const [ready, setReady] = React.useState(false);
 
   React.useEffect(() => {
@@ -25,12 +24,15 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
 
     setReady(false);
 
-    fetch(
-      `${
-        process.env.REACT_APP_API || ""
-      }/api/overview?name=${encodeURIComponent(dataFromParent.name)}`
-    )
-      .then((response) => response.json())
+    const fetches = dataFromParent.map((d) => {
+      return fetch(
+        `${
+          process.env.REACT_APP_API || ""
+        }/api/overview?name=${encodeURIComponent(d.name)}`
+      ).then((response) => response.json());
+    });
+
+    Promise.all(fetches)
       .then((data) => {
         setData(data);
         setReady(true);
@@ -41,25 +43,38 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
   return (
     <>
       <div className="details">
-        <Heading variant="h2">Details</Heading>
-        {dataFromParent.name === "" ? (
+        <Heading variant="h2">Compare</Heading>
+        {dataFromParent.length < 2 ? (
           <>
-            <Text>
-              Click on a result to see related information, or click on multiple
-              for a quick comparison.
-            </Text>
+            {dataFromParent.length === 0 ? (
+              <Text>Select at least two items to compare.</Text>
+            ) : (
+              <Text>
+                Select one more item to compare with{" "}
+                <strong>{dataFromParent[0].name}</strong>.
+              </Text>
+            )}
           </>
         ) : ready ? (
           <>
-            <Card
-              color="white"
-              style={{
-                marginBottom: "16px",
-                maxWidth: "100%",
-              }}
-            >
-              <Heading variant="h3">{data.name}</Heading>
-            </Card>
+            <>
+              <Card
+                color="white"
+                style={{
+                  marginBottom: "16px",
+                  maxWidth: "100%",
+                }}
+              >
+                <Heading variant="h3">Comparing {data.length} items</Heading>
+                {data.map((d, i) => (
+                  <Text>
+                    <TextLink key={i} href={`/overview?name=${d.name}`}>
+                      {d.name}
+                    </TextLink>
+                  </Text>
+                ))}
+              </Card>
+            </>
             <Card
               color="white"
               style={{
@@ -69,13 +84,17 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
             >
               <Heading variant="h3">Historical Trends</Heading>
               <LineGraph
-                data={data.listings.map((l) => {
-                  return {
-                    name: data.name,
-                    date: l.date,
-                    listings: l.listings,
-                  };
-                })}
+                data={data
+                  .map((d) => {
+                    return d.listings.map((l) => {
+                      return {
+                        name: d.name,
+                        date: l.date,
+                        listings: l.listings,
+                      };
+                    });
+                  })
+                  .flat()}
                 x={(d) => {
                   return new Date(
                     d.date.split("-")[1],
@@ -88,12 +107,6 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
                 title={(d) => d.name}
               />
             </Card>
-            <br />
-            <Button
-              color="white"
-              label={`Explore this ${data.category.toLocaleLowerCase()}`}
-              onClick={() => setSelectedObject(data)}
-            />
           </>
         ) : (
           <>

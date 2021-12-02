@@ -9,6 +9,7 @@ import RadioGroup from "../../components/RadioGroup";
 import Text from "../../components/Text";
 
 import DetailsPage from "../DetailsPage";
+import ComparePage from "../ComparePage";
 
 import LineGraph from "../../visualizations/LineGraph";
 
@@ -31,7 +32,8 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
   const [data, setData] = React.useState(emptyData);
   const [ready, setReady] = React.useState(false);
 
-  const [detailObject, setDetailObject] = React.useState([]);
+  const [detailObject, setDetailObject] = React.useState(emptyData);
+  const [compareObject, setCompareObject] = React.useState([]);
 
   React.useEffect(() => {
     setReady(false);
@@ -156,7 +158,8 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
           value={view}
           setValue={(newView) => {
             setView(newView);
-            setDetailObject([]);
+            setDetailObject(emptyData);
+            setCompareObject([]);
           }}
         />
       </div>
@@ -170,17 +173,27 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
                     <Card
                       variant="interactive"
                       color={
-                        detailObject.some((d) => d.name === datum.name)
+                        view === VIEWS.COMPARE
+                          ? compareObject.some((d) => d.name === datum.name)
+                            ? "purple10"
+                            : "white"
+                          : detailObject.name === datum.name
                           ? "purple10"
                           : "white"
                       }
                       onClick={() => {
-                        setView(VIEWS.DETAILS);
-                        if (detailObject.some((d) => d.name === datum.name))
-                          setDetailObject(
-                            detailObject.filter((d) => d.name !== datum.name)
-                          );
-                        else setDetailObject([...detailObject, datum]);
+                        if (view === VIEWS.SORT || view === VIEWS.FILTER) {
+                          setView(VIEWS.DETAILS);
+                          setDetailObject(datum);
+                        } else if (view === VIEWS.DETAILS) {
+                          setDetailObject(datum);
+                        } else if (view === VIEWS.COMPARE) {
+                          if (compareObject.some((d) => d.name === datum.name))
+                            setCompareObject(
+                              compareObject.filter((d) => d.name !== datum.name)
+                            );
+                          else setCompareObject([...compareObject, datum]);
+                        }
                       }}
                       style={{
                         width: "100%",
@@ -228,7 +241,7 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
                 <DetailsPage
                   dataFromParent={detailObject}
                   setSelectedObject={(newObject) => {
-                    setDetailObject([]);
+                    setDetailObject(emptyData);
                     setReady(false);
                     setSelectedObject(newObject);
                   }}
@@ -239,7 +252,16 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
             case VIEWS.FILTER:
               return <>FILTER</>;
             case VIEWS.COMPARE:
-              return <>COMPARE</>;
+              return (
+                <ComparePage
+                  dataFromParent={compareObject}
+                  setSelectedObject={(newObject) => {
+                    setCompareObject([]);
+                    setReady(false);
+                    setSelectedObject(newObject);
+                  }}
+                />
+              );
             default:
               return <>DETAILS</>;
           }
