@@ -8,6 +8,8 @@ import Placeholder from "../../components/Placeholder";
 import RadioGroup from "../../components/RadioGroup";
 import Text from "../../components/Text";
 
+import DetailsPage from "../DetailsPage";
+
 const VIEWS = {
   DETAILS: "details",
   SORT: "sort",
@@ -26,6 +28,8 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
   };
   const [data, setData] = React.useState(emptyData);
   const [ready, setReady] = React.useState(false);
+
+  const [detailObject, setDetailObject] = React.useState(emptyData);
 
   React.useEffect(() => {
     setReady(false);
@@ -133,9 +137,13 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
                   <div key={i} className="result">
                     <Card
                       variant="interactive"
-                      color="white"
+                      color={
+                        detailObject.name === datum.name ? "purple10" : "white"
+                      }
                       onClick={() => {
-                        setSelectedObject(datum);
+                        if (detailObject.name === datum.name)
+                          setDetailObject(emptyData);
+                        else setDetailObject(datum);
                       }}
                       style={{
                         width: "100%",
@@ -176,7 +184,7 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
         {(() => {
           switch (view) {
             case VIEWS.DETAILS:
-              return <>DETAILS</>;
+              return <DetailsPage selectedObject={detailObject} />;
             case VIEWS.SORT:
               return <>SORT</>;
             case VIEWS.FILTER:

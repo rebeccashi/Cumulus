@@ -23,6 +23,9 @@
 .card-color--white {
   background-color: var(--white);
 }
+.card-color--purple10 {
+  background-color: var(--purple10);
+}
 
 .card *:first-child {
   margin-top: 0;
