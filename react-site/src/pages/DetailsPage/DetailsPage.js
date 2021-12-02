@@ -46,7 +46,7 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
         <Heading variant="h1">Details</Heading>
         {dataFromParent.length === 0 ? (
           <>
-            <Text>Click on a result to see related information.</Text>
+            <Text>Click on a result to see related information, or click on multiple for a quick comparison.</Text>
           </>
         ) : ready ? (
           <>
