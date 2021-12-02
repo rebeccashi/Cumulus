@@ -96,7 +96,6 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
           </div>
         )}
       </Card>
-      <Heading variant="h2">Overview</Heading>
       <div className="selectGroup">
         <RadioGroup
           color="white"
@@ -126,65 +125,69 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
           setValue={setView}
         />
       </div>
-      {ready
-        ? data.data.map((datum, i) => {
-            return (
-              <div key={i} className="result">
-                <Card
-                  variant="interactive"
-                  color="white"
-                  onClick={() => {
-                    setSelectedObject(datum);
-                  }}
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  <Heading variant="h3">{datum.name}</Heading>
-                  <div className="resultData">
-                    <Text>
-                      <strong>Listings:</strong>
-                    </Text>
-                    <Text>
-                      {datum.listings.toLocaleString("en", {
-                        useGrouping: true,
-                      })}
-                    </Text>
-                    <Text>
-                      <strong>Category:</strong>
-                    </Text>
-                    <Text>{datum.category}</Text>
+      <div className="overviewColumns">
+        <div>
+          {ready
+            ? data.data.map((datum, i) => {
+                return (
+                  <div key={i} className="result">
+                    <Card
+                      variant="interactive"
+                      color="white"
+                      onClick={() => {
+                        setSelectedObject(datum);
+                      }}
+                      style={{
+                        width: "100%",
+                      }}
+                    >
+                      <Heading variant="h3">{datum.name}</Heading>
+                      <div className="resultData">
+                        <Text>
+                          <strong>Listings:</strong>
+                        </Text>
+                        <Text>
+                          {datum.listings.toLocaleString("en", {
+                            useGrouping: true,
+                          })}
+                        </Text>
+                        <Text>
+                          <strong>Category:</strong>
+                        </Text>
+                        <Text>{datum.category}</Text>
+                      </div>
+                    </Card>
                   </div>
-                </Card>
-              </div>
-            );
-          })
-        : Array.from(Array(4)).map((_, i) => {
-            return (
-              <div key={i} className="result">
-                <Placeholder
-                  style={{
-                    height: "128px",
-                    width: "100%",
-                  }}
-                />
-              </div>
-            );
-          })}
-      {(() => {
-        switch (view) {
-          case VIEWS.DETAILS:
-            return <>DETAILS</>;
-          case VIEWS.SORT:
-            return <>SORT</>;
-          case VIEWS.FILTER:
-            return <>FILTER</>;
-          case VIEWS.COMPARE:
-            return <>COMPARE</>;
-          default:
-            return <>DETAILS</>;
-        }
-      })()}
+                );
+              })
+            : Array.from(Array(4)).map((_, i) => {
+                return (
+                  <div key={i} className="result">
+                    <Placeholder
+                      style={{
+                        height: "128px",
+                        width: "100%",
+                      }}
+                    />
+                  </div>
+                );
+              })}
+        </div>
+        {(() => {
+          switch (view) {
+            case VIEWS.DETAILS:
+              return <>DETAILS</>;
+            case VIEWS.SORT:
+              return <>SORT</>;
+            case VIEWS.FILTER:
+              return <>FILTER</>;
+            case VIEWS.COMPARE:
+              return <>COMPARE</>;
+            default:
+              return <>DETAILS</>;
+          }
+        })()}
+      </div>
     </>
   );
 };
