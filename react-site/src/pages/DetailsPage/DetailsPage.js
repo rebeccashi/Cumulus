@@ -46,16 +46,44 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
         <Heading variant="h1">Details</Heading>
         {dataFromParent.length === 0 ? (
           <>
-            <Text>Click on a result to see related information, or click on multiple for a quick comparison.</Text>
+            <Text>
+              Click on a result to see related information, or click on multiple
+              for a quick comparison.
+            </Text>
           </>
         ) : ready ? (
           <>
-            <Heading variant="h2">
-              {data.length > 1 ? "Comparing" : ""}{" "}
-              {data.map((d) => d.name).join(", ")}
-            </Heading>
-            <Heading variant="h3">Historical Trends</Heading>
-            <Card color="white">
+            {data.length > 1 ? (
+              <>
+                <Card
+                  color="white"
+                  style={{
+                    marginBottom: "16px",
+                  }}
+                >
+                  <Heading variant="h2">Comparing {data.length} items</Heading>
+                  {data.map((d, i) => (
+                    <Text key={i}>{d.name}</Text>
+                  ))}
+                </Card>
+              </>
+            ) : (
+              <Card
+                color="white"
+                style={{
+                  marginBottom: "16px",
+                }}
+              >
+                <Heading variant="h2">{data[0].name}</Heading>
+              </Card>
+            )}
+            <Card
+              color="white"
+              style={{
+                padding: "32px",
+              }}
+            >
+              <Heading variant="h2">Historical Trends</Heading>
               <LineGraph
                 data={data
                   .map((d) => {
