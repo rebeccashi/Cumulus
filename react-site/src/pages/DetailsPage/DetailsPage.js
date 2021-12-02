@@ -7,8 +7,10 @@ import Heading from "../../components/Heading";
 import Placeholder from "../../components/Placeholder";
 import RadioGroup from "../../components/RadioGroup";
 import Text from "../../components/Text";
+import { LineGraph } from "../../visualizations/LineGraph/LineGraph";
+import Button from "../../components/Button";
 
-export const DetailsPage = ({ selectedObject }) => {
+export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
   const emptyData = {
     name: "",
     category: "",
@@ -19,15 +21,14 @@ export const DetailsPage = ({ selectedObject }) => {
   const [ready, setReady] = React.useState(false);
 
   React.useEffect(() => {
-    if (selectedObject.name === "") return;
+    if (dataFromParent.name === "") return;
 
     setReady(false);
-    console.log("Hi");
 
     fetch(
       `${
         process.env.REACT_APP_API || ""
-      }/api/overview?name=${encodeURIComponent(selectedObject.name)}`
+      }/api/overview?name=${encodeURIComponent(dataFromParent.name)}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -35,22 +36,39 @@ export const DetailsPage = ({ selectedObject }) => {
         setReady(true);
       })
       .catch(() => {});
-  }, [selectedObject]);
+  }, [dataFromParent]);
 
   return (
     <>
       <div className="details">
         <Heading variant="h1">Details</Heading>
-        {selectedObject.name === "" ? (
+        {dataFromParent.name === "" ? (
           <>
             <Text>Click on a result to see related information.</Text>
           </>
         ) : ready ? (
           <>
             <Heading variant="h2">{data.name}</Heading>
-            <Text>Brief description.</Text>
-            <Heading variant="h2">Historical Trends</Heading>
-            <Card></Card>
+            <Heading variant="h3">Historical Trends</Heading>
+            <Card color="white">
+              <LineGraph
+                data={data.listings}
+                x={(d) => {
+                  return new Date(
+                    d.date.split("-")[1],
+                    d.date.split("-")[0] - 1,
+                    1
+                  );
+                }}
+                y={(d) => parseInt(d.listings)}
+              />
+            </Card>
+            <br />
+            <Button
+              color="white"
+              label={`Explore this ${data.category.toLocaleLowerCase()}`}
+              onClick={() => setSelectedObject(data)}
+            />
           </>
         ) : (
           <>
@@ -67,7 +85,7 @@ export const DetailsPage = ({ selectedObject }) => {
                 width: "100%",
               }}
             />
-            <Heading variant="h2">Historical Trends</Heading>
+            <Heading variant="h3">Historical Trends</Heading>
             <Placeholder
               style={{
                 height: "128px",

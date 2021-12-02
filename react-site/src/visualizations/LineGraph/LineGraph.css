@@ -1,0 +1,12 @@
+#linegraph {
+  width: 100%;
+}
+
+#linegraph path,
+#linegraph line {
+  stroke: var(--purple);
+}
+
+#linegraph text {
+  color: var(--purple);
+}

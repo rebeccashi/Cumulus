@@ -184,7 +184,15 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
         {(() => {
           switch (view) {
             case VIEWS.DETAILS:
-              return <DetailsPage selectedObject={detailObject} />;
+              return (
+                <DetailsPage
+                  dataFromParent={detailObject}
+                  setSelectedObject={(newObject) => {
+                    setDetailObject(emptyData);
+                    setSelectedObject(newObject);
+                  }}
+                />
+              );
             case VIEWS.SORT:
               return <>SORT</>;
             case VIEWS.FILTER:
