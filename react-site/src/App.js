@@ -18,6 +18,9 @@ function App() {
   const [selectedObject, setSelectedObject] = React.useState(null);
 
   React.useEffect(() => {
+    setSearchValue("");
+    setSelectedObject(null);
+
     const params = new URLSearchParams(location.search);
     if (location.pathname.includes("search") && params.has("q")) {
       setSearchValue(params.get("q"));

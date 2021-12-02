@@ -8,7 +8,6 @@ import Text from "../../components/Text";
 
 export const LandingPage = ({ setSearchValue }) => {
   const [value, setValue] = React.useState("");
-  const [hit, setHit] = React.useState(false);
 
   return (
     <div className="landing">
@@ -22,11 +21,8 @@ export const LandingPage = ({ setSearchValue }) => {
           iconVariant="search"
           value={value}
           setValue={(newValue) => {
-            if (!hit) {
-              setHit(true);
-              setValue(newValue);
-              setSearchValue(newValue);
-            }
+            setValue(newValue);
+            setSearchValue(newValue);
           }}
           style={{
             width: "100%",
