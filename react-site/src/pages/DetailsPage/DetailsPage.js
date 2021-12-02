@@ -34,7 +34,6 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
 
     Promise.all(fetches)
       .then((data) => {
-        console.log(data);
         setData(data);
         setReady(true);
       })
@@ -78,6 +77,7 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
                 }}
                 y={(d) => parseInt(d.listings)}
                 z={(d) => d.name}
+                title={(d) => d.name}
               />
             </Card>
             <br />
@@ -85,7 +85,7 @@ export const DetailsPage = ({ dataFromParent, setSelectedObject }) => {
               <Button
                 color="white"
                 label={`Explore this ${data[0].category.toLocaleLowerCase()}`}
-                onClick={() => setSelectedObject(data)}
+                onClick={() => setSelectedObject(data[0])}
               />
             ) : null}
           </>

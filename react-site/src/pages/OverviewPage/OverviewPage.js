@@ -193,6 +193,7 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
                   dataFromParent={detailObject}
                   setSelectedObject={(newObject) => {
                     setDetailObject([]);
+                    setReady(false);
                     setSelectedObject(newObject);
                   }}
                 />
