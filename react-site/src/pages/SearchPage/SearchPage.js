@@ -1,5 +1,7 @@
 import React from "react";
 
+import { useHistory, useLocation } from "react-router-dom";
+
 import "./SearchPage.css";
 
 import ResultsPage from "../ResultsPage";
@@ -9,16 +11,32 @@ import Heading from "../../components/Heading";
 import Text from "../../components/Text";
 import { OverviewPage } from "../OverviewPage/OverviewPage";
 
-export const SearchPage = ({ searchValue }) => {
+export const SearchPage = ({
+  searchValue,
+  selectedObject,
+  setSelectedObject,
+}) => {
   const [autocomplete, setAutocomplete] = React.useState("");
   const [query, setQuery] = React.useState("");
-  const [selectedObject, setSelectedObject] = React.useState(null);
+
+  const history = useHistory();
+  const location = useLocation();
 
   const emptyData = {
     query: "",
     results: [],
   };
   const [data, setData] = React.useState(emptyData);
+
+  React.useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (
+      selectedObject != null &&
+      (!params.has("name") ||
+        (params.has("name") && params.get("name") != selectedObject.name))
+    )
+      history.push(`/overview?name=${selectedObject.name}`);
+  }, [selectedObject]);
 
   React.useEffect(() => {
     if (data.results.length > 0) {
@@ -43,6 +61,7 @@ export const SearchPage = ({ searchValue }) => {
   React.useEffect(() => {
     setSelectedObject(null);
     setAutocomplete("");
+    history.push(`/search?q=${query}`);
 
     const controller = new AbortController();
 

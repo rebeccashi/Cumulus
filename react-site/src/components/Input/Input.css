@@ -77,9 +77,9 @@
 }
 .input.active .input-autocomplete {
   color: var(--purple30);
-  
+
   max-width: calc(100% - 64px);
-  
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
