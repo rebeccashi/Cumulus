@@ -9,6 +9,7 @@ export const LineGraph = ({
   data,
   x = ([x]) => x, // given d in data, returns the (temporal) x-value
   y = ([, y]) => y, // given d in data, returns the (quantitative) y-value
+  z = () => 1, // given d in data, returns the (categorical) z-value
   defined, // for gaps in data
   curve = d3.curveBasis, // method of interpolation between points
   marginTop = 20, // top margin, in pixels
@@ -25,6 +26,7 @@ export const LineGraph = ({
   strokeLinejoin = "round", // stroke line join of the line
   strokeWidth = 1, // stroke width of line, in pixels
   strokeOpacity = 1, // stroke opacity of line
+  mixBlendMode = "multiply", // blend mode of lines
 }) => {
   const viewBoxWidth = 380;
   const viewBox = `0 0 ${viewBoxWidth} ${viewBoxWidth}`;
@@ -37,6 +39,7 @@ export const LineGraph = ({
     // Compute values.
     const X = d3.map(data, x);
     const Y = d3.map(data, y);
+    const Z = d3.map(data, z);
     const I = d3.range(X.length);
     if (defined === undefined) defined = (d, i) => !isNaN(X[i]) && !isNaN(Y[i]);
     const D = d3.map(data, defined);
@@ -88,14 +91,18 @@ export const LineGraph = ({
           .text(yLabel)
       );
 
-    svg
+    const path = svg
       .select("#path")
       .attr("fill", "none")
-      .attr("stroke-width", strokeWidth)
       .attr("stroke-linecap", strokeLinecap)
       .attr("stroke-linejoin", strokeLinejoin)
+      .attr("stroke-width", strokeWidth)
       .attr("stroke-opacity", strokeOpacity)
-      .attr("d", line(I));
+      .selectAll("path")
+      .data(d3.group(I, (i) => Z[i]))
+      .join("path")
+      .style("mix-blend-mode", mixBlendMode)
+      .attr("d", ([, I]) => line(I));
   });
 
   return (
@@ -103,7 +110,7 @@ export const LineGraph = ({
       <svg id="linegraph" ref={ref} viewBox={viewBox}>
         <g id="xAxis"></g>
         <g id="yAxis"></g>
-        <path id="path"></path>
+        <g id="path"></g>
       </svg>
       <div id="linegraph-tooltip"></div>
     </>

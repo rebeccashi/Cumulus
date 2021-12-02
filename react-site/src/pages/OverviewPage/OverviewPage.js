@@ -29,7 +29,7 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
   const [data, setData] = React.useState(emptyData);
   const [ready, setReady] = React.useState(false);
 
-  const [detailObject, setDetailObject] = React.useState(emptyData);
+  const [detailObject, setDetailObject] = React.useState([]);
 
   React.useEffect(() => {
     setReady(false);
@@ -138,12 +138,16 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
                     <Card
                       variant="interactive"
                       color={
-                        detailObject.name === datum.name ? "purple10" : "white"
+                        detailObject.some((d) => d.name === datum.name)
+                          ? "purple10"
+                          : "white"
                       }
                       onClick={() => {
-                        if (detailObject.name === datum.name)
-                          setDetailObject(emptyData);
-                        else setDetailObject(datum);
+                        if (detailObject.some((d) => d.name === datum.name))
+                          setDetailObject(
+                            detailObject.filter((d) => d.name !== datum.name)
+                          );
+                        else setDetailObject([...detailObject, datum]);
                       }}
                       style={{
                         width: "100%",
@@ -188,7 +192,7 @@ export const OverviewPage = ({ selectedObject, setSelectedObject }) => {
                 <DetailsPage
                   dataFromParent={detailObject}
                   setSelectedObject={(newObject) => {
-                    setDetailObject(emptyData);
+                    setDetailObject([]);
                     setSelectedObject(newObject);
                   }}
                 />

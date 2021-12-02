@@ -1,12 +1,20 @@
 #linegraph {
+  font-family: "Inter";
   width: 100%;
 }
 
-#linegraph path,
-#linegraph line {
+#linegraph #path path {
+  stroke-opacity: 1;
+  stroke: var(--cta);
+}
+
+#linegraph line,
+#linegraph path {
+  stroke-opacity: 0.1;
   stroke: var(--purple);
 }
 
 #linegraph text {
+  font-family: "Inter";
   color: var(--purple);
 }
