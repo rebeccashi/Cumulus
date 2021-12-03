@@ -15,11 +15,19 @@ function App() {
   const location = useLocation();
 
   const [searchValue, setSearchValue] = React.useState("");
+  const [selectedObject, setSelectedObject] = React.useState(null);
 
   React.useEffect(() => {
+    setSearchValue("");
+    setSelectedObject(null);
+
     const params = new URLSearchParams(location.search);
     if (location.pathname.includes("search") && params.has("q")) {
       setSearchValue(params.get("q"));
+    }
+
+    if (location.pathname.includes("overview") && params.has("name")) {
+      setSelectedObject({ name: params.get("name") });
     }
   }, [location]);
 
@@ -29,7 +37,18 @@ function App() {
         <Navbar />
         <Switch>
           <Route path="/search">
-            <SearchPage searchValue={searchValue} />
+            <SearchPage
+              searchValue={searchValue}
+              selectedObject={selectedObject}
+              setSelectedObject={setSelectedObject}
+            />
+          </Route>
+          <Route path="/overview">
+            <SearchPage
+              searchValue={searchValue}
+              selectedObject={selectedObject}
+              setSelectedObject={setSelectedObject}
+            />
           </Route>
           <Route path="/signin">
             <SignInPage />

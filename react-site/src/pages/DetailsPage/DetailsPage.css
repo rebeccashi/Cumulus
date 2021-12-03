@@ -1,0 +1,10 @@
+.details-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-flow: column;
+  grid-gap: 16px;
+}
+
+.details-buttons .button {
+  width: 100%;
+}

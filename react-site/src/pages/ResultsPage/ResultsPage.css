@@ -24,7 +24,7 @@
   grid-auto-flow: column;
   grid-row-gap: 4px;
   grid-column-gap: 16px;
-  
+
   max-width: fit-content;
   max-height: fit-content;
 }
