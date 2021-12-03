@@ -11,17 +11,35 @@ const EMSIOUTPUT = {
 class EMSI {
   constructor({
     output = EMSIOUTPUT.MONGODB,
+    outputConfig = {},
     outputDb = "jobs",
     clientId = "",
     clientSecret = "",
   } = {}) {
     this.output = output;
+    this.outputConfig = outputConfig;
     this.outputDb = outputDb;
+    this.dbWrapper = null;
+
     this.clientId = clientId;
     this.clientSecret = clientSecret;
 
     let dateObj = new Date();
     this.date = `${dateObj.getUTCMonth()}-${dateObj.getUTCFullYear()}`; // subtract month by 1
+  }
+
+  async setup() {
+    console.log("Setting up...");
+
+    this.dbWrapper = await import(`./util/${this.output}.js`);
+
+    if (this.output === EMSIOUTPUT.MONGODB) {
+      console.log("Passing config to MongoDB...");
+      await this.dbWrapper.setup(this.outputConfig);
+      console.log("Passed config successfully!");
+    }
+
+    console.log("Setup successful!");
   }
 
   async setupScraper() {
@@ -32,8 +50,7 @@ class EMSI {
     this.parsedSkills = new Map();
     this.remainingSkills = new Map();
 
-    const dbWrapper = await import(`./util/${this.output}.js`);
-    await dbWrapper.populateParsedSkills(this);
+    await this.dbWrapper.populateParsedSkills(this);
   }
 
   async getAccessToken() {
@@ -188,8 +205,7 @@ class EMSI {
       console.log(`Skill ${skill} has no available data! Skipping...`);
       return;
     } else {
-      const dbWrapper = await import(`./util/${this.output}.js`);
-      await dbWrapper.writeSkill(this, data);
+      await this.dbWrapper.writeSkill(this, data);
 
       console.log(`Wrote skill ${skill} to disk!`);
     }
@@ -281,12 +297,10 @@ class EMSI {
     const totalLength = this.titleMap.size;
     let current = 0;
 
-    const dbWrapper = await import(`./util/${this.output}.js`);
-
     for (let [titleName, titleSkills] of this.titleMap) {
       process.stdout.write(`Writing title ${current++}/${totalLength}\r`);
 
-      await dbWrapper.writeTitle(this, {
+      await this.dbWrapper.writeTitle(this, {
         name: titleName,
         date: this.date,
         skills: titleSkills,
@@ -302,12 +316,10 @@ class EMSI {
     const totalLength = this.companyMap.size;
     let current = 0;
 
-    const dbWrapper = await import(`./util/${this.output}.js`);
-
     for (let [companyName, companySkills] of this.companyMap) {
       process.stdout.write(`Writing company ${current++}/${totalLength}\r`);
 
-      await dbWrapper.writeCompany(this, {
+      await this.dbWrapper.writeCompany(this, {
         name: companyName,
         date: this.date,
         skills: companySkills,
@@ -320,8 +332,7 @@ class EMSI {
   async transform() {
     console.log("Starting to transform...");
 
-    const dbWrapper = await import(`./util/${this.output}.js`);
-    await dbWrapper.getAllCurrentSkills(this);
+    await this.dbWrapper.getAllCurrentSkills(this);
 
     this.loopOverSkills();
 
@@ -338,6 +349,8 @@ const runScraper = async () => {
     clientSecret: process.env.EMSI_CLIENT_SECRET,
   });
 
+  await emsi.setup();
+
   await emsi.setupScraper();
   await emsi.scrape();
 };
@@ -345,13 +358,19 @@ const runScraper = async () => {
 const runTransformer = async () => {
   const emsi = new EMSI();
 
+  await emsi.setup();
+
   await emsi.setupTransformer();
   await emsi.transform();
 };
 
-if (process.env.MODE === "scrape" || process.env.MODE === "all") {
-  runScraper();
-}
-if (process.env.MODE === "transform" || process.env.MODE === "all") {
-  runTransformer();
-}
+(async () => {
+  if (process.env.MODE === "scrape" || process.env.MODE === "all") {
+    await runScraper();
+  }
+  if (process.env.MODE === "transform" || process.env.MODE === "all") {
+    await runTransformer();
+  }
+})();
+
+export { EMSI };
