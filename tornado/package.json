@@ -9,6 +9,8 @@
     "emsi.transform": "cross-env MODE=transform node src/emsi.js",
     "oneshot.old_schema_to_new_schema": "node src/deprecated/oneshot/old_schema_to_new_schema.js",
     "oneshot.filesystem_to_mongodb": "node src/deprecated/oneshot/filesystem_to_mongodb.js",
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prettier": "prettier --write src/**/*.js"
   },
@@ -25,6 +27,7 @@
     "puppeteer": "^11.0.0"
   },
   "devDependencies": {
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.15"
   }
 }
