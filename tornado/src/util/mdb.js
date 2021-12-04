@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@jobs.tcmdh.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
+let uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@jobs.tcmdh.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -9,6 +9,14 @@ const COLLECTIONS = {
   SKILLS: "skills",
   TITLES: "titles",
   COMPANIES: "companies",
+};
+
+const setup = async ({
+  MONGO_USER = process.env.MONGO_USER,
+  MONGO_PASS = process.env.MONGO_PASS,
+  MONGO_DB = process.env.MONGO_DV,
+}) => {
+  uri = `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@jobs.tcmdh.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority`;
 };
 
 const populateParsedSkills = async (queryObject) => {
@@ -141,9 +149,19 @@ const writeTitle = async (queryObject, title) => {
     if (!data.copies.some((copy) => copy.date == queryObject.date)) {
       data.copies.unshift(title);
 
-      await skiltitles.replaceOne(query, data);
+      await titles.replaceOne(query, data);
 
       console.log(`Updated title ${name}!`);
+    } else {
+      data.copies.splice(
+        data.copies.findIndex((copy) => copy.date === queryObject.date),
+        1,
+        title
+      );
+
+      await titles.replaceOne(query, data);
+
+      console.log(`Updated title ${name} at ${queryObject.date}!`);
     }
   } else {
     await titles.insertOne({
@@ -160,6 +178,7 @@ const writeTitle = async (queryObject, title) => {
 export {
   getAllCurrentSkills,
   populateParsedSkills,
+  setup,
   writeCompany,
   writeSkill,
   writeTitle,
