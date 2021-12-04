@@ -1,8 +1,9 @@
 name: Ping scraper
 
 on: 
+  workflow_dispatch:
   schedule:
-    - cron: '11 * * * *'
+    - cron: '1 * * * *'
 
 jobs: 
   build:
