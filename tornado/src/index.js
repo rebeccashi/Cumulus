@@ -10,9 +10,9 @@ if (!process.env.SECRET_KEY) {
 
 const secretKey = process.env.SECRET_KEY;
 
-const buildEmsiWithConfig = ({ config, clientId, clientSecret }) => {
+const buildEmsiWithConfig = ({ outputConfig, clientId, clientSecret }) => {
   return new EMSI({
-    outputConfig: config,
+    outputConfig,
     clientId,
     clientSecret,
   });
