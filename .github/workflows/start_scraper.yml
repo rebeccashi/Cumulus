@@ -1,0 +1,20 @@
+name: Ping scraper
+
+on: 
+  schedule:
+    - cron: '13 8 2 * *'
+
+jobs: 
+  build:
+    name: Keep-alive Heroku
+    runs-on: ubuntu-latest
+    env: 
+      SECRET_KEY: ${{ secrets.SCRAPER_SECRET_KEY }}
+      MONGO_USER: ${{ secrets.MONGO_USER }}
+      MONGO_PASS: ${{ secrets.MONGO_PASS }}
+      MONGO_DB: ${{ secrets.MONGO_DB }}
+      EMSI_CLIENT_ID: ${{ secrets.EMSI_CLIENT_ID }}
+      EMSI_CLIENT_SECRET: ${{ secrets.EMSI_CLIENT_SECRET }}
+    steps:
+      - name: Curl health endpoint
+        run: 'curl https://cumulus-data--scraper.herokuapp.com/all -d "{\"SECRET_KEY\":\"$SECRET_KEY\",\"MONGO_USER\":\"$MONGO_USER\",\"MONGO_PASS\":\"$MONGO_PASS\",\"MONGO_DB\":\"$MONGO_DB\",\"EMSI_CLIENT_ID\":\"$EMSI_CLIENT_ID\",\"EMSI_CLIENT_SECRET\":\"$EMSI_CLIENT_SECRET\"}" -H "Content-Type: application/json"'

@@ -1,10 +1,7 @@
 import { MongoClient } from "mongodb";
 
-let uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@jobs.tcmdh.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+let client = null;
+
 const COLLECTIONS = {
   SKILLS: "skills",
   TITLES: "titles",
@@ -16,7 +13,13 @@ const setup = async ({
   MONGO_PASS = process.env.MONGO_PASS,
   MONGO_DB = process.env.MONGO_DV,
 }) => {
-  uri = `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@jobs.tcmdh.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority`;
+  client = new MongoClient(
+    `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@jobs.tcmdh.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority`,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  );
 };
 
 const populateParsedSkills = async (queryObject) => {
