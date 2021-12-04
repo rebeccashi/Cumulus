@@ -1,40 +1,136 @@
 import express from "express";
 const app = express();
+app.use(express.json());
 
 import { EMSI } from "./emsi.js";
 
-let lock = null;
+if (!process.env.SECRET_KEY) {
+  throw new Error("Secret key missing!");
+}
+
+const secretKey = process.env.SECRET_KEY;
+
+const buildEmsiWithConfig = ({ config, clientId, clientSecret }) => {
+  return new EMSI({
+    outputConfig: config,
+    clientId,
+    clientSecret,
+  });
+};
+
+const paramsAreValid = (params) => {
+  if (
+    !params.MONGO_USER ||
+    !params.MONGO_PASS ||
+    !params.MONGO_DB ||
+    !params.EMSI_CLIENT_ID ||
+    !params.EMSI_CLIENT_SECRET
+  ) {
+    return false;
+  }
+
+  return true;
+};
 
 app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
 
-app.get("/status", (req, res) => {
-  if (lock === null) {
-    res.status(200).send("Idle");
-  } else {
-    res.status(200).send({
-      status: lock,
-    });
-  }
-});
-
 app.post("/all", (req, res) => {
-  lock = "scrape";
+  const params = req.body;
+
+  if (!params.SECRET_KEY || params.SECRET_KEY !== secretKey) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
+
+  if (!paramsAreValid(params)) {
+    res.status(406).send("Missing parameters");
+    return;
+  }
+
+  const emsi = buildEmsiWithConfig({
+    outputConfig: {
+      MONGO_USER: params.MONGO_USER,
+      MONGO_PASS: params.MONGO_PASS,
+      MONGO_DB: params.MONGO_DB,
+    },
+    clientId: params.EMSI_CLIENT_ID,
+    clientSecret: params.EMSI_CLIENT_SECRET,
+  });
+
+  emsi.setup().then(async () => {
+    await emsi.setupScraper();
+    await emsi.scrape();
+
+    await emsi.setupTransformer();
+    await emsi.transform();
+  });
+
   res.status(200).send("Doing all!");
-  lock = null;
 });
 
 app.post("/scrape", (req, res) => {
-  lock = "scrape";
+  const params = req.body;
+
+  if (!params.SECRET_KEY || params.SECRET_KEY !== secretKey) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
+
+  if (!paramsAreValid(params)) {
+    res.status(406).send("Missing parameters");
+    return;
+  }
+
+  const emsi = buildEmsiWithConfig({
+    outputConfig: {
+      MONGO_USER: params.MONGO_USER,
+      MONGO_PASS: params.MONGO_PASS,
+      MONGO_DB: params.MONGO_DB,
+    },
+    clientId: params.EMSI_CLIENT_ID,
+    clientSecret: params.EMSI_CLIENT_SECRET,
+  });
+
+  emsi.setup().then(async () => {
+    await emsi.setupScraper();
+    await emsi.scrape();
+  });
+
   res.status(200).send("Scraping");
-  lock = null;
 });
 
 app.post("/transform", (req, res) => {
-  lock = "scrape";
+  const params = req.body;
+
+  if (!params.SECRET_KEY || params.SECRET_KEY !== secretKey) {
+    console.log(params);
+    res.status(401).send("Unauthorized");
+    return;
+  }
+
+  if (!paramsAreValid(params)) {
+    res.status(406).send("Missing parameters");
+    return;
+  }
+
+  const emsi = buildEmsiWithConfig({
+    outputConfig: {
+      MONGO_USER: params.MONGO_USER,
+      MONGO_PASS: params.MONGO_PASS,
+      MONGO_DB: params.MONGO_DB,
+    },
+    clientId: params.EMSI_CLIENT_ID,
+    clientSecret: params.EMSI_CLIENT_SECRET,
+  });
+
+  emsi.setup().then(async () => {
+    await emsi.setupTransformer();
+    await emsi.transform();
+  });
+
   res.status(200).send("Transforming");
-  lock = null;
 });
 
 app.listen(process.env.PORT || 80, () => {
