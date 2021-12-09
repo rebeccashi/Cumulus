@@ -148,6 +148,11 @@ export const SearchPage = ({
     </>
   );
 };
+/**
+ * sortByListings function takes the data that we're going to sort and the parameter "ascending"
+ * if you would like the list to come back in ascending order then pass 1, for descending pass 0.
+ * 
+ * **/
 
 function sortByListings(data, ascending){
 
@@ -185,6 +190,12 @@ function sortByListings(data, ascending){
     return data;
   }
 }
+
+/**
+ * sortByName function takes the data that we're going to sort and the parameter "ascending"
+ * if you would like the list to come back in ascending order then pass 1, for descending pass 0.
+ * 
+ * **/
 
 function sortByName(data, ascending){
 
