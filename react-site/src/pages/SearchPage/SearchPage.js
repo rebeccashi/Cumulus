@@ -148,3 +148,73 @@ export const SearchPage = ({
     </>
   );
 };
+
+function sortByListings(data, ascending){
+
+
+  if(ascending){
+    for(var i = 0; i < data.results.length; i++){
+      for (var j = 0; j < data.results.length - 1; j ++){
+        if(data.results[j].listings > data.results[j + 1].listings){
+
+          var temp = data.results[j];
+          data.results[j] = data.results[j + 1];
+          data.results[j + 1] = temp;
+
+        }
+      }
+      
+    }
+    return data;
+  }
+
+
+  if(!ascending){
+
+    for(var i = data.results.length - 1; i >= 0; i--){
+      for(var j = data.results.length - 1; i > 0; i --){
+        if(data.results[j].listings > data.results[j-1].listings){
+
+          var temp = data.results[j];
+          data.results[j] = data.results[j - 1];
+          data.results[j - 1] = temp;
+      }
+
+      }
+    }
+    return data;
+  }
+}
+
+function sortByName(data, ascending){
+
+  if(ascending){
+    for(var i = 0; i < data.results.length; i ++){
+      for(var j = 0; j < data.results.length - 1; i ++){
+        if(data.results[j].name.toLowerCase() > data.results[j + 1].name.toLowerCase()){
+
+          var temp = data.results[j];
+          data.results[j] = data.results[j + 1];
+          data.results[j + 1] = temp;
+        }
+      }
+
+    }
+
+    return data;
+  }
+
+  if(!ascending){
+    for(var i = data.results.length - 1; i >= 0; i --){
+      for(var j = data.results.length - 1; i > 0; i --){
+        if(data.results[j].name.toLowerCase() > data.results[j - 1].name.toLowerCase()){
+
+          var temp = data.results[j];
+          data.results[j] = data.results[j-1];
+          data.results[j-1] = temp;
+        }
+      }
+    }
+    return data;
+  }
+}
